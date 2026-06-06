@@ -2,6 +2,7 @@ import { Routes, Route, Link as RouterLink } from 'react-router'
 import LoginPage from '@/pages/login'
 import BannersPage from '@/pages/banners'
 import SiteConfigPage from '@/pages/site-config'
+import NewsPage from '@/pages/news'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Terminal, Cpu, Database, Server, Compass, AlertTriangle, ShieldCheck } from 'lucide-react'
@@ -219,7 +220,7 @@ export default function App() {
           </Route>
 
           <Route element={<ProtectedRoute permission="news:read" />}>
-            <Route path="/news" element={<ModulePlaceholderPage title="新闻资讯与浏览量统计" />} />
+            <Route path="/news" element={<NewsPage />} />
           </Route>
 
           <Route element={<ProtectedRoute permission="help:read" />}>

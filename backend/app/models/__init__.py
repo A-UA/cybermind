@@ -2,4 +2,6 @@
 from app.models.user import SysUser, SysRole, SysPermission, SysUserRole, SysRolePermission
 from app.models.banner import Banner
 from app.models.site_config import SiteConfig
+from app.models.news import NewsArticle
+
 

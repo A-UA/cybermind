@@ -1,6 +1,6 @@
 """API 路由汇总"""
 from fastapi import APIRouter
-from app.api.v1 import auth, users, roles, upload, banners, site_config
+from app.api.v1 import auth, users, roles, upload, banners, site_config, news
 
 api_router = APIRouter(prefix="/api/v1")
 
@@ -10,4 +10,6 @@ api_router.include_router(roles.router)
 api_router.include_router(upload.router)
 api_router.include_router(banners.router)
 api_router.include_router(site_config.router)
+api_router.include_router(news.router)
+
 
