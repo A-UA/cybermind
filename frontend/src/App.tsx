@@ -3,6 +3,8 @@ import LoginPage from '@/pages/login'
 import BannersPage from '@/pages/banners'
 import SiteConfigPage from '@/pages/site-config'
 import NewsPage from '@/pages/news'
+import HelpPage from '@/pages/help'
+import VideosPage from '@/pages/videos'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Terminal, Cpu, Database, Server, Compass, AlertTriangle, ShieldCheck } from 'lucide-react'
@@ -224,11 +226,11 @@ export default function App() {
           </Route>
 
           <Route element={<ProtectedRoute permission="help:read" />}>
-            <Route path="/help" element={<ModulePlaceholderPage title="帮助中心常见问题管理" />} />
+            <Route path="/help" element={<HelpPage />} />
           </Route>
 
           <Route element={<ProtectedRoute permission="video:read" />}>
-            <Route path="/videos" element={<ModulePlaceholderPage title="操作视频管理与上传" />} />
+            <Route path="/videos" element={<VideosPage />} />
           </Route>
 
           <Route element={<ProtectedRoute permission="contact:read" />}>

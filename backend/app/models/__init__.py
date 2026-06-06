@@ -3,5 +3,8 @@ from app.models.user import SysUser, SysRole, SysPermission, SysUserRole, SysRol
 from app.models.banner import Banner
 from app.models.site_config import SiteConfig
 from app.models.news import NewsArticle
+from app.models.help import HelpCategory, HelpQuestion
+from app.models.video import OperationVideo
+
 
 
