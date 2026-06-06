@@ -1,4 +1,6 @@
 import { Routes, Route, Link as RouterLink } from 'react-router'
+import { useQuery } from '@tanstack/react-query'
+import apiClient from '@/lib/api'
 import LoginPage from '@/pages/login'
 import BannersPage from '@/pages/banners'
 import SiteConfigPage from '@/pages/site-config'
@@ -6,9 +8,10 @@ import NewsPage from '@/pages/news'
 import HelpPage from '@/pages/help'
 import VideosPage from '@/pages/videos'
 import ContactsPage from '@/pages/contacts'
+import UsersPage from '@/pages/users'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
-import { Terminal, Cpu, Database, Server, Compass, AlertTriangle, ShieldCheck } from 'lucide-react'
+import { Terminal, Cpu, Database, Server, AlertTriangle, ShieldCheck } from 'lucide-react'
 
 // 局部的优雅 Link 封装
 function Link({ to, className, children }: { to: string; className?: string; children: React.ReactNode }) {
@@ -45,20 +48,31 @@ function StatCard({
 
 // 看板/首页 页面
 function DashboardPage() {
+  const { data, isLoading } = useQuery<{ today_uv: number; total_pv: number }>({
+    queryKey: ['dashboard-stats'],
+    queryFn: async () => {
+      const res = await apiClient.get('/tracking/stats')
+      return res.data.data
+    }
+  })
+
+  const todayUv = data?.today_uv ?? 0
+  const totalPv = data?.total_pv ?? 0
+
   return (
     <div className="space-y-8 text-foreground font-sans">
       {/* 顶部三页实体撞色拼贴卡纸 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard 
           title="今日 IP 访问数 // CLIENT_NET_IPS"
-          value="1,248"
+          value={isLoading ? '...' : todayUv.toLocaleString()}
           label="请求次数 / 24H"
           bgColorClass="bg-[#E8F4FD] dark:bg-[#1E293B]"
           statusColor="bg-primary"
         />
         <StatCard 
           title="全站总浏览量 // NET_TOTAL_VIEWS"
-          value="45,892"
+          value={isLoading ? '...' : totalPv.toLocaleString()}
           label="累计访问量"
           bgColorClass="bg-[#FEF9E7] dark:bg-[#1E293B]"
           statusColor="bg-primary"
@@ -143,25 +157,7 @@ function DashboardPage() {
   )
 }
 
-// 通用占位页面组件 (新野兽派贴纸状态)
-function ModulePlaceholderPage({ title }: { title: string }) {
-  return (
-    <div className="h-[calc(100vh-12rem)] flex flex-col justify-center items-center text-center">
-      <div className="p-10 bg-card border-2 border-border max-w-lg rounded-xl pop-shadow text-center">
-        <div className="w-16 h-16 bg-primary/10 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-6 pop-shadow-sm">
-          <Compass className="h-7 w-7 text-primary animate-spin-slow" />
-        </div>
-        <h3 className="text-2xl font-heading font-bold text-foreground tracking-tight uppercase">{title}</h3>
-        <p className="text-muted-foreground text-sm mt-4 leading-relaxed max-w-sm mx-auto font-semibold">
-          该核心业务模块的数据库模型、Alembic 迁移脚本、后端 Service 事务处理以及 API 权限验证路由已在底层装配完毕。
-        </p>
-        <div className="mt-8 inline-flex items-center px-4 py-2 text-xs font-heading font-bold text-primary bg-accent border-2 border-border rounded-lg pop-shadow-sm rotate-[-2.5deg] select-none">
-          阶段二：等待模块激活 // PENDING ACTIVATION
-        </div>
-      </div>
-    </div>
-  )
-}
+
 
 // 403 页面 (高亮波普警告风格)
 function ForbiddenPage() {
@@ -239,7 +235,7 @@ export default function App() {
           </Route>
 
           <Route element={<ProtectedRoute permission="user:read" />}>
-            <Route path="/users" element={<ModulePlaceholderPage title="管理员与 RBAC 权限管理" />} />
+            <Route path="/users" element={<UsersPage />} />
           </Route>
 
           <Route element={<ProtectedRoute permission="config:read" />}>
