@@ -13,7 +13,7 @@ from app.services import site_config as config_service
 router = APIRouter(prefix="/site-config", tags=["站点配置"])
 
 
-@router.get("/", response_model=ApiResponse[List[SiteConfigResponse]],
+@router.get("", response_model=ApiResponse[List[SiteConfigResponse]],
             dependencies=[Depends(require_permission("config:read"))])
 async def list_configs(session: Session = Depends(get_session)):
     """获取所有配置项"""
@@ -32,7 +32,7 @@ async def list_configs(session: Session = Depends(get_session)):
     return ApiResponse(data=items)
 
 
-@router.put("/", response_model=ApiResponse[List[SiteConfigResponse]])
+@router.put("", response_model=ApiResponse[List[SiteConfigResponse]])
 async def batch_update_configs(
     body: SiteConfigBatchUpdate,
     current_user: SysUser = Depends(require_permission("config:update")),

@@ -14,7 +14,7 @@ from app.services import role as role_service
 router = APIRouter(prefix="/roles", tags=["角色权限"])
 
 
-@router.get("/", response_model=ApiResponse[list[RoleResponse]],
+@router.get("", response_model=ApiResponse[list[RoleResponse]],
             dependencies=[Depends(require_permission("role:read"))])
 async def list_roles(session: Session = Depends(get_session)):
     """获取角色列表"""
@@ -30,7 +30,7 @@ async def list_roles(session: Session = Depends(get_session)):
     return ApiResponse(data=items)
 
 
-@router.post("/", response_model=ApiResponse[RoleResponse],
+@router.post("", response_model=ApiResponse[RoleResponse],
              dependencies=[Depends(require_permission("role:create"))])
 async def create_role(body: RoleCreate, session: Session = Depends(get_session)):
     """创建角色"""

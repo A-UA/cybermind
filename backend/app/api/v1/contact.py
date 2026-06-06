@@ -13,7 +13,7 @@ from app.services import contact as contact_service
 router = APIRouter(prefix="/contact-submissions", tags=["联系我们"])
 
 
-@router.post("/", response_model=ApiResponse[ContactResponse])
+@router.post("", response_model=ApiResponse[ContactResponse])
 async def submit_contact(
     body: ContactSubmitRequest,
     session: Session = Depends(get_session)
@@ -25,7 +25,7 @@ async def submit_contact(
     return ApiResponse(data=data, message="留言提交成功")
 
 
-@router.get("/", response_model=ApiResponse[PaginatedData[ContactResponse]],
+@router.get("", response_model=ApiResponse[PaginatedData[ContactResponse]],
             dependencies=[Depends(require_permission("contact:read"))])
 async def list_contact_submissions(
     page: int = Query(1, ge=1),

@@ -13,7 +13,7 @@ from app.services import banner as banner_service
 router = APIRouter(prefix="/banners", tags=["Banner管理"])
 
 
-@router.get("/", response_model=ApiResponse[PaginatedData[BannerResponse]],
+@router.get("", response_model=ApiResponse[PaginatedData[BannerResponse]],
             dependencies=[Depends(require_permission("banner:read"))])
 async def list_banners(
     page: int = Query(1, ge=1),
@@ -43,7 +43,7 @@ async def list_banners(
     ))
 
 
-@router.post("/", response_model=ApiResponse[BannerResponse])
+@router.post("", response_model=ApiResponse[BannerResponse])
 async def create_banner(
     body: BannerCreate,
     current_user: SysUser = Depends(require_permission("banner:create")),

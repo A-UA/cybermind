@@ -12,7 +12,7 @@ from app.services import user as user_service
 router = APIRouter(prefix="/users", tags=["用户管理"])
 
 
-@router.get("/", response_model=ApiResponse[PaginatedData[UserResponse]],
+@router.get("", response_model=ApiResponse[PaginatedData[UserResponse]],
             dependencies=[Depends(require_permission("user:read"))])
 async def list_users(
     page: int = Query(1, ge=1),
@@ -35,7 +35,7 @@ async def list_users(
     ))
 
 
-@router.post("/", response_model=ApiResponse[UserResponse],
+@router.post("", response_model=ApiResponse[UserResponse],
              dependencies=[Depends(require_permission("user:create"))])
 async def create_user(body: UserCreate, session: Session = Depends(get_session)):
     """创建用户"""

@@ -13,7 +13,7 @@ from app.services import video as video_service
 router = APIRouter(prefix="/videos", tags=["操作视频管理"])
 
 
-@router.get("/", response_model=ApiResponse[PaginatedData[VideoResponse]],
+@router.get("", response_model=ApiResponse[PaginatedData[VideoResponse]],
             dependencies=[Depends(require_permission("video:read"))])
 async def list_videos(
     page: int = Query(1, ge=1),
@@ -49,7 +49,7 @@ async def list_videos(
     ))
 
 
-@router.post("/", response_model=ApiResponse[VideoResponse])
+@router.post("", response_model=ApiResponse[VideoResponse])
 async def create_video(
     body: VideoCreate,
     current_user: SysUser = Depends(require_permission("video:create")),

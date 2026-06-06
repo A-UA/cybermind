@@ -13,7 +13,7 @@ from app.services import news as news_service
 router = APIRouter(prefix="/news", tags=["新闻资讯"])
 
 
-@router.get("/", response_model=ApiResponse[PaginatedData[NewsResponse]],
+@router.get("", response_model=ApiResponse[PaginatedData[NewsResponse]],
             dependencies=[Depends(require_permission("news:read"))])
 async def list_news(
     page: int = Query(1, ge=1),
@@ -71,7 +71,7 @@ async def get_news_stats_api(session: Session = Depends(get_session)):
     ))
 
 
-@router.post("/", response_model=ApiResponse[NewsResponse])
+@router.post("", response_model=ApiResponse[NewsResponse])
 async def create_news_article(
     body: NewsCreate,
     current_user: SysUser = Depends(require_permission("news:create")),
