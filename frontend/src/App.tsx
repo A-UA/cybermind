@@ -5,6 +5,7 @@ import SiteConfigPage from '@/pages/site-config'
 import NewsPage from '@/pages/news'
 import HelpPage from '@/pages/help'
 import VideosPage from '@/pages/videos'
+import ContactsPage from '@/pages/contacts'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Terminal, Cpu, Database, Server, Compass, AlertTriangle, ShieldCheck } from 'lucide-react'
@@ -234,7 +235,7 @@ export default function App() {
           </Route>
 
           <Route element={<ProtectedRoute permission="contact:read" />}>
-            <Route path="/contacts" element={<ModulePlaceholderPage title="用户联系我们表单管理" />} />
+            <Route path="/contacts" element={<ContactsPage />} />
           </Route>
 
           <Route element={<ProtectedRoute permission="user:read" />}>

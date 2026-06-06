@@ -5,6 +5,7 @@ from app.models.site_config import SiteConfig
 from app.models.news import NewsArticle
 from app.models.help import HelpCategory, HelpQuestion
 from app.models.video import OperationVideo
+from app.models.contact import ContactSubmission
 
 
 

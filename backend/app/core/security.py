@@ -2,7 +2,8 @@
 import bcrypt
 # 修复 passlib 与新版本 bcrypt 的兼容性问题
 if not hasattr(bcrypt, "__about__"):
-    bcrypt.__about__ = type("About", (object,), {"__version__": bcrypt.__version__})
+    bcrypt_version = getattr(bcrypt, "__version__", "4.0.0")
+    bcrypt.__about__ = type("About", (object,), {"__version__": bcrypt_version})
 
 from datetime import datetime, timedelta, timezone
 from typing import Optional
