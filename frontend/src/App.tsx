@@ -1,6 +1,7 @@
 import { Routes, Route, Link as RouterLink } from 'react-router'
 import LoginPage from '@/pages/login'
 import BannersPage from '@/pages/banners'
+import SiteConfigPage from '@/pages/site-config'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Terminal, Cpu, Database, Server, Compass, AlertTriangle, ShieldCheck } from 'lucide-react'
@@ -238,7 +239,7 @@ export default function App() {
           </Route>
 
           <Route element={<ProtectedRoute permission="config:read" />}>
-            <Route path="/config" element={<ModulePlaceholderPage title="系统站点配置中心" />} />
+            <Route path="/config" element={<SiteConfigPage />} />
           </Route>
         </Route>
       </Route>

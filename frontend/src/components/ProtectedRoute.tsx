@@ -6,11 +6,11 @@ export interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ permission }: ProtectedRouteProps) => {
-  const { hasPermission } = useAuthStore()
+  const { accessToken, hasPermission } = useAuthStore()
 
-  // if (!accessToken) {
-  //   return <Navigate to="/login" replace />
-  // }
+  if (!accessToken) {
+    return <Navigate to="/login" replace />
+  }
 
   if (permission && !hasPermission(permission)) {
     return <Navigate to="/403" replace />

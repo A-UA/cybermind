@@ -122,5 +122,30 @@ def seed_database():
                 link = SysUserRole(user_id=admin.id, role_id=super_role.id)
                 session.add(link)
 
+        # 4. 初始化预置站点配置项
+        from app.models.site_config import SiteConfig
+        
+        PRESET_CONFIGS = [
+            ("site_name", "CyberMind 官网", "text", "站点名称"),
+            ("site_logo", "", "image", "站点LOGO"),
+            ("contact_phone", "13800138000", "text", "手机号"),
+            ("contact_email", "contact@cybermind.com", "text", "邮箱"),
+            ("qr_code_image", "", "image", "二维码图片URL"),
+        ]
+        
+        for key, value, config_type, description in PRESET_CONFIGS:
+            config = session.exec(
+                select(SiteConfig).where(SiteConfig.config_key == key)
+            ).first()
+            if not config:
+                config = SiteConfig(
+                    config_key=key,
+                    config_value=value,
+                    config_type=config_type,
+                    description=description
+                )
+                session.add(config)
+
         session.commit()
         print("种子数据初始化完成")
+
