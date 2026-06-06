@@ -12,7 +12,8 @@ import {
   Settings,
   Users,
   LogOut,
-  User
+  User,
+  Compass
 } from 'lucide-react'
 
 // 定义菜单项
@@ -24,8 +25,8 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { name: '数据看板', path: '/', icon: LayoutDashboard }, // 默认显示
-  { name: 'Banner管理', path: '/banners', icon: Image, permission: 'banner:read' },
+  { name: '仪表盘', path: '/', icon: LayoutDashboard }, 
+  { name: 'Banner 管理', path: '/banners', icon: Image, permission: 'banner:read' },
   { name: '新闻资讯', path: '/news', icon: FileText, permission: 'news:read' },
   { name: '帮助中心', path: '/help', icon: HelpCircle, permission: 'help:read' },
   { name: '操作视频', path: '/videos', icon: Video, permission: 'video:read' },
@@ -56,83 +57,97 @@ export default function AdminLayout() {
   })
 
   return (
-    <div className="flex h-screen bg-slate-950 text-slate-100 font-sans overflow-hidden">
+    <div className="flex h-screen bg-background elegant-gradient-bg text-foreground font-sans overflow-hidden">
       {/* 侧边栏 */}
-      <aside className="w-64 border-r border-slate-800 bg-slate-900 flex flex-col flex-shrink-0">
-        {/* Logo */}
-        <div className="h-16 border-b border-slate-800 flex items-center px-6">
-          <Link to="/" className="text-xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
-            CyberMind CMS
+      <aside className="w-60 border-r border-border bg-sidebar flex flex-col flex-shrink-0 relative z-20">
+        
+        {/* 顶部 Logo - 优雅杂志感 */}
+        <div className="h-16 flex items-center px-6 justify-between border-b border-border/60">
+          <Link to="/" className="text-xl font-display font-medium tracking-tight italic text-foreground flex items-center space-x-2">
+            <span>Cybermind</span>
+            <span className="text-[9px] uppercase tracking-widest px-1.5 py-0.5 border border-muted-foreground/30 text-muted-foreground/80 font-sans rounded-sm not-italic font-bold scale-90">
+              CMS
+            </span>
           </Link>
         </div>
 
-        {/* 导航菜单 */}
-        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-          {filteredMenu.map(item => {
+        {/* 导航菜单 - 圆角滑块风格 */}
+        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+          {filteredMenu.map((item) => {
             const Icon = item.icon
             const isActive = location.pathname === item.path
+            
             return (
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group ${
+                className={`flex items-center px-3.5 py-2.5 text-xs font-medium rounded-xl transition-all duration-200 group ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                    ? 'bg-secondary text-primary font-semibold'
+                    : 'text-muted-foreground hover:bg-secondary/40 hover:text-foreground'
                 }`}
               >
-                <Icon className={`mr-3 h-5 w-5 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-100'}`} />
-                {item.name}
+                <Icon className={`mr-3 h-4 w-4 transition-colors ${isActive ? 'text-primary' : 'text-muted-foreground/70 group-hover:text-foreground'}`} />
+                <span>{item.name}</span>
               </Link>
             )
           })}
         </nav>
 
-        {/* 用户底部栏 */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950/40">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-full bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center">
-                <User className="h-5 w-5 text-indigo-400" />
+        {/* 用户底部面板 - 精致小卡片 */}
+        <div className="p-4 border-t border-border/60 bg-sidebar">
+          <div className="flex items-center justify-between bg-secondary/30 p-2.5 rounded-xl border border-border/20">
+            <div className="flex items-center space-x-2.5 min-w-0">
+              {/* 圆形头像 */}
+              <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/5 flex items-center justify-center flex-shrink-0 text-primary">
+                <User className="h-4 w-4" />
               </div>
-              <div className="truncate">
-                <p className="text-sm font-semibold truncate text-slate-200">
+              <div className="truncate text-[11px] leading-tight">
+                <p className="font-semibold truncate text-foreground">
                   {user?.nickname || user?.username || '管理员'}
                 </p>
-                <p className="text-xs text-slate-500 truncate">
-                  {user?.roles.includes('super_admin') ? '超级管理员' : '普通用户'}
+                <p className="text-[9px] text-muted-foreground/80 truncate mt-0.5">
+                  {user?.roles.includes('super_admin') ? '超级管理员' : '系统操作员'}
                 </p>
               </div>
             </div>
             <button
               onClick={handleLogout}
-              className="p-1.5 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-all cursor-pointer"
+              className="p-1.5 rounded-lg border border-transparent hover:bg-secondary text-muted-foreground hover:text-rose-600 transition-all cursor-pointer"
               title="退出登录"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-4 w-4" />
             </button>
           </div>
         </div>
       </aside>
 
       {/* 右侧主内容区 */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* 顶部栏 */}
-        <header className="h-16 border-b border-slate-800 bg-slate-900/40 backdrop-blur flex items-center justify-between px-8 flex-shrink-0">
-          <h2 className="text-lg font-bold text-slate-200">
-            {filteredMenu.find(item => item.path === location.pathname)?.name || '后台管理'}
-          </h2>
-          <div className="flex items-center space-x-4">
-            {/* 统计指标或用户信息 */}
-            <span className="text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
-              系统运行中
+      <div className="flex-1 flex flex-col overflow-hidden relative z-10">
+        {/* 顶部简洁工具栏 */}
+        <header className="h-16 border-b border-border/60 bg-card/40 backdrop-blur flex items-center justify-between px-8 flex-shrink-0">
+          <div className="flex items-center space-x-2 text-xs">
+            <Compass className="h-4 w-4 text-muted-foreground/60" />
+            <span className="text-muted-foreground">主控面板</span>
+            <span className="text-muted-foreground/40">/</span>
+            <span className="text-foreground font-medium">
+              {filteredMenu.find(item => item.path === location.pathname)?.name || '概览'}
             </span>
+          </div>
+          
+          <div className="flex items-center space-x-3 text-xs text-muted-foreground">
+            <div className="flex items-center space-x-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+              <span className="text-[11px] tracking-wider text-muted-foreground/80">核心节点连接成功</span>
+            </div>
           </div>
         </header>
 
         {/* 内容主体 */}
-        <main className="flex-1 overflow-y-auto p-8 bg-slate-950">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-8 bg-background/30">
+          <div className="max-w-7xl mx-auto h-full">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

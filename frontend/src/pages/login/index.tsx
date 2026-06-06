@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 import apiClient from '@/lib/api'
+import { ShieldAlert, ArrowRight, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -9,8 +10,14 @@ export default function LoginPage() {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // 允许用户使用亮色/暗色，这里默认设置为跟随系统或者跟随 shadcn 切换
+    // 我们可以直接支持自适应，不强行 classList.add('dark')
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,70 +39,98 @@ export default function LoginPage() {
       // 3. 跳转到主页
       navigate('/', { replace: true })
     } catch (err: any) {
-      setError(err.response?.data?.message || '登录失败，请检查账号密码')
+      setError(err.response?.data?.message || '身份验证未通过，请检查操作员凭证')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-radial from-slate-900 to-black overflow-hidden font-sans">
-      {/* 渐变装饰背景球 */}
-      <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-purple-600/20 blur-3xl" />
-      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 rounded-full bg-blue-600/20 blur-3xl" />
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-background elegant-gradient-bg font-sans overflow-hidden">
+      
+      {/* 柔和的大圆模糊光圈装饰 */}
+      <div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-indigo-500/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-pink-500/5 blur-[120px] pointer-events-none" />
 
-      {/* Glassmorphism 卡片 */}
-      <div className="relative w-full max-w-md p-8 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl shadow-2xl transition-all duration-300 hover:border-white/20">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">
-            CyberMind CMS
+      {/* 极简卡片容器 */}
+      <div className="relative w-full max-w-md p-8 bg-card border border-border/60 elegant-shadow rounded-2xl transition-all duration-300">
+        
+        {/* 高端画廊标题部 */}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-display font-medium tracking-tight text-foreground italic">
+            Cybermind
           </h1>
-          <p className="text-sm text-slate-400 mt-2">智能企业后台内容管理系统</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-2.5">
+            Elegant Content Workspace // 优雅工作台
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {error && (
-            <div className="p-3 text-sm text-red-200 border border-red-500/30 bg-red-500/10 rounded-lg animate-pulse">
-              {error}
+        {error && (
+          <div className="p-3 mb-6 text-xs text-rose-600 dark:text-rose-400 border border-rose-500/10 bg-rose-500/5 rounded-lg flex items-start space-x-2 animate-shake">
+            <ShieldAlert className="h-4 w-4 flex-shrink-0 mt-0.5" />
+            <div>
+              <span className="font-semibold">系统提示:</span> {error}
             </div>
-          )}
+          </div>
+        )}
 
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* 操作员账号 */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block">
-              登录账号
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+              操作员账号
             </label>
             <input
               type="text"
               required
-              placeholder="请输入账号"
+              placeholder="请输入登录账号"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-slate-700/50 bg-slate-950/40 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+              className="w-full px-4 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all text-xs rounded-xl text-foreground placeholder-muted-foreground/60 outline-none"
             />
           </div>
 
+          {/* 访问密码 */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block">
-              密码
-            </label>
-            <input
-              type="password"
-              required
-              placeholder="请输入密码"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-slate-700/50 bg-slate-950/40 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
-            />
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
+                安全访问密钥
+              </label>
+            </div>
+            <div className="relative flex items-center">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                placeholder="请输入访问密钥"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-4 pr-10 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all text-xs rounded-xl text-foreground placeholder-muted-foreground/60 outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 text-muted-foreground/60 hover:text-foreground transition-colors cursor-pointer"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
 
+          {/* 提交按钮 */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-lg font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:via-indigo-500 hover:to-purple-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 active:scale-98 transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            className="w-full py-3.5 mt-2 bg-[#111622] hover:bg-[#1e2536] dark:bg-[#e2e8f0] dark:hover:bg-[#f3f4f6] text-white dark:text-black font-semibold text-xs tracking-wider rounded-xl focus:outline-none active:scale-[0.98] transition-all disabled:opacity-50 disabled:pointer-events-none cursor-pointer flex items-center justify-center space-x-2 shadow-sm"
           >
-            {loading ? '登录中...' : '立即登录'}
+            <span>{loading ? '正在建立安全会话...' : '进入工作空间'}</span>
+            {!loading && <ArrowRight className="h-4 w-4" />}
           </button>
         </form>
+
+        {/* 底部版权 */}
+        <div className="mt-10 text-center text-[9px] text-muted-foreground/50 tracking-wider">
+          CYBERMIND STUDIO © 2026 // ALL RIGHTS RESERVED
+        </div>
       </div>
     </div>
   )
