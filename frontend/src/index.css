@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap');
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -7,9 +7,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: 'Playfair Display', 'Georgia', serif;
-    --font-display: 'Playfair Display', serif;
-    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-heading: 'Space Grotesk', 'Outfit', sans-serif;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-sans: 'Outfit', sans-serif;
     --font-mono: monospace;
     
     --color-sidebar-ring: var(--sidebar-ring);
@@ -54,72 +54,72 @@
 }
 
 :root {
-    --background: oklch(0.985 0.003 240);
-    --foreground: oklch(0.12 0.015 240);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.12 0.015 240);
+    --background: oklch(0.99 0.005 85); /* 温暖奶油黄 */
+    --foreground: oklch(0.15 0.01 240);  /* 炭黑 */
+    --card: oklch(1 0 0);                /* 纯白 */
+    --card-foreground: oklch(0.15 0.01 240);
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.12 0.015 240);
-    --primary: oklch(0.35 0.14 260);
-    --primary-foreground: oklch(0.98 0.005 240);
+    --popover-foreground: oklch(0.15 0.01 240);
+    --primary: oklch(0.65 0.2 330);      /* 波普紫粉 */
+    --primary-foreground: oklch(1 0 0);  /* 实体白 */
     --secondary: oklch(0.96 0.005 240);
     --secondary-foreground: oklch(0.2 0.01 240);
-    --muted: oklch(0.96 0.005 240);
-    --muted-foreground: oklch(0.48 0.01 240);
-    --accent: oklch(0.94 0.01 240);
-    --accent-foreground: oklch(0.12 0.015 240);
-    --destructive: oklch(0.55 0.18 20);
-    --border: oklch(0.92 0.005 240);
-    --input: oklch(0.92 0.005 240);
-    --ring: oklch(0.35 0.14 260);
-    --chart-1: oklch(0.35 0.14 260);
+    --muted: oklch(0.95 0.01 240);       /* 淡灰 */
+    --muted-foreground: oklch(0.38 0.01 240);
+    --accent: oklch(0.96 0.02 90);       /* 浅黄拼色 */
+    --accent-foreground: oklch(0.15 0.01 240);
+    --destructive: oklch(0.58 0.22 25);  /* 波普红 */
+    --border: oklch(0.15 0.01 240);      /* 粗边框全用炭黑 */
+    --input: oklch(0.15 0.01 240);
+    --ring: oklch(0.65 0.2 330);
+    --chart-1: oklch(0.65 0.2 330);
     --chart-2: oklch(0.45 0.1 120);
     --chart-3: oklch(0.7 0.12 60);
-    --chart-4: oklch(0.55 0.18 20);
+    --chart-4: oklch(0.58 0.22 25);
     --chart-5: oklch(0.5 0.02 240);
-    --radius: 10px;
-    --sidebar: oklch(0.98 0.004 240);
-    --sidebar-foreground: oklch(0.22 0.012 240);
-    --sidebar-primary: oklch(0.35 0.14 260);
-    --sidebar-primary-foreground: oklch(0.98 0.005 240);
-    --sidebar-accent: oklch(0.94 0.005 240);
-    --sidebar-accent-foreground: oklch(0.12 0.015 240);
-    --sidebar-border: oklch(0.92 0.005 240);
-    --sidebar-ring: oklch(0.35 0.14 260);
+    --radius: 8px;
+    --sidebar: oklch(1 0 0);
+    --sidebar-foreground: oklch(0.15 0.01 240);
+    --sidebar-primary: oklch(0.65 0.2 330);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.95 0.01 240);
+    --sidebar-accent-foreground: oklch(0.15 0.01 240);
+    --sidebar-border: oklch(0.15 0.01 240);
+    --sidebar-ring: oklch(0.65 0.2 330);
 }
 
 .dark {
-    --background: oklch(0.1 0.01 240);
-    --foreground: oklch(0.93 0.005 240);
-    --card: oklch(0.14 0.015 240);
-    --card-foreground: oklch(0.93 0.005 240);
-    --popover: oklch(0.14 0.015 240);
-    --popover-foreground: oklch(0.93 0.005 240);
-    --primary: oklch(0.78 0.12 220);
+    --background: oklch(0.12 0.02 250);  /* 深海蓝黑 */
+    --foreground: oklch(0.98 0 0);       /* 纯白 */
+    --card: oklch(0.18 0.02 250);        /* 石板灰 */
+    --card-foreground: oklch(0.98 0 0);
+    --popover: oklch(0.18 0.02 250);
+    --popover-foreground: oklch(0.98 0 0);
+    --primary: oklch(0.88 0.2 95);       /* 霓虹黄 */
     --primary-foreground: oklch(0.1 0.01 240);
-    --secondary: oklch(0.18 0.015 240);
-    --secondary-foreground: oklch(0.93 0.005 240);
-    --muted: oklch(0.16 0.01 240);
-    --muted-foreground: oklch(0.6 0.02 240);
-    --accent: oklch(0.2 0.02 240);
-    --accent-foreground: oklch(0.93 0.005 240);
+    --secondary: oklch(0.22 0.02 250);
+    --secondary-foreground: oklch(0.98 0 0);
+    --muted: oklch(0.2 0.02 250);
+    --muted-foreground: oklch(0.75 0.01 250);
+    --accent: oklch(0.24 0.02 250);
+    --accent-foreground: oklch(0.98 0 0);
     --destructive: oklch(0.55 0.18 20);
-    --border: oklch(0.2 0.02 240 / 30%);
-    --input: oklch(0.18 0.015 240);
-    --ring: oklch(0.78 0.12 220);
-    --chart-1: oklch(0.78 0.12 220);
+    --border: oklch(0.75 0.1 230);       /* 霓虹天青描边 */
+    --input: oklch(0.18 0.02 250);
+    --ring: oklch(0.88 0.2 95);
+    --chart-1: oklch(0.88 0.2 95);
     --chart-2: oklch(0.75 0.1 120);
     --chart-3: oklch(0.8 0.12 60);
     --chart-4: oklch(0.7 0.18 20);
     --chart-5: oklch(0.6 0.02 240);
-    --sidebar: oklch(0.12 0.012 240);
-    --sidebar-foreground: oklch(0.85 0.008 240);
-    --sidebar-primary: oklch(0.78 0.12 220);
+    --sidebar: oklch(0.14 0.02 250);
+    --sidebar-foreground: oklch(0.95 0.008 250);
+    --sidebar-primary: oklch(0.88 0.2 95);
     --sidebar-primary-foreground: oklch(0.1 0.01 240);
-    --sidebar-accent: oklch(0.16 0.015 240);
-    --sidebar-accent-foreground: oklch(0.93 0.005 240);
-    --sidebar-border: oklch(0.2 0.02 240 / 20%);
-    --sidebar-ring: oklch(0.78 0.12 220);
+    --sidebar-accent: oklch(0.22 0.02 250);
+    --sidebar-accent-foreground: oklch(0.98 0 0);
+    --sidebar-border: oklch(0.75 0.1 230);
+    --sidebar-ring: oklch(0.88 0.2 95);
 }
 
 @layer base {
@@ -134,43 +134,48 @@
   }
 }
 
-/* 高雅极简设计公用类 */
+/* 波普新野兽派公共类 */
 @layer utilities {
-  /* 优雅渐变微透背景 */
-  .elegant-gradient-bg {
+  /* 波普新野兽派拼贴背景 */
+  .pop-brutal-bg {
     background-color: var(--background);
     background-image: 
-      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.02) 0px, transparent 50%), 
-      radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.01) 0px, transparent 50%);
+      radial-gradient(circle at 100% 150%, var(--primary) 0%, transparent 24%),
+      radial-gradient(circle at 0% -50%, var(--border) 0%, transparent 20%);
+    background-size: cover;
   }
 
-  /* 精细柔和软阴影 */
-  .elegant-shadow {
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.01);
+  /* 波普新野兽派实体硬阴影 */
+  .pop-shadow {
+    box-shadow: 4px 4px 0px 0px var(--border);
+  }
+
+  .pop-shadow-sm {
+    box-shadow: 2px 2px 0px 0px var(--border);
+  }
+
+  .pop-shadow-lg {
+    box-shadow: 6px 6px 0px 0px var(--border);
   }
   
-  .dark .elegant-shadow {
-    box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.01);
+  /* hover 下压物理动效 */
+  .pop-press {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .pop-press:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--border);
+  }
+  .pop-press:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px 0px var(--border);
   }
 
-  /* 精细输入底线聚焦动效 */
-  .elegant-input-underline {
-    position: relative;
+  .pop-press-card {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .elegant-input-underline::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: var(--primary);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  .elegant-input-underline:focus-within::after {
-    transform: scaleX(1);
-    transform-origin: left;
+  .pop-press-card:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 3px 3px 0px 0px var(--border);
   }
 }

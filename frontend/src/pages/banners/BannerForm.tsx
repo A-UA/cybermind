@@ -129,15 +129,20 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border border-border/80 max-w-lg p-8 font-sans text-foreground rounded-2xl shadow-xl">
-        <DialogHeader className="border-b border-border/60 pb-4 mb-6">
-          <DialogTitle className="text-xl font-display font-medium tracking-tight text-foreground italic">
-            {isEdit ? '编辑 Banner' : '新建 Banner'}
+      <DialogContent className="bg-card border-2 border-border max-w-lg p-8 font-sans text-foreground rounded-xl pop-shadow-lg">
+        {/* 对话框头部 */}
+        <DialogHeader className="border-b-2 border-border pb-4 mb-6 relative">
+          {/* 对话框装饰小贴纸 */}
+          <div className="absolute -top-11 -right-2 px-2.5 py-0.5 bg-primary text-primary-foreground border-2 border-border text-[9px] font-heading font-bold uppercase rounded-lg rotate-[4deg] pop-shadow-sm select-none">
+            FORM PANEL
+          </div>
+          <DialogTitle className="text-xl font-heading font-bold tracking-tight text-foreground">
+            {isEdit ? '编辑 BANNER' : '新建 BANNER'}
           </DialogTitle>
         </DialogHeader>
 
         {errorMsg && (
-          <div className="p-3 mb-6 text-xs text-rose-600 dark:text-rose-400 border border-rose-500/10 bg-rose-500/5 rounded-xl flex items-center space-x-2 animate-shake">
+          <div className="p-3 mb-6 text-xs text-destructive border-2 border-destructive bg-destructive/5 rounded-lg flex items-center space-x-2 animate-shake font-semibold">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{errorMsg}</span>
           </div>
@@ -146,8 +151,8 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
         <form onSubmit={handleSubmit} className="space-y-6 text-xs">
           {/* 标题 */}
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              Banner 标题
+            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
+              Banner 标题 / TITLE
             </label>
             <input
               type="text"
@@ -155,23 +160,23 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
               placeholder="请输入标题"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all rounded-xl text-foreground placeholder-muted-foreground/60 outline-none text-xs"
+              className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
           </div>
 
           {/* 图片上传 */}
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              展示图片
+            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
+              展示图片 / COVER IMAGE
             </label>
             <div className="flex space-x-2">
               <input
                 type="text"
                 required
-                placeholder="请输入图片 URL 或点击上传"
+                placeholder="请输入图片 URL 或点击右侧上传"
                 value={imageUrl}
                 onChange={(e) => setImageUrl(e.target.value)}
-                className="flex-1 px-4 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all rounded-xl text-foreground placeholder-muted-foreground/60 outline-none text-xs"
+                className="flex-1 px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
               />
               <input
                 type="file"
@@ -184,65 +189,65 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
                 type="button"
                 onClick={handleUploadClick}
                 disabled={uploading}
-                className="px-4 py-3 border border-border bg-card hover:bg-secondary text-foreground font-semibold flex items-center space-x-1.5 transition-all rounded-xl cursor-pointer disabled:opacity-50 text-xs"
+                className="px-4 py-3 border-2 border-border bg-background hover:bg-accent text-foreground font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 text-xs"
               >
                 {uploading ? (
                   <RefreshCw className="h-3.5 w-3.5 animate-spin" />
                 ) : (
-                  <Upload className="h-3.5 w-3.5 text-muted-foreground" />
+                  <Upload className="h-3.5 w-3.5 text-primary" />
                 )}
-                <span>{uploading ? '上传中...' : '上传图片'}</span>
+                <span>{uploading ? '上传中...' : '本地上传'}</span>
               </button>
             </div>
             {imageUrl && (
-              <div className="mt-3 p-1 border border-border bg-secondary/20 w-32 h-20 rounded-xl overflow-hidden flex items-center justify-center">
-                <img src={imageUrl} alt="预览" className="max-w-full max-h-full object-contain rounded-lg" />
+              <div className="mt-3 p-1.5 border-2 border-border bg-accent/20 w-32 h-20 rounded-lg overflow-hidden flex items-center justify-center pop-shadow-sm">
+                <img src={imageUrl} alt="预览" className="max-w-full max-h-full object-contain rounded" />
               </div>
             )}
           </div>
 
           {/* 跳转链接 */}
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-              跳转链接
+            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
+              跳转链接 / TARGET LINK
             </label>
             <input
               type="text"
               placeholder="请输入点击跳转的 URL（选填）"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
-              className="w-full px-4 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all rounded-xl text-foreground placeholder-muted-foreground/60 outline-none text-xs"
+              className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             {/* 排序序号 */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                排序序号
+              <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
+                排序序号 / SORT ORDER
               </label>
               <input
                 type="number"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-3 bg-secondary/30 border border-transparent focus:border-primary/20 focus:bg-card focus:ring-4 focus:ring-primary/5 transition-all rounded-xl text-foreground outline-none text-xs"
+                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
               />
             </div>
 
             {/* 启用状态 */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">
-                分发状态
+              <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
+                分发状态 / DISPATCH STATUS
               </label>
               <div className="flex items-center h-11 pl-1">
-                <label className="inline-flex items-center space-x-2 cursor-pointer">
+                <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={isActive}
                     onChange={(e) => setIsActive(e.target.checked)}
-                    className="w-4 h-4 bg-secondary border-border/80 text-primary focus:ring-0 rounded cursor-pointer"
+                    className="w-4 h-4 bg-background border-2 border-border text-primary focus:ring-0 rounded-md cursor-pointer"
                   />
-                  <span className={`text-xs font-semibold ${isActive ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <span className={`text-xs font-bold ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}>
                     {isActive ? '分发启用 (ACTIVE)' : '下线搁置 (INACTIVE)'}
                   </span>
                 </label>
@@ -250,20 +255,20 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             </div>
           </div>
 
-          <DialogFooter className="border-t border-border/60 pt-6 mt-6 flex justify-end space-x-2">
+          <DialogFooter className="border-t-2 border-border pt-6 mt-6 flex justify-end space-x-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground font-semibold transition-all rounded-xl cursor-pointer"
+              className="px-5 py-2.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
             >
-              取消
+              取消 CANCEL
             </button>
             <button
               type="submit"
               disabled={submitMutation.isPending || uploading}
-              className="px-6 py-2.5 bg-[#111622] hover:bg-[#1e2536] dark:bg-[#e2e8f0] dark:hover:bg-[#f3f4f6] text-white dark:text-black font-semibold transition-all rounded-xl cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 bg-primary text-primary-foreground border-2 border-border font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50"
             >
-              <span>{submitMutation.isPending ? '保存中...' : '确认保存'}</span>
+              <span>{submitMutation.isPending ? '保存中 SAVE...' : '确认保存 CONFIRM'}</span>
             </button>
           </DialogFooter>
         </form>

@@ -93,10 +93,10 @@ export default function BannersPage() {
   return (
     <div className="space-y-6 text-foreground font-sans">
       {/* 顶部操作过滤条 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border border-border/60 elegant-shadow p-5 rounded-2xl transition-all duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300">
         <div className="flex items-center space-x-2.5">
-          <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold tracking-wide text-foreground">
+          <SlidersHorizontal className="h-4 w-4 text-primary" />
+          <h2 className="text-sm font-heading font-bold tracking-wider text-foreground uppercase">
             Banner 数据分发控制
           </h2>
           {(isLoading || isFetching) && (
@@ -107,7 +107,7 @@ export default function BannersPage() {
         <div className="flex flex-wrap items-center gap-3 text-xs">
           {/* 状态过滤 */}
           <div className="flex items-center space-x-2">
-            <span className="text-muted-foreground">过滤:</span>
+            <span className="font-semibold text-muted-foreground">过滤:</span>
             <Select
               value={isActiveFilter}
               onValueChange={(val) => {
@@ -115,10 +115,10 @@ export default function BannersPage() {
                 setPage(1)
               }}
             >
-              <SelectTrigger className="w-28 h-9 bg-secondary/40 border-transparent text-foreground text-xs rounded-xl focus:ring-0">
+              <SelectTrigger className="w-28 h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-semibold">
                 <SelectValue placeholder="全部状态" />
               </SelectTrigger>
-              <SelectContent className="bg-card border-border text-foreground rounded-xl text-xs">
+              <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
                 <SelectItem value="all">显示全部</SelectItem>
                 <SelectItem value="active">已启用</SelectItem>
                 <SelectItem value="inactive">已下线</SelectItem>
@@ -128,7 +128,7 @@ export default function BannersPage() {
 
           <button
             onClick={() => refetch()}
-            className="p-2 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all rounded-xl cursor-pointer"
+            className="p-2 border-2 border-border bg-background text-foreground hover:bg-accent transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
             title="刷新数据"
           >
             <RefreshCw className="h-4 w-4" />
@@ -136,7 +136,7 @@ export default function BannersPage() {
 
           <button
             onClick={handleCreateClick}
-            className="px-4 py-2 bg-[#111622] hover:bg-[#1e2536] dark:bg-[#e2e8f0] dark:hover:bg-[#f3f4f6] text-white dark:text-black font-semibold flex items-center space-x-1.5 transition-all rounded-xl cursor-pointer text-xs shadow-sm"
+            className="px-4 py-2 bg-primary text-primary-foreground font-heading font-bold flex items-center space-x-1.5 transition-all border-2 border-border pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
           >
             <Plus className="h-4 w-4" />
             <span>新建 Banner</span>
@@ -145,44 +145,44 @@ export default function BannersPage() {
       </div>
 
       {/* 数据列表面板 */}
-      <div className="border border-border/60 bg-card elegant-shadow rounded-2xl overflow-hidden transition-all duration-300">
+      <div className="border-2 border-border bg-card pop-shadow rounded-xl overflow-hidden transition-all duration-300">
         {isLoading ? (
           <div className="h-64 flex flex-col justify-center items-center space-y-3">
-            <RefreshCw className="h-8 w-8 text-primary/60 animate-spin" />
-            <span className="text-xs text-muted-foreground">正在载入数据资源...</span>
+            <RefreshCw className="h-8 w-8 text-primary animate-spin" />
+            <span className="text-xs text-muted-foreground font-semibold">正在载入数据资源...</span>
           </div>
         ) : banners.length === 0 ? (
           <div className="h-64 flex flex-col justify-center items-center text-center">
-            <span className="text-xs text-muted-foreground">暂无可用数据记录</span>
+            <span className="text-xs text-muted-foreground font-semibold">暂无可用数据记录</span>
           </div>
         ) : (
           <Table className="text-xs">
-            <TableHeader className="bg-secondary/30">
-              <TableRow className="border-b border-border hover:bg-transparent">
-                <TableHead className="font-semibold text-muted-foreground w-14">ID</TableHead>
-                <TableHead className="font-semibold text-muted-foreground w-24">缩略图</TableHead>
-                <TableHead className="font-semibold text-muted-foreground">标题</TableHead>
-                <TableHead className="font-semibold text-muted-foreground">跳转链路</TableHead>
-                <TableHead className="font-semibold text-muted-foreground w-20 text-center">排序</TableHead>
-                <TableHead className="font-semibold text-muted-foreground w-24 text-center">状态</TableHead>
-                <TableHead className="font-semibold text-muted-foreground w-40">最后修改时间</TableHead>
-                <TableHead className="font-semibold text-muted-foreground w-24 text-center">操作</TableHead>
+            <TableHeader className="bg-accent border-b-2 border-border">
+              <TableRow className="border-b-2 border-border hover:bg-transparent">
+                <TableHead className="font-bold text-foreground w-14">ID</TableHead>
+                <TableHead className="font-bold text-foreground w-24">缩略图</TableHead>
+                <TableHead className="font-bold text-foreground">标题</TableHead>
+                <TableHead className="font-bold text-foreground">跳转链路</TableHead>
+                <TableHead className="font-bold text-foreground w-20 text-center">排序</TableHead>
+                <TableHead className="font-bold text-foreground w-24 text-center">状态</TableHead>
+                <TableHead className="font-bold text-foreground w-40">最后修改时间</TableHead>
+                <TableHead className="font-bold text-foreground w-24 text-center">操作</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {banners.map((banner) => (
                 <TableRow
                   key={banner.id}
-                  className="border-b border-border/40 hover:bg-secondary/20 transition-all"
+                  className="border-b-2 border-border hover:bg-secondary/40 transition-colors"
                 >
                   {/* ID */}
-                  <TableCell className="font-semibold text-muted-foreground/80">
+                  <TableCell className="font-bold text-muted-foreground/80 font-mono">
                     #{banner.id}
                   </TableCell>
                   
                   {/* 缩略图 */}
                   <TableCell>
-                    <div className="w-16 h-10 border border-border/40 bg-secondary/30 rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
+                    <div className="w-16 h-10 border-2 border-border bg-background rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
                       <img
                         src={banner.image_url}
                         alt={banner.title}
@@ -200,12 +200,12 @@ export default function BannersPage() {
                   </TableCell>
 
                   {/* 标题 */}
-                  <TableCell className="font-semibold text-foreground truncate max-w-xs">
+                  <TableCell className="font-bold text-foreground truncate max-w-xs">
                     {banner.title}
                   </TableCell>
 
                   {/* 跳转链接 */}
-                  <TableCell className="text-muted-foreground text-[11px] truncate max-w-[150px]">
+                  <TableCell className="text-muted-foreground text-[11px] font-semibold truncate max-w-[150px]">
                     {banner.link_url ? (
                       <a
                         href={banner.link_url}
@@ -217,27 +217,27 @@ export default function BannersPage() {
                         <ExternalLink className="h-3 w-3 flex-shrink-0" />
                       </a>
                     ) : (
-                      <span className="text-muted-foreground/40">--</span>
+                      <span className="text-muted-foreground/40 font-mono">--</span>
                     )}
                   </TableCell>
 
                   {/* 排序 */}
-                  <TableCell className="text-center font-medium text-muted-foreground">
+                  <TableCell className="text-center font-bold text-muted-foreground font-mono">
                     {banner.sort_order}
                   </TableCell>
 
                   {/* 状态 */}
                   <TableCell className="text-center">
                     <div className="flex items-center justify-center space-x-2">
-                      <span className={`w-2 h-2 rounded-full inline-block ${banner.is_active ? 'bg-primary' : 'bg-muted-foreground/35'}`} />
-                      <span className={`text-[10px] font-semibold ${banner.is_active ? 'text-primary' : 'text-muted-foreground/60'}`}>
+                      <span className={`w-2.5 h-2.5 rounded-full inline-block border-2 border-border ${banner.is_active ? 'bg-emerald-400' : 'bg-muted-foreground/35'}`} />
+                      <span className={`text-[10px] font-bold ${banner.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground/60'}`}>
                         {banner.is_active ? '分发中' : '已下线'}
                       </span>
                     </div>
                   </TableCell>
 
                   {/* 修改时间 */}
-                  <TableCell className="text-muted-foreground text-[11px]">
+                  <TableCell className="text-muted-foreground font-semibold text-[11px] font-mono">
                     {formatDate(banner.updated_at)}
                   </TableCell>
 
@@ -246,14 +246,14 @@ export default function BannersPage() {
                     <div className="flex items-center justify-center space-x-2">
                       <button
                         onClick={() => handleEditClick(banner)}
-                        className="p-2 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all rounded-lg cursor-pointer"
+                        className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
                         title="编辑"
                       >
                         <Edit className="h-3.5 w-3.5" />
                       </button>
                       <button
                         onClick={() => handleDelete(banner.id)}
-                        className="p-2 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-rose-600 transition-all rounded-lg cursor-pointer"
+                        className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-destructive transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
                         title="删除"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -268,24 +268,24 @@ export default function BannersPage() {
 
         {/* 底部分页组件 */}
         {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-between border-t border-border/40 p-4 bg-secondary/10 text-[11px] text-muted-foreground">
+          <div className="flex items-center justify-between border-t-2 border-border p-4 bg-accent/30 text-[11px] text-muted-foreground font-semibold">
             <div>
-              共计 <span className="font-semibold">{total}</span> 条数据 // 当前第{' '}
-              <span className="font-semibold">{page}</span> /{' '}
-              <span className="font-semibold">{totalPages}</span> 页
+              共计 <span className="font-bold text-foreground">{total}</span> 条数据 // 当前第{' '}
+              <span className="font-bold text-foreground">{page}</span> /{' '}
+              <span className="font-bold text-foreground">{totalPages}</span> 页
             </div>
-            <div className="flex space-x-1">
+            <div className="flex space-x-1.5">
               <button
                 disabled={page <= 1}
                 onClick={() => setPage((p) => p - 1)}
-                className="px-3.5 py-1.5 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all rounded-xl cursor-pointer disabled:opacity-35 disabled:pointer-events-none"
+                className="px-3.5 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
               >
                 上一页
               </button>
               <button
                 disabled={page >= totalPages}
                 onClick={() => setPage((p) => p + 1)}
-                className="px-3.5 py-1.5 border border-border bg-card hover:bg-secondary text-muted-foreground hover:text-foreground transition-all rounded-xl cursor-pointer disabled:opacity-35 disabled:pointer-events-none"
+                className="px-3.5 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
               >
                 下一页
               </button>
