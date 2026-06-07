@@ -76,7 +76,7 @@ export default function NewsPage() {
       if (searchTitle.trim()) params.title = searchTitle
       if (statusFilter !== 'all') params.status = statusFilter
       if (categoryFilter !== 'all') params.category = categoryFilter
-      const res = await apiClient.get('/news/', { params })
+      const res = await apiClient.get('/news', { params })
       return res.data.data
     }
   })
@@ -157,7 +157,7 @@ export default function NewsPage() {
       if (view === 'edit' && editingArticle) {
         await apiClient.put(`/news/${editingArticle.id}`, payload)
       } else {
-        await apiClient.post('/news/', payload)
+        await apiClient.post('/news', payload)
       }
     },
     onSuccess: () => {

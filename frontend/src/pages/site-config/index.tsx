@@ -31,7 +31,7 @@ export default function SiteConfigPage() {
   const { data: configs, isLoading, isFetching, refetch } = useQuery<ISiteConfigItem[]>({
     queryKey: ['site-config'],
     queryFn: async () => {
-      const res = await apiClient.get('/site-config/')
+      const res = await apiClient.get('/site-config')
       return res.data.data
     }
   })
@@ -101,7 +101,7 @@ export default function SiteConfigPage() {
         contact_email: contactEmail,
         qr_code_image: qrCodeImage
       }
-      await apiClient.put('/site-config/', { configs: payload })
+      await apiClient.put('/site-config', { configs: payload })
     },
     onSuccess: () => {
       toast.success('系统配置保存成功')

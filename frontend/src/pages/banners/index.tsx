@@ -41,7 +41,7 @@ export default function BannersPage() {
       if (isActiveFilter !== 'all') {
         params.is_active = isActiveFilter === 'active'
       }
-      const res = await apiClient.get('/banners/', { params })
+      const res = await apiClient.get('/banners', { params })
       return res.data.data
     }
   })

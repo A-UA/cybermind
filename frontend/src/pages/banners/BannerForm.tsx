@@ -90,7 +90,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
       if (isEdit && banner) {
         await apiClient.put(`/banners/${banner.id}`, dataPayload)
       } else {
-        await apiClient.post('/banners/', dataPayload)
+        await apiClient.post('/banners', dataPayload)
       }
     },
     onSuccess: () => {
