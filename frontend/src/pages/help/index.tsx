@@ -7,6 +7,7 @@ import HelpCategoryList from './components/HelpCategoryList'
 import HelpQuestionList from './components/HelpQuestionList'
 import HelpQuestionForm from './components/HelpQuestionForm'
 import type { IHelpCategory, IHelpQuestion } from './types'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function HelpPage() {
   // 问答主视图: 'list' | 'create' | 'edit'
@@ -16,6 +17,7 @@ export default function HelpPage() {
   // 类别联动及搜索状态
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const { showConfirm } = useConfirmStore()
 
   // ==================== 1. API 数据拉取 ====================
 
@@ -139,9 +141,13 @@ export default function HelpPage() {
             await saveCategoryMutation.mutateAsync({ name, sortOrder, category })
           }}
           onDeleteCategory={(id) => {
-            if (window.confirm('确认要删除此分类吗？若分类下含有问答关联，操作将被系统阻断。')) {
-              deleteCategoryMutation.mutate(id)
-            }
+            showConfirm({
+              title: '确认删除',
+              message: '确认要删除此分类吗？若分类下含有问答关联，操作将被系统阻断。',
+              onConfirm: async () => {
+                await deleteCategoryMutation.mutateAsync(id)
+              }
+            })
           }}
         />
 
@@ -168,9 +174,13 @@ export default function HelpPage() {
             setView('edit')
           }}
           onDeleteQuestion={(id) => {
-            if (window.confirm('确认要物理删除此问答项吗？此操作不可撤销。')) {
-              deleteQuestionMutation.mutate(id)
-            }
+            showConfirm({
+              title: '确认删除',
+              message: '确认要物理删除此问答项吗？此操作不可撤销。',
+              onConfirm: async () => {
+                await deleteQuestionMutation.mutateAsync(id)
+              }
+            })
           }}
           onToggleActive={(id, currentActive) => {
             toggleActiveMutation.mutate({ id, activeVal: currentActive })

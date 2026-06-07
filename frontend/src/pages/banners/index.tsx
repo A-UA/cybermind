@@ -9,9 +9,11 @@ import BannerForm from './components/BannerForm'
 import AppTable from '@/components/common/AppTable'
 import type { AppTableColumn } from '@/components/common/AppTable'
 import AppTime from '@/components/common/AppTime'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function BannersPage() {
   const queryClient = useQueryClient()
+  const { showConfirm } = useConfirmStore()
   
   // 分页与筛选状态
   const [page, setPage] = useState(1)
@@ -54,9 +56,13 @@ export default function BannersPage() {
   })
 
   const handleDelete = (id: number) => {
-    if (window.confirm('确认要删除此 Banner 吗？删除后前台页面将无法继续渲染该项。')) {
-      deleteMutation.mutate(id)
-    }
+    showConfirm({
+      title: '确认删除',
+      message: '确认要删除此 Banner 吗？删除后前台页面将无法继续渲染该项。',
+      onConfirm: async () => {
+        await deleteMutation.mutateAsync(id)
+      }
+    })
   }
 
   const handleCreateClick = () => {

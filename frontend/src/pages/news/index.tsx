@@ -6,9 +6,11 @@ import { toast } from 'sonner'
 import NewsList from './components/NewsList'
 import NewsForm from './components/NewsForm'
 import type { INewsArticle, INewsStats } from './types'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function NewsPage() {
   const queryClient = useQueryClient()
+  const { showConfirm } = useConfirmStore()
 
   // 视图状态: 'list' | 'create' | 'edit'
   const [view, setView] = useState<'list' | 'create' | 'edit'>('list')
@@ -143,9 +145,13 @@ export default function NewsPage() {
           setView('edit')
         }}
         onDelete={(id) => {
-          if (window.confirm('确认要物理删除此文章吗？此操作无法撤销。')) {
-            deleteMutation.mutate(id)
-          }
+          showConfirm({
+            title: '确认删除',
+            message: '确认要物理删除此文章吗？此操作无法撤销。',
+            onConfirm: async () => {
+              await deleteMutation.mutateAsync(id)
+            }
+          })
         }}
         onToggleTop={(id, currentVal) => {
           toggleTopMutation.mutate({ id, isTopVal: !currentVal })

@@ -11,6 +11,7 @@ import ContactsPage from '@/pages/contacts'
 import UsersPage from '@/pages/users'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { AppProtectedRoute } from '@/components/business/AppProtectedRoute'
+import AppConfirm from '@/components/common/AppConfirm'
 import { 
   Terminal, AlertTriangle, RefreshCw,
   TrendingUp, Eye, BookOpen, MessageSquare, Clock, ArrowRight, Activity 
@@ -416,6 +417,7 @@ function NotFoundPage() {
 
 export default function App() {
   return (
+    <>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/403" element={<ForbiddenPage />} />
@@ -458,5 +460,7 @@ export default function App() {
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
+    <AppConfirm />
+    </>
   )
 }

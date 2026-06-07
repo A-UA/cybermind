@@ -11,6 +11,7 @@ import RoleFormModal from './components/RoleFormModal'
 import AssignRoleModal from './components/AssignRoleModal'
 import AssignPermModal from './components/AssignPermModal'
 import type { IUser, IRole, IPermission } from './types'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function UsersPage() {
   const [activeTab, setActiveTab] = useState<'users' | 'roles'>('users')
@@ -25,6 +26,7 @@ export default function UsersPage() {
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false)
   const [isAssignRoleOpen, setIsAssignRoleOpen] = useState(false)
   const [isAssignPermOpen, setIsAssignPermOpen] = useState(false)
+  const { showConfirm } = useConfirmStore()
 
   // 获取用户列表
   const { data: usersData, isLoading: isUsersLoading, refetch: refetchUsers } = useQuery<{
@@ -220,9 +222,13 @@ export default function UsersPage() {
             setIsUserModalOpen(true)
           }}
           onDeleteUser={(id, username) => {
-            if (window.confirm(`确认要禁用管理员 ${username} 吗？`)) {
-              deleteUserMutation.mutate(id)
-            }
+            showConfirm({
+              title: '确认禁用',
+              message: `确认要禁用管理员 ${username} 吗？`,
+              onConfirm: async () => {
+                await deleteUserMutation.mutateAsync(id)
+              }
+            })
           }}
           onAssignRole={(u) => {
             setSelectedUser(u)
@@ -243,9 +249,13 @@ export default function UsersPage() {
             setIsRoleModalOpen(true)
           }}
           onDeleteRole={(id, name) => {
-            if (window.confirm(`确定要物理删除角色 [${name}] 吗？`)) {
-              deleteRoleMutation.mutate(id)
-            }
+            showConfirm({
+              title: '确认删除',
+              message: `确定要物理删除角色 [${name}] 吗？`,
+              onConfirm: async () => {
+                await deleteRoleMutation.mutateAsync(id)
+              }
+            })
           }}
           onAssignPerm={(r) => {
             setSelectedRole(r)

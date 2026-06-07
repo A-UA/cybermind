@@ -71,3 +71,15 @@ apiClient.interceptors.response.use(
 )
 
 export default apiClient
+
+/**
+ * 统一 API 错误解析并 Toast 反馈
+ * 从 Axios 响应中提取后端 message 字段，如无则使用 fallback 兜底文案。
+ */
+export function getApiErrorMessage(err: unknown, fallbackMsg = '操作失败'): string {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const resp = (err as { response?: { data?: { message?: string } } }).response
+    return resp?.data?.message || fallbackMsg
+  }
+  return fallbackMsg
+}

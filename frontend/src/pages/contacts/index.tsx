@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import ContactList from './components/ContactList'
 import ContactDetailDrawer from './components/ContactDetailDrawer'
 import type { IContactSubmission } from './types'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function ContactsPage() {
   const [page, setPage] = useState(1)
@@ -13,9 +14,9 @@ export default function ContactsPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const [activeSubmission, setActiveSubmission] = useState<IContactSubmission | null>(null)
+  const { showConfirm } = useConfirmStore()
 
   // ==================== 1. API 数据拉取 ====================
-
   // 获取分页留言列表
   const { data, isLoading, refetch } = useQuery<{
     items: IContactSubmission[]
@@ -157,9 +158,13 @@ export default function ContactsPage() {
         isDeleting={deleteMutation.isPending}
         onClose={() => setActiveSubmission(null)}
         onDelete={(id) => {
-          if (window.confirm('确认要物理擦除此条留言吗？此操作无法撤销。')) {
-            deleteMutation.mutate(id)
-          }
+          showConfirm({
+            title: '确认删除',
+            message: '确认要物理擦除此条留言吗？此操作无法撤销。',
+            onConfirm: async () => {
+              await deleteMutation.mutateAsync(id)
+            }
+          })
         }}
         onProcess={async (remark, status) => {
           if (activeSubmission) {

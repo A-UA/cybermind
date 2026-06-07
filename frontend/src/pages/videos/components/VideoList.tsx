@@ -1,6 +1,7 @@
 import { Plus, Trash2, Edit, RefreshCw, Eye, Film, Clock, Play } from 'lucide-react'
 import AppGuard from '@/components/common/AppGuard'
 import type { IOperationVideo } from '../types'
+import { formatDuration } from '@/lib/utils'
 
 interface VideoListProps {
   videos: IOperationVideo[]
@@ -15,14 +16,6 @@ interface VideoListProps {
   onDelete: (id: number) => void
   onPlay: (video: IOperationVideo) => void
   onToggleActive: (id: number, currentActive: boolean) => void
-}
-
-// 格式化时长为 mm:ss
-function formatDuration(seconds?: number): string {
-  if (!seconds) return '00:00'
-  const mins = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
 }
 
 export default function VideoList({

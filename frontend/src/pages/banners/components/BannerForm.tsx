@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import apiClient from '@/lib/api'
+import apiClient, { getApiErrorMessage } from '@/lib/api'
 import type { IBanner } from '@/types/banner'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter
-} from '@/components/ui/dialog'
 import { AlertCircle } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
+import AppModal from '@/components/common/AppModal'
+import AppButton from '@/components/common/AppButton'
 
 interface BannerFormProps {
   isOpen: boolean
@@ -73,8 +68,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
       onClose()
     },
     onError: (err: any) => {
-      const msg = err.response?.data?.message || '保存失败'
-      setErrorMsg(msg)
+      setErrorMsg(getApiErrorMessage(err, '保存失败'))
     },
   })
 
@@ -92,19 +86,14 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-card border-2 border-border max-w-lg p-8 font-sans text-foreground rounded-xl pop-shadow-lg">
-        {/* 对话框头部 */}
-        <DialogHeader className="border-b-2 border-border pb-4 mb-6 relative">
-          {/* 对话框装饰小贴纸 */}
-          <div className="absolute -top-11 -right-2 px-2.5 py-0.5 bg-primary text-primary-foreground border-2 border-border text-[9px] font-heading font-bold uppercase rounded-lg rotate-[4deg] pop-shadow-sm select-none">
-            FORM PANEL
-          </div>
-          <DialogTitle className="text-xl font-heading font-bold tracking-tight text-foreground">
-            {isEdit ? '编辑 BANNER' : '新建 BANNER'}
-          </DialogTitle>
-        </DialogHeader>
-
+    <AppModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={isEdit ? '编辑 BANNER' : '新建 BANNER'}
+      size="lg"
+      sticker="FORM PANEL"
+    >
+      <div className="p-6 font-sans text-foreground">
         {errorMsg && (
           <div className="p-3 mb-6 text-xs text-destructive border-2 border-destructive bg-destructive/5 rounded-lg flex items-center space-x-2 animate-shake font-semibold">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
@@ -174,24 +163,23 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             </AppFormItem>
           </div>
 
-          <DialogFooter className="border-t-2 border-border pt-6 mt-6 flex justify-end space-x-2.5">
-            <button
+          <div className="border-t-2 border-border pt-6 mt-6 flex justify-end space-x-2.5">
+            <AppButton
               type="button"
+              variant="secondary"
               onClick={onClose}
-              className="px-5 py-2.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
             >
               取消 CANCEL
-            </button>
-            <button
+            </AppButton>
+            <AppButton
               type="submit"
-              disabled={submitMutation.isPending}
-              className="px-6 py-2.5 bg-primary text-primary-foreground border-2 border-border font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50"
+              loading={submitMutation.isPending}
             >
-              <span>{submitMutation.isPending ? '保存中 SAVE...' : '确认保存 CONFIRM'}</span>
-            </button>
-          </DialogFooter>
+              确认保存 CONFIRM
+            </AppButton>
+          </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </AppModal>
   )
 }

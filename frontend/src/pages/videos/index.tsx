@@ -7,6 +7,7 @@ import VideoList from './components/VideoList'
 import VideoForm from './components/VideoForm'
 import VideoPlayerModal from './components/VideoPlayerModal'
 import type { IOperationVideo } from './types'
+import { useConfirmStore } from '@/stores/useConfirmStore'
 
 export default function VideosPage() {
   // 页面视图：'list' | 'create' | 'edit'
@@ -19,6 +20,7 @@ export default function VideosPage() {
 
   // 播放器弹窗状态
   const [activePlayVideo, setActivePlayVideo] = useState<IOperationVideo | null>(null)
+  const { showConfirm } = useConfirmStore()
 
   // ==================== 1. API 数据拉取 ====================
 
@@ -122,9 +124,13 @@ export default function VideosPage() {
             setView('edit')
           }}
           onDelete={(id) => {
-            if (window.confirm('确认要物理删除此操作视频吗？此操作无法撤销。')) {
-              deleteVideoMutation.mutate(id)
-            }
+            showConfirm({
+              title: '确认删除',
+              message: '确认要物理删除此操作视频吗？此操作无法撤销。',
+              onConfirm: async () => {
+                await deleteVideoMutation.mutateAsync(id)
+              }
+            })
           }}
           onPlay={handlePlayVideo}
           onToggleActive={(id, currentActive) => {
