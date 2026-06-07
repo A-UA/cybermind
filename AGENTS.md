@@ -259,6 +259,11 @@ async def list_banners(...):
   - `uv run <command>` — 在虚拟环境中运行命令
 - 禁止手动编辑 `uv.lock` 文件
 
+### 5.7 类型注解规范
+
+- **禁止**使用 `typing.Optional`，必须使用最新规范的联合类型（如 `str | None`、`int | None` 等）
+- **禁止**使用 `typing.List` 或 `typing.Dict` 等大写类型，必须直接使用内置的 `list`、`dict` 等小写类型
+
 ---
 
 ## 6. 前端开发规范

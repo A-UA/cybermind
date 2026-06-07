@@ -19,7 +19,7 @@ def record_tracking_event(
     session: Session,
     ip_address: str,
     page_path: str,
-    user_agent: Optional[str] = None
+    user_agent: str | None = None
 ) -> bool:
     """记录一次页面访问。若指纹在 5 分钟内已存在，则去重拦截不入库并返回 False；否则入库并返回 True。"""
     fingerprint = generate_fingerprint(ip_address, page_path)

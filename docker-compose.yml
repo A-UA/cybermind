@@ -47,6 +47,16 @@ services:
     volumes:
       - ./backend/uploads:/app/uploads
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cybermind-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
 volumes:
   mysql-data:
   minio-data:
