@@ -1,11 +1,11 @@
 import { Navigate, Outlet } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 
-export interface ProtectedRouteProps {
+export interface AppProtectedRouteProps {
   permission?: string
 }
 
-export const ProtectedRoute = ({ permission }: ProtectedRouteProps) => {
+export const AppProtectedRoute = ({ permission }: AppProtectedRouteProps) => {
   const { accessToken, hasPermission } = useAuthStore()
 
   if (!accessToken) {

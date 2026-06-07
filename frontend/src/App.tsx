@@ -10,7 +10,7 @@ import VideosPage from '@/pages/videos'
 import ContactsPage from '@/pages/contacts'
 import UsersPage from '@/pages/users'
 import AdminLayout from '@/components/layout/AdminLayout'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { AppProtectedRoute } from '@/components/business/AppProtectedRoute'
 import { 
   Terminal, AlertTriangle, RefreshCw,
   TrendingUp, Eye, BookOpen, MessageSquare, Clock, ArrowRight, Activity 
@@ -421,36 +421,36 @@ export default function App() {
       <Route path="/403" element={<ForbiddenPage />} />
 
       {/* 必须登录的受保护路由 */}
-      <Route element={<ProtectedRoute />}>
+      <Route element={<AppProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/" element={<DashboardPage />} />
           
           {/* 带权限控制的路由 */}
-          <Route element={<ProtectedRoute permission="banner:read" />}>
+          <Route element={<AppProtectedRoute permission="banner:read" />}>
             <Route path="/banners" element={<BannersPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="news:read" />}>
+          <Route element={<AppProtectedRoute permission="news:read" />}>
             <Route path="/news" element={<NewsPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="help:read" />}>
+          <Route element={<AppProtectedRoute permission="help:read" />}>
             <Route path="/help" element={<HelpPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="video:read" />}>
+          <Route element={<AppProtectedRoute permission="video:read" />}>
             <Route path="/videos" element={<VideosPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="contact:read" />}>
+          <Route element={<AppProtectedRoute permission="contact:read" />}>
             <Route path="/contacts" element={<ContactsPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="user:read" />}>
+          <Route element={<AppProtectedRoute permission="user:read" />}>
             <Route path="/users" element={<UsersPage />} />
           </Route>
 
-          <Route element={<ProtectedRoute permission="config:read" />}>
+          <Route element={<AppProtectedRoute permission="config:read" />}>
             <Route path="/config" element={<SiteConfigPage />} />
           </Route>
         </Route>

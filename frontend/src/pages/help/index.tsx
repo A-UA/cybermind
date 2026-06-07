@@ -18,7 +18,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Plus, Trash2, Edit, RefreshCw, HelpCircle, Save, FolderPlus, ArrowLeft } from 'lucide-react'
-import RichEditor from '@/components/rich-editor/RichEditor'
+import AppRichEditor from '@/components/common/AppRichEditor'
 
 interface IHelpCategory {
   id: number
@@ -558,7 +558,7 @@ export default function HelpPage() {
               <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
                 问题解答详情 / ANSWER DETAILS
               </label>
-              <RichEditor value={answerContent} onChange={setAnswerContent} />
+              <AppRichEditor value={answerContent} onChange={setAnswerContent} />
             </div>
           </div>
 

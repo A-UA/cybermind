@@ -18,7 +18,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Plus, Trash2, Edit, RefreshCw, Eye, ArrowLeft, Save, Upload, Star, BookOpen, Layers } from 'lucide-react'
-import RichEditor from '@/components/rich-editor/RichEditor'
+import AppRichEditor from '@/components/common/AppRichEditor'
 
 interface INewsArticle {
   id: number
@@ -637,7 +637,7 @@ export default function NewsPage() {
               <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
                 文章富文本正文 / EDITORIAL CONTENT
               </label>
-              <RichEditor value={content} onChange={setContent} />
+              <AppRichEditor value={content} onChange={setContent} />
             </div>
           </div>
 

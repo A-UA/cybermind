@@ -4,12 +4,12 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Quote, Undo, Redo } from 'lucide-react'
 
-interface RichEditorProps {
+interface AppRichEditorProps {
   value: string
   onChange: (value: string) => void
 }
 
-export default function RichEditor({ value, onChange }: RichEditorProps) {
+export default function AppRichEditor({ value, onChange }: AppRichEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,

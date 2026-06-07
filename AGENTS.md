@@ -84,7 +84,8 @@ cybermind/
 │   ├── src/
 │   │   ├── components/ui/      # shadcn/ui 组件（通过 CLI 安装，禁止手动修改）
 │   │   ├── components/layout/  # 布局组件
-│   │   ├── components/         # 业务通用组件
+│   │   ├── components/common/  # 无业务逻辑的公共通用组件（如 AppTime, AppTable 等）
+│   │   ├── components/business/# 带业务逻辑的通用组件（如 AppProtectedRoute, AppImageUploader 等）
 │   │   ├── pages/              # 页面组件（按模块分目录）
 │   │   ├── hooks/              # 自定义 Hooks
 │   │   ├── lib/                # 工具函数 + Axios 实例
@@ -281,6 +282,10 @@ async def list_banners(...):
 - 组件文件命名使用 PascalCase：`BannerList.tsx`
 - 每个组件文件只导出一个主组件
 - 复杂组件拆分为子组件，放在同一目录下
+- **页面/组件代码行数限制（300行原则）**：单文件 React 组件或页面代码**超过 300 行**后，必须进行拆分重构：
+  - 具有跨页面复用性的组件，应提取为公共通用组件并使用 **`App` 前缀** 命名：无业务逻辑的公共通用基础组件归纳到 `src/components/common/` 目录下；与业务逻辑（如状态管理、权限校验等）相关的通用组件归纳到 `src/components/business/` 目录下。
+  - 仅当前页面使用的逻辑组件，应提取为局部子组件，放置在当前页面目录的独立文件中（如 `BannerForm.tsx`, `BannerCard.tsx`）。
+- **通用组件命名空间规范**：自主封装的、具备复用性的通用功能/业务组件**统一采用 `App` 前缀命名**（如 `AppTable`、`AppFormItem`、`AppImageUploader`、`AppVideoUploader`、`AppTime`、`AppGuard`、`AppProtectedRoute` 等），以此与基础 UI 库（如 shadcn/ui）及原生 HTML 元素区分，并保持跨项目移植性。
 - 页面组件结构示例：
 
 ```
