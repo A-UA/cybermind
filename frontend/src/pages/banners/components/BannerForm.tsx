@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
 import type { IBanner } from '@/types/banner'
@@ -9,7 +9,9 @@ import {
   DialogTitle,
   DialogFooter
 } from '@/components/ui/dialog'
-import { Upload, AlertCircle, RefreshCw } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
+import AppFormItem from '@/components/common/AppFormItem'
+import AppImageUploader from '@/components/business/AppImageUploader'
 
 interface BannerFormProps {
   isOpen: boolean
@@ -20,7 +22,6 @@ interface BannerFormProps {
 
 export default function BannerForm({ isOpen, onClose, banner, onSuccess }: BannerFormProps) {
   const isEdit = !!banner
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // 表单状态
   const [title, setTitle] = useState('')
@@ -30,7 +31,6 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
   const [isActive, setIsActive] = useState(true)
   
   const [errorMsg, setErrorMsg] = useState('')
-  const [uploading, setUploading] = useState(false)
 
   // 监听 banner 变化以初始化表单
   useEffect(() => {
@@ -51,31 +51,6 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
       }
     }
   }, [isOpen, banner])
-
-  // 文件上传 Mutation
-  const uploadMutation = useMutation({
-    mutationFn: async (file: File) => {
-      const formData = new FormData()
-      formData.append('file', file)
-      const res = await apiClient.post('/upload/image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
-      return res.data.data.url
-    },
-    onMutate: () => {
-      setUploading(true)
-      setErrorMsg('')
-    },
-    onSuccess: (url) => {
-      setImageUrl(url)
-      setUploading(false)
-    },
-    onError: (err: any) => {
-      setUploading(false)
-      const msg = err.response?.data?.message || '文件上传失败'
-      setErrorMsg(`上传出错: ${msg}`)
-    },
-  })
 
   // 创建/更新 Mutation
   const submitMutation = useMutation({
@@ -102,17 +77,6 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
       setErrorMsg(msg)
     },
   })
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      uploadMutation.mutate(file)
-    }
-  }
-
-  const handleUploadClick = () => {
-    fileInputRef.current?.click()
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -150,10 +114,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
 
         <form onSubmit={handleSubmit} className="space-y-6 text-xs">
           {/* 标题 */}
-          <div className="space-y-2">
-            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-              Banner 标题 / TITLE
-            </label>
+          <AppFormItem label="Banner 标题 / TITLE" required>
             <input
               type="text"
               required
@@ -162,55 +123,19 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
               onChange={(e) => setTitle(e.target.value)}
               className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
-          </div>
+          </AppFormItem>
 
           {/* 图片上传 */}
-          <div className="space-y-2">
-            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-              展示图片 / COVER IMAGE
-            </label>
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                required
-                placeholder="请输入图片 URL 或点击右侧上传"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                className="flex-1 px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
-              />
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                className="hidden"
-              />
-              <button
-                type="button"
-                onClick={handleUploadClick}
-                disabled={uploading}
-                className="px-4 py-3 border-2 border-border bg-background hover:bg-accent text-foreground font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 text-xs"
-              >
-                {uploading ? (
-                  <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Upload className="h-3.5 w-3.5 text-primary" />
-                )}
-                <span>{uploading ? '上传中...' : '本地上传'}</span>
-              </button>
-            </div>
-            {imageUrl && (
-              <div className="mt-3 p-1.5 border-2 border-border bg-accent/20 w-32 h-20 rounded-lg overflow-hidden flex items-center justify-center pop-shadow-sm">
-                <img src={imageUrl} alt="预览" className="max-w-full max-h-full object-contain rounded" />
-              </div>
-            )}
-          </div>
+          <AppFormItem label="展示图片 / COVER IMAGE" required>
+            <AppImageUploader
+              value={imageUrl}
+              onChange={setImageUrl}
+              disabled={submitMutation.isPending}
+            />
+          </AppFormItem>
 
           {/* 跳转链接 */}
-          <div className="space-y-2">
-            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-              跳转链接 / TARGET LINK
-            </label>
+          <AppFormItem label="跳转链接 / TARGET LINK">
             <input
               type="text"
               placeholder="请输入点击跳转的 URL（选填）"
@@ -218,27 +143,21 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
               onChange={(e) => setLinkUrl(e.target.value)}
               className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
-          </div>
+          </AppFormItem>
 
           <div className="grid grid-cols-2 gap-4">
             {/* 排序序号 */}
-            <div className="space-y-2">
-              <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                排序序号 / SORT ORDER
-              </label>
+            <AppFormItem label="排序序号 / SORT ORDER">
               <input
                 type="number"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
                 className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
               />
-            </div>
+            </AppFormItem>
 
             {/* 启用状态 */}
-            <div className="space-y-2">
-              <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                分发状态 / DISPATCH STATUS
-              </label>
+            <AppFormItem label="分发状态 / DISPATCH STATUS">
               <div className="flex items-center h-11 pl-1">
                 <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
                   <input
@@ -252,7 +171,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
                   </span>
                 </label>
               </div>
-            </div>
+            </AppFormItem>
           </div>
 
           <DialogFooter className="border-t-2 border-border pt-6 mt-6 flex justify-end space-x-2.5">
@@ -265,7 +184,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             </button>
             <button
               type="submit"
-              disabled={submitMutation.isPending || uploading}
+              disabled={submitMutation.isPending}
               className="px-6 py-2.5 bg-primary text-primary-foreground border-2 border-border font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50"
             >
               <span>{submitMutation.isPending ? '保存中 SAVE...' : '确认保存 CONFIRM'}</span>

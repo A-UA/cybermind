@@ -284,15 +284,16 @@ async def list_banners(...):
 - 复杂组件拆分为子组件，放在同一目录下
 - **页面/组件代码行数限制（300行原则）**：单文件 React 组件或页面代码**超过 300 行**后，必须进行拆分重构：
   - 具有跨页面复用性的组件，应提取为公共通用组件并使用 **`App` 前缀** 命名：无业务逻辑的公共通用基础组件归纳到 `src/components/common/` 目录下；与业务逻辑（如状态管理、权限校验等）相关的通用组件归纳到 `src/components/business/` 目录下。
-  - 仅当前页面使用的逻辑组件，应提取为局部子组件，放置在当前页面目录的独立文件中（如 `BannerForm.tsx`, `BannerCard.tsx`）。
+  - 仅当前页面使用的逻辑组件，应提取为局部子组件，统一放置在当前页面目录下的 components 文件夹中（如 components/BannerForm.tsx, components/BannerCard.tsx）。
 - **通用组件命名空间规范**：自主封装的、具备复用性的通用功能/业务组件**统一采用 `App` 前缀命名**（如 `AppTable`、`AppFormItem`、`AppImageUploader`、`AppVideoUploader`、`AppTime`、`AppGuard`、`AppProtectedRoute` 等），以此与基础 UI 库（如 shadcn/ui）及原生 HTML 元素区分，并保持跨项目移植性。
 - 页面组件结构示例：
 
 ```
 pages/banners/
 ├── index.tsx          # 列表页（默认导出）
-├── BannerForm.tsx     # 表单组件（新建/编辑共用）
-└── BannerCard.tsx     # 列表卡片组件
+└── components/        # 局部子组件目录
+    ├── BannerForm.tsx
+    └── BannerCard.tsx
 ```
 
 ### 6.3 状态管理

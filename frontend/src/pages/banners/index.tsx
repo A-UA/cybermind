@@ -2,24 +2,13 @@ import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
 import type { IBanner } from '@/types/banner'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Edit, RefreshCw, Eye, ExternalLink, SlidersHorizontal } from 'lucide-react'
 import { toast } from 'sonner'
-import BannerForm from './BannerForm'
+import BannerForm from './components/BannerForm'
+import AppTable from '@/components/common/AppTable'
+import type { AppTableColumn } from '@/components/common/AppTable'
+import AppTime from '@/components/common/AppTime'
 
 export default function BannersPage() {
   const queryClient = useQueryClient()
@@ -27,7 +16,7 @@ export default function BannersPage() {
   // 分页与筛选状态
   const [page, setPage] = useState(1)
   const [pageSize] = useState(10)
-  const [isActiveFilter, setIsActiveFilter] = useState<string>('all')
+  const [isActiveFilter, setIsActiveFilter] = useState('all')
 
   // 表单对话框状态
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -48,7 +37,6 @@ export default function BannersPage() {
 
   const banners: IBanner[] = data?.items || []
   const total = data?.total || 0
-  const totalPages = Math.ceil(total / pageSize)
 
   // 删除 Banner Mutation
   const deleteMutation = useMutation({
@@ -81,17 +69,125 @@ export default function BannersPage() {
     setIsFormOpen(true)
   }
 
-  const formatDate = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr)
-      return d.toLocaleDateString() + ' ' + d.toTimeString().substring(0, 5)
-    } catch {
-      return dateStr
+  // 表格列配置
+  const columns: AppTableColumn<IBanner>[] = [
+    {
+      title: 'ID',
+      key: 'id',
+      width: '60px',
+      render: (row) => (
+        <span className="font-bold text-muted-foreground/80 font-mono">
+          #{row.id}
+        </span>
+      )
+    },
+    {
+      title: '缩略图',
+      key: 'image_url',
+      width: '100px',
+      render: (row) => (
+        <div className="w-16 h-10 border-2 border-border bg-background rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
+          <img
+            src={row.image_url}
+            alt={row.title}
+            className="max-w-full max-h-full object-contain rounded-md transition-transform group-hover:scale-105"
+          />
+          <a
+            href={row.image_url}
+            target="_blank"
+            rel="noreferrer"
+            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md"
+          >
+            <Eye className="h-3.5 w-3.5 text-white" />
+          </a>
+        </div>
+      )
+    },
+    {
+      title: '标题',
+      key: 'title',
+      render: (row) => (
+        <span className="font-bold text-foreground truncate block max-w-xs">
+          {row.title}
+        </span>
+      )
+    },
+    {
+      title: '跳转链路',
+      key: 'link_url',
+      render: (row) => row.link_url ? (
+        <a
+          href={row.link_url}
+          target="_blank"
+          rel="noreferrer"
+          className="hover:text-primary inline-flex items-center space-x-1 text-muted-foreground text-[11px] font-semibold"
+        >
+          <span className="truncate max-w-[120px]">{row.link_url}</span>
+          <ExternalLink className="h-3 w-3 flex-shrink-0" />
+        </a>
+      ) : (
+        <span className="text-muted-foreground/40 font-mono">--</span>
+      )
+    },
+    {
+      title: '排序',
+      key: 'sort_order',
+      width: '80px',
+      className: 'text-center font-bold text-muted-foreground font-mono',
+      render: (row) => row.sort_order
+    },
+    {
+      title: '状态',
+      key: 'is_active',
+      width: '110px',
+      className: 'text-center',
+      render: (row) => (
+        <div className="flex items-center justify-center space-x-2">
+          <span className={`w-2.5 h-2.5 rounded-full inline-block border-2 border-border ${row.is_active ? 'bg-emerald-400' : 'bg-muted-foreground/35'}`} />
+          <span className={`text-[10px] font-bold ${row.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground/60'}`}>
+            {row.is_active ? '分发中' : '已下线'}
+          </span>
+        </div>
+      )
+    },
+    {
+      title: '最后修改时间',
+      key: 'updated_at',
+      width: '150px',
+      render: (row) => (
+        <div className="text-muted-foreground font-semibold text-[11px] font-mono">
+          <AppTime value={row.updated_at} format="YYYY-MM-DD HH:mm" />
+        </div>
+      )
+    },
+    {
+      title: '操作',
+      key: 'actions',
+      width: '110px',
+      className: 'text-center',
+      render: (row) => (
+        <div className="flex items-center justify-center space-x-2">
+          <button
+            onClick={() => handleEditClick(row)}
+            className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
+            title="编辑"
+          >
+            <Edit className="h-3.5 w-3.5" />
+          </button>
+          <button
+            onClick={() => handleDelete(row.id)}
+            className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-destructive transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
+            title="删除"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )
     }
-  }
+  ]
 
   return (
-    <div className="space-y-6 text-foreground font-sans">
+    <div className="space-y-6 text-foreground font-sans text-xs">
       {/* 顶部操作过滤条 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300">
         <div className="flex items-center space-x-2.5">
@@ -136,7 +232,7 @@ export default function BannersPage() {
 
           <button
             onClick={handleCreateClick}
-            className="px-4 py-2 bg-primary text-primary-foreground font-heading font-bold flex items-center space-x-1.5 transition-all border-2 border-border pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
+            className="px-4 py-2 bg-primary text-primary-foreground border-2 border-border font-heading font-bold flex items-center space-x-1.5 transition-all border-2 border-border pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
           >
             <Plus className="h-4 w-4" />
             <span>新建 Banner</span>
@@ -145,154 +241,16 @@ export default function BannersPage() {
       </div>
 
       {/* 数据列表面板 */}
-      <div className="border-2 border-border bg-card pop-shadow rounded-xl overflow-hidden transition-all duration-300">
-        {isLoading ? (
-          <div className="h-64 flex flex-col justify-center items-center space-y-3">
-            <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-            <span className="text-xs text-muted-foreground font-semibold">正在载入数据资源...</span>
-          </div>
-        ) : banners.length === 0 ? (
-          <div className="h-64 flex flex-col justify-center items-center text-center">
-            <span className="text-xs text-muted-foreground font-semibold">暂无可用数据记录</span>
-          </div>
-        ) : (
-          <Table className="text-xs">
-            <TableHeader className="bg-accent border-b-2 border-border">
-              <TableRow className="border-b-2 border-border hover:bg-transparent">
-                <TableHead className="font-bold text-foreground w-14">ID</TableHead>
-                <TableHead className="font-bold text-foreground w-24">缩略图</TableHead>
-                <TableHead className="font-bold text-foreground">标题</TableHead>
-                <TableHead className="font-bold text-foreground">跳转链路</TableHead>
-                <TableHead className="font-bold text-foreground w-20 text-center">排序</TableHead>
-                <TableHead className="font-bold text-foreground w-24 text-center">状态</TableHead>
-                <TableHead className="font-bold text-foreground w-40">最后修改时间</TableHead>
-                <TableHead className="font-bold text-foreground w-24 text-center">操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {banners.map((banner) => (
-                <TableRow
-                  key={banner.id}
-                  className="border-b-2 border-border hover:bg-secondary/40 transition-colors"
-                >
-                  {/* ID */}
-                  <TableCell className="font-bold text-muted-foreground/80 font-mono">
-                    #{banner.id}
-                  </TableCell>
-                  
-                  {/* 缩略图 */}
-                  <TableCell>
-                    <div className="w-16 h-10 border-2 border-border bg-background rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
-                      <img
-                        src={banner.image_url}
-                        alt={banner.title}
-                        className="max-w-full max-h-full object-contain rounded-md transition-transform group-hover:scale-105"
-                      />
-                      <a
-                        href={banner.image_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md"
-                      >
-                        <Eye className="h-3.5 w-3.5 text-white" />
-                      </a>
-                    </div>
-                  </TableCell>
-
-                  {/* 标题 */}
-                  <TableCell className="font-bold text-foreground truncate max-w-xs">
-                    {banner.title}
-                  </TableCell>
-
-                  {/* 跳转链接 */}
-                  <TableCell className="text-muted-foreground text-[11px] font-semibold truncate max-w-[150px]">
-                    {banner.link_url ? (
-                      <a
-                        href={banner.link_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="hover:text-primary inline-flex items-center space-x-1"
-                      >
-                        <span className="truncate max-w-[120px]">{banner.link_url}</span>
-                        <ExternalLink className="h-3 w-3 flex-shrink-0" />
-                      </a>
-                    ) : (
-                      <span className="text-muted-foreground/40 font-mono">--</span>
-                    )}
-                  </TableCell>
-
-                  {/* 排序 */}
-                  <TableCell className="text-center font-bold text-muted-foreground font-mono">
-                    {banner.sort_order}
-                  </TableCell>
-
-                  {/* 状态 */}
-                  <TableCell className="text-center">
-                    <div className="flex items-center justify-center space-x-2">
-                      <span className={`w-2.5 h-2.5 rounded-full inline-block border-2 border-border ${banner.is_active ? 'bg-emerald-400' : 'bg-muted-foreground/35'}`} />
-                      <span className={`text-[10px] font-bold ${banner.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground/60'}`}>
-                        {banner.is_active ? '分发中' : '已下线'}
-                      </span>
-                    </div>
-                  </TableCell>
-
-                  {/* 修改时间 */}
-                  <TableCell className="text-muted-foreground font-semibold text-[11px] font-mono">
-                    {formatDate(banner.updated_at)}
-                  </TableCell>
-
-                  {/* 操作 */}
-                  <TableCell>
-                    <div className="flex items-center justify-center space-x-2">
-                      <button
-                        onClick={() => handleEditClick(banner)}
-                        className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
-                        title="编辑"
-                      >
-                        <Edit className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(banner.id)}
-                        className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-destructive transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
-                        title="删除"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-
-        {/* 底部分页组件 */}
-        {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-between border-t-2 border-border p-4 bg-accent/30 text-[11px] text-muted-foreground font-semibold">
-            <div>
-              共计 <span className="font-bold text-foreground">{total}</span> 条数据 // 当前第{' '}
-              <span className="font-bold text-foreground">{page}</span> /{' '}
-              <span className="font-bold text-foreground">{totalPages}</span> 页
-            </div>
-            <div className="flex space-x-1.5">
-              <button
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="px-3.5 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
-              >
-                上一页
-              </button>
-              <button
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="px-3.5 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
-              >
-                下一页
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
+      <AppTable
+        columns={columns}
+        data={banners}
+        isLoading={isLoading}
+        total={total}
+        page={page}
+        pageSize={pageSize}
+        onPageChange={setPage}
+        emptyText="暂无可用数据记录"
+      />
 
       {/* 新建/编辑对话框表单 */}
       <BannerForm

@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
 import { toast } from 'sonner'
-import { Settings, Upload, RefreshCw, Save, Phone, Mail, Globe } from 'lucide-react'
+import { Settings, RefreshCw, Save, Phone, Mail, Globe } from 'lucide-react'
+import AppFormItem from '@/components/common/AppFormItem'
+import AppImageUploader from '@/components/business/AppImageUploader'
 
 interface ISiteConfigItem {
   id: number
@@ -20,12 +22,6 @@ export default function SiteConfigPage() {
   const [contactPhone, setContactPhone] = useState('')
   const [contactEmail, setContactEmail] = useState('')
   const [qrCodeImage, setQrCodeImage] = useState('')
-
-  const [logoUploading, setLogoUploading] = useState(false)
-  const [qrUploading, setQrUploading] = useState(false)
-
-  const logoInputRef = useRef<HTMLInputElement>(null)
-  const qrInputRef = useRef<HTMLInputElement>(null)
 
   // 拉取全站配置
   const { data: configs, isLoading, isFetching, refetch } = useQuery<ISiteConfigItem[]>({
@@ -48,48 +44,6 @@ export default function SiteConfigPage() {
       })
     }
   }, [configs])
-
-  // 上传图片公共方法
-  const uploadImageFile = async (file: File): Promise<string> => {
-    const formData = new FormData()
-    formData.append('file', file)
-    const res = await apiClient.post('/upload/image', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    })
-    return res.data.data.url
-  }
-
-  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setLogoUploading(true)
-      try {
-        const url = await uploadImageFile(file)
-        setSiteLogo(url)
-        toast.success('站点 LOGO 上传成功')
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || 'LOGO 上传失败')
-      } finally {
-        setLogoUploading(false)
-      }
-    }
-  }
-
-  const handleQrUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setQrUploading(true)
-      try {
-        const url = await uploadImageFile(file)
-        setQrCodeImage(url)
-        toast.success('二维码图片上传成功')
-      } catch (err: any) {
-        toast.error(err.response?.data?.message || '二维码上传失败')
-      } finally {
-        setQrUploading(false)
-      }
-    }
-  }
 
   // 批量保存
   const saveMutation = useMutation({
@@ -157,10 +111,7 @@ export default function SiteConfigPage() {
               </h3>
 
               {/* 站点名称 */}
-              <div className="space-y-2">
-                <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                  站点名称 / SITE NAME
-                </label>
+              <AppFormItem label="站点名称 / SITE NAME" required>
                 <input
                   type="text"
                   required
@@ -169,48 +120,16 @@ export default function SiteConfigPage() {
                   onChange={(e) => setSiteName(e.target.value)}
                   className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
                 />
-              </div>
+              </AppFormItem>
 
               {/* 站点 LOGO */}
-              <div className="space-y-2">
-                <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                  站点 LOGO / SITE LOGO
-                </label>
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="请输入 LOGO 图片链接或点击右侧上传"
-                    value={siteLogo}
-                    onChange={(e) => setSiteLogo(e.target.value)}
-                    className="flex-1 px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
-                  />
-                  <input
-                    type="file"
-                    ref={logoInputRef}
-                    onChange={handleLogoUpload}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => logoInputRef.current?.click()}
-                    disabled={logoUploading}
-                    className="px-4 py-3 border-2 border-border bg-background hover:bg-accent text-foreground font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 text-xs"
-                  >
-                    {logoUploading ? (
-                      <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <Upload className="h-3.5 w-3.5 text-primary" />
-                    )}
-                    <span>{logoUploading ? '上传中...' : '本地上传'}</span>
-                  </button>
-                </div>
-                {siteLogo && (
-                  <div className="mt-3 p-1.5 border-2 border-border bg-background w-32 h-16 rounded-lg overflow-hidden flex items-center justify-center pop-shadow-sm">
-                    <img src={siteLogo} alt="LOGO预览" className="max-w-full max-h-full object-contain rounded" />
-                  </div>
-                )}
-              </div>
+              <AppFormItem label="站点 LOGO / SITE LOGO">
+                <AppImageUploader
+                  value={siteLogo}
+                  onChange={setSiteLogo}
+                  disabled={saveMutation.isPending}
+                />
+              </AppFormItem>
             </div>
 
             {/* 右半部分：联系方式（奶油黄拼色卡片） */}
@@ -221,10 +140,7 @@ export default function SiteConfigPage() {
               </h3>
 
               {/* 手机号 */}
-              <div className="space-y-2">
-                <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                  联系电话 / CONTACT PHONE
-                </label>
+              <AppFormItem label="联系电话 / CONTACT PHONE">
                 <div className="relative flex items-center">
                   <Phone className="absolute left-3.5 h-4 w-4 text-muted-foreground" />
                   <input
@@ -235,13 +151,10 @@ export default function SiteConfigPage() {
                     className="w-full pl-10 pr-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
                   />
                 </div>
-              </div>
+              </AppFormItem>
 
               {/* 邮箱 */}
-              <div className="space-y-2">
-                <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                  电子邮箱 / CONTACT EMAIL
-                </label>
+              <AppFormItem label="电子邮箱 / CONTACT EMAIL">
                 <div className="relative flex items-center">
                   <Mail className="absolute left-3.5 h-4 w-4 text-muted-foreground" />
                   <input
@@ -252,48 +165,16 @@ export default function SiteConfigPage() {
                     className="w-full pl-10 pr-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
                   />
                 </div>
-              </div>
+              </AppFormItem>
 
               {/* 二维码上传 */}
-              <div className="space-y-2">
-                <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-                  公众号/客服二维码 / QR CODE
-                </label>
-                <div className="flex space-x-2">
-                  <input
-                    type="text"
-                    placeholder="请输入二维码图片链接或上传"
-                    value={qrCodeImage}
-                    onChange={(e) => setQrCodeImage(e.target.value)}
-                    className="flex-1 px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
-                  />
-                  <input
-                    type="file"
-                    ref={qrInputRef}
-                    onChange={handleQrUpload}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => qrInputRef.current?.click()}
-                    disabled={qrUploading}
-                    className="px-4 py-3 border-2 border-border bg-background hover:bg-accent text-foreground font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 text-xs"
-                  >
-                    {qrUploading ? (
-                      <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                    ) : (
-                      <Upload className="h-3.5 w-3.5 text-primary" />
-                    )}
-                    <span>{qrUploading ? '上传中...' : '本地上传'}</span>
-                  </button>
-                </div>
-                {qrCodeImage && (
-                  <div className="mt-3 p-1.5 border-2 border-border bg-background w-24 h-24 rounded-lg overflow-hidden flex items-center justify-center pop-shadow-sm">
-                    <img src={qrCodeImage} alt="二维码预览" className="max-w-full max-h-full object-contain rounded" />
-                  </div>
-                )}
-              </div>
+              <AppFormItem label="公众号/客服二维码 / QR CODE">
+                <AppImageUploader
+                  value={qrCodeImage}
+                  onChange={setQrCodeImage}
+                  disabled={saveMutation.isPending}
+                />
+              </AppFormItem>
             </div>
           </div>
 
