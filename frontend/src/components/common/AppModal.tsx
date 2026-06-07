@@ -77,17 +77,17 @@ export default function AppModal({
 
       {/* 弹窗主体 */}
       <div
-        className={`relative bg-card border-4 border-border rounded-xl pop-shadow-lg ${SIZE_MAP[size]} w-full overflow-hidden flex flex-col animate-scale-in`}
+        className={`relative bg-card border-4 border-border rounded-xl pop-shadow-lg ${SIZE_MAP[size]} w-full flex flex-col animate-scale-in`}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* 装饰贴纸 */}
+        {sticker && (
+          <div className="absolute -top-3 -right-1 px-2.5 py-0.5 bg-primary text-primary-foreground border-2 border-border text-[9px] font-heading font-bold uppercase rounded-lg rotate-[4deg] pop-shadow-sm select-none z-10">
+            {sticker}
+          </div>
+        )}
         {/* 顶部头 */}
-        <div className="p-4 bg-accent border-b-4 border-border flex items-center justify-between flex-shrink-0 relative">
-          {/* 装饰贴纸 */}
-          {sticker && (
-            <div className="absolute -top-3 -right-1 px-2.5 py-0.5 bg-primary text-primary-foreground border-2 border-border text-[9px] font-heading font-bold uppercase rounded-lg rotate-[4deg] pop-shadow-sm select-none z-10">
-              {sticker}
-            </div>
-          )}
+        <div className="rounded-t-xl p-4 bg-accent border-b-4 border-border flex items-center justify-between flex-shrink-0 relative">
           <h3 className="font-heading font-bold text-sm text-foreground truncate pr-8">
             {title}
           </h3>
@@ -101,7 +101,7 @@ export default function AppModal({
         </div>
 
         {/* 内容插槽 */}
-        <div className="flex-1 overflow-y-auto text-xs font-sans text-foreground">
+        <div className="rounded-b-xl flex-1 overflow-y-auto text-xs font-sans text-foreground">
           {children}
         </div>
       </div>
