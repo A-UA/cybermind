@@ -167,7 +167,7 @@ export default function VideosPage() {
       if (view === 'edit' && editingVideo) {
         await apiClient.put(`/videos/${editingVideo.id}`, payload)
       } else {
-        await apiClient.post('/videos/', payload)
+        await apiClient.post('/videos', payload)
       }
     },
     onSuccess: () => {
