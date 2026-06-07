@@ -1,12 +1,14 @@
 /**
- * AppModal — 全站统一新野兽派风格模态对话框底座
- * 所有表单弹窗、确认弹窗统一由此组件包裹，确保遮罩/层叠/动画/关闭行为一致。
+ * AppModal - 全站统一的弹窗包装层
+ * 基于共享 Dialog 组件封装业务弹窗外观、尺寸和装饰贴纸。
  */
-import { useEffect, type ReactNode } from 'react'
-import { createPortal } from 'react-dom'
+import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 
-/** 尺寸变体对照 */
+import { Dialog, DialogPortal } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
+
 const SIZE_MAP = {
   sm: 'max-w-sm',
   md: 'max-w-md',
@@ -16,19 +18,11 @@ const SIZE_MAP = {
 } as const
 
 interface AppModalProps {
-  /** 是否展示弹窗 */
   isOpen: boolean
-  /** 关闭回调 */
   onClose: () => void
-  /** 弹窗标题文案 */
   title: string
-  /** 弹窗尺寸 */
   size?: keyof typeof SIZE_MAP
-  /** 顶部装饰贴纸文案（可选） */
   sticker?: string
-  /** 是否显示底部关闭按钮 */
-  showFooterClose?: boolean
-  /** 子内容插槽 */
   children: ReactNode
 }
 
@@ -40,72 +34,61 @@ export default function AppModal({
   sticker,
   children,
 }: AppModalProps) {
-  // 弹窗打开时锁定 body 滚动
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    }
-    return () => {
-      document.body.style.overflow = ''
-    }
-  }, [isOpen])
-
-  // ESC 键关闭
-  useEffect(() => {
-    if (!isOpen) return
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, onClose])
-
-  if (!isOpen) return null
-
-  return createPortal(
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      role="dialog"
-      aria-modal="true"
-      aria-label={title}
+  return (
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose()
+      }}
     >
-      {/* 遮罩层 — 点击关闭 */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
-        onClick={onClose}
-      />
+      <DialogPortal>
+        <DialogPrimitive.Backdrop
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+          onClick={onClose}
+        />
 
-      {/* 弹窗主体 */}
-      <div
-        className={`relative bg-card border-4 border-border rounded-xl pop-shadow-lg ${SIZE_MAP[size]} w-full flex flex-col animate-scale-in`}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* 装饰贴纸 */}
-        {sticker && (
-          <div className="absolute -top-3 -right-1 px-2.5 py-0.5 bg-primary text-primary-foreground border-2 border-border text-[9px] font-heading font-bold uppercase rounded-lg rotate-[4deg] pop-shadow-sm select-none z-10">
-            {sticker}
-          </div>
-        )}
-        {/* 顶部头 */}
-        <div className="rounded-t-xl p-4 bg-accent border-b-4 border-border flex items-center justify-between flex-shrink-0 relative">
-          <h3 className="font-heading font-bold text-sm text-foreground truncate pr-8">
-            {title}
-          </h3>
-          <button
-            onClick={onClose}
-            className="p-1 border-2 border-border bg-background hover:bg-accent rounded-lg pop-shadow-sm cursor-pointer flex-shrink-0 transition-colors"
-            aria-label="关闭弹窗"
+        <DialogPrimitive.Popup
+          className={cn(
+            'fixed top-1/2 left-1/2 z-50 w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 overflow-visible outline-none duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+            SIZE_MAP[size],
+          )}
+        >
+          <div
+            className="relative w-full"
+            onClick={(event) => event.stopPropagation()}
           >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+            {sticker && (
+              <div className="absolute -top-3 -right-1 z-10 select-none rounded-lg border-2 border-border bg-primary px-2.5 py-0.5 text-[9px] font-heading font-bold uppercase text-primary-foreground rotate-[4deg] pop-shadow-sm">
+                {sticker}
+              </div>
+            )}
 
-        {/* 内容插槽 */}
-        <div className="rounded-b-xl flex-1 overflow-y-auto text-xs font-sans text-foreground">
-          {children}
-        </div>
-      </div>
-    </div>,
-    document.body,
+            <div className="relative flex w-full flex-col overflow-hidden rounded-xl border-4 border-border bg-card pop-shadow-lg animate-scale-in">
+              <div className="relative flex flex-shrink-0 items-center justify-between rounded-t-xl border-b-4 border-border bg-accent p-4">
+                <DialogPrimitive.Title className="truncate pr-8 font-heading text-sm font-bold text-foreground">
+                  {title}
+                </DialogPrimitive.Title>
+                <DialogPrimitive.Close
+                  render={
+                    <button
+                      type="button"
+                      className="flex-shrink-0 cursor-pointer rounded-lg border-2 border-border bg-background p-1 transition-colors hover:bg-accent pop-shadow-sm"
+                      aria-label="关闭弹窗"
+                    />
+                  }
+                >
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">关闭弹窗</span>
+                </DialogPrimitive.Close>
+              </div>
+
+              <div className="flex-1 overflow-y-auto rounded-b-xl font-sans text-xs text-foreground">
+                {children}
+              </div>
+            </div>
+          </div>
+        </DialogPrimitive.Popup>
+      </DialogPortal>
+    </Dialog>
   )
 }
