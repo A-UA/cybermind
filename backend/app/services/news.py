@@ -126,3 +126,35 @@ def get_news_stats(session: Session) -> Tuple[int, int, List[NewsArticle]]:
     hot_articles = session.exec(hot_query).all()
     
     return total_articles, total_views, hot_articles
+
+
+def get_public_news_list(
+    session: Session,
+    page: int = 1,
+    page_size: int = 20,
+    category: str | None = None,
+) -> Tuple[List[NewsArticle], int]:
+    """获取公开新闻列表（仅已发布，置顶优先，支持分页与分类过滤）"""
+    query = select(NewsArticle).where(NewsArticle.status == "published")
+
+    if category:
+        query = query.where(NewsArticle.category == category)
+
+    total = len(session.exec(query).all())
+
+    query = query.order_by(NewsArticle.is_top.desc(), NewsArticle.published_at.desc())
+    query = query.offset((page - 1) * page_size).limit(page_size)
+    items = session.exec(query).all()
+
+    return items, total
+
+
+def get_public_news_detail(session: Session, id: int) -> NewsArticle:
+    """获取公开新闻详情（必须是已发布状态，浏览量 +1）"""
+    article = get_news_by_id(session, id, auto_increment_view=True)
+    if article.status != "published":
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"文章 ID #{id} 不存在",
+        )
+    return article

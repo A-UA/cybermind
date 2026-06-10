@@ -108,3 +108,28 @@ def delete_video(session: Session, id: int):
     video = get_video_by_id(session, id)
     session.delete(video)
     session.commit()
+
+
+def get_public_videos(
+    session: Session,
+    page: int = 1,
+    page_size: int = 20,
+    category: str | None = None,
+) -> tuple[list[OperationVideo], int]:
+    """获取公开视频列表（仅已启用的，支持分页与分类过滤）"""
+    statement = select(OperationVideo).where(OperationVideo.is_active == True)
+
+    if category is not None:
+        statement = statement.where(OperationVideo.category == category)
+
+    count_statement = select(func.count()).select_from(statement.subquery())
+    total = session.exec(count_statement).one()
+
+    statement = statement.order_by(
+        col(OperationVideo.sort_order).asc(),
+        col(OperationVideo.created_at).desc(),
+    )
+    statement = statement.offset((page - 1) * page_size).limit(page_size)
+
+    videos = session.exec(statement).all()
+    return videos, total

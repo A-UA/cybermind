@@ -55,3 +55,9 @@ def batch_update_configs(session: Session, configs_dict: Dict[str, str], user_id
     for config in updated_configs:
         session.refresh(config)
     return updated_configs
+
+
+def get_public_configs(session: Session) -> dict[str, str]:
+    """获取公开配置项（返回 key-value 字典，供官网落地页使用）"""
+    configs = session.exec(select(SiteConfig)).all()
+    return {c.config_key: c.config_value for c in configs}

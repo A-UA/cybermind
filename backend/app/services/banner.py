@@ -81,3 +81,13 @@ def delete_banner(session: Session, banner_id: int):
     banner = get_banner_by_id(session, banner_id)
     session.delete(banner)
     session.commit()
+
+
+def get_public_banners(session: Session) -> list[Banner]:
+    """获取公开 Banner 列表（仅返回已启用的，按 sort_order 排序）"""
+    statement = (
+        select(Banner)
+        .where(Banner.is_active == True)
+        .order_by(col(Banner.sort_order).asc(), col(Banner.created_at).desc())
+    )
+    return session.exec(statement).all()

@@ -137,3 +137,17 @@ def delete_question(session: Session, id: int):
     question = get_question_by_id(session, id)
     session.delete(question)
     session.commit()
+
+
+def get_public_questions(
+    session: Session,
+    category_id: int | None = None,
+) -> list[HelpQuestion]:
+    """获取公开问题列表（仅已启用的，可选按分类过滤，按 sort_order 排序）"""
+    query = select(HelpQuestion).where(HelpQuestion.is_active == True)
+
+    if category_id is not None:
+        query = query.where(HelpQuestion.category_id == category_id)
+
+    query = query.order_by(HelpQuestion.sort_order.asc(), HelpQuestion.created_at.desc())
+    return session.exec(query).all()
