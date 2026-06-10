@@ -54,8 +54,7 @@ export default function AppCheckbox({
       <label
         className={cn(
           'flex items-start space-x-2.5 px-3 py-2 border-2 border-border rounded-lg bg-background cursor-pointer select-none transition-all duration-200 cubic-bezier(0.16, 1, 0.3, 1)',
-          'hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_var(--border)]',
-          'active:translate-x-[2px] active:translate-y-[2px] active:shadow-none',
+          
           disabled && 'opacity-50 cursor-not-allowed',
           className,
         )}
@@ -85,8 +84,7 @@ export default function AppCheckbox({
   return (
     <label
       className={cn(
-        'inline-flex items-center space-x-2.5 cursor-pointer select-none transition-all duration-200 cubic-bezier(0.16, 1, 0.3, 1)',
-        'hover:translate-x-[1px] hover:translate-y-[1px]',
+        'flex items-center space-x-2.5 cursor-pointer select-none transition-all duration-200 cubic-bezier(0.16, 1, 0.3, 1)',
         disabled && 'opacity-50 cursor-not-allowed',
         className,
       )}
