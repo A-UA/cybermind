@@ -59,8 +59,8 @@ export default function HelpCategoryList({
   }
 
   return (
-    <div className="xl:col-span-1 bg-[#F5EEF8] dark:bg-[#1E293B] border-2 border-border rounded-xl p-5 pop-shadow h-fit space-y-5 text-xs">
-      <div className="flex items-center justify-between border-b-2 border-border pb-3">
+    <div className="xl:col-span-1 bg-[#F5EEF8] dark:bg-[#1E293B] border-2 border-border rounded-xl pop-shadow h-fit text-xs">
+      <div className="flex pt-5 px-5 items-center justify-between border-b-2 border-border pb-3">
         <h3 className="text-sm font-heading font-bold text-foreground flex items-center space-x-1.5 select-none">
           <FolderPlus className="h-4 w-4 text-primary" />
           <span>类别筛选 / CLASSIFY</span>
@@ -75,7 +75,7 @@ export default function HelpCategoryList({
       </div>
 
       {/* 类别列表 */}
-      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
+      <div className="space-y-2 p-5 max-h-[400px] overflow-y-auto">
         <button
           onClick={() => onSelectCategory(null)}
           className={`w-full text-left px-3 py-2 text-xs font-bold rounded-lg border-2 transition-all ${
@@ -95,7 +95,7 @@ export default function HelpCategoryList({
           categories.map((cat) => (
             <div
               key={cat.id}
-              className={`flex items-center justify-between px-3 py-1.5 rounded-lg border-2 transition-all group ${
+              className={`flex items-center justify-between px-3 py-2 rounded-lg border-2 transition-all group ${
                 selectedCategoryId === cat.id
                   ? 'bg-primary text-primary-foreground border-border pop-shadow-sm -translate-x-[1px] -translate-y-[1px]'
                   : 'bg-background text-foreground border-transparent hover:border-border hover:pop-shadow-sm'
@@ -130,7 +130,7 @@ export default function HelpCategoryList({
 
       {/* 分类编辑小表单 */}
       {isOpen && (
-        <form onSubmit={handleFormSubmit} className="p-4 bg-background border-2 border-border rounded-lg pop-shadow-sm space-y-4">
+        <form onSubmit={handleFormSubmit} className="m-5 mt-0 p-4 bg-background border-2 border-border rounded-lg pop-shadow-sm space-y-4">
           <h4 className="text-[10px] font-heading font-bold uppercase tracking-wider text-foreground">
             {editingCategory ? '重命名分类 / RENAME' : '创建分类 / NEW CATEGORY'}
           </h4>
