@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
+import AppCheckbox from '@/components/common/AppCheckbox'
 import type { IUser } from '../types'
 
 interface UserFormModalProps {
@@ -158,15 +159,11 @@ export default function UserFormModal({
 
         {/* 启用状态 */}
         <div className="pt-2 border-t border-border/20">
-          <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={isActiveVal}
-              onChange={(e) => setIsActiveVal(e.target.checked)}
-              className="w-4 h-4 bg-background border-2 border-border text-primary focus:ring-0 rounded-md cursor-pointer"
-            />
-            <span className="text-xs font-bold text-foreground">启用此管理员账号 (ACTIVE)</span>
-          </label>
+          <AppCheckbox
+            checked={isActiveVal}
+            onCheckedChange={setIsActiveVal}
+            label="启用此管理员账号 (ACTIVE)"
+          />
         </div>
 
         {/* 底部按钮 */}

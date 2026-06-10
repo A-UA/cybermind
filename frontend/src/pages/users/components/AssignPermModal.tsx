@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { CheckSquare } from 'lucide-react'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
+import AppCheckbox from '@/components/common/AppCheckbox'
 import type { IRole, IPermission } from '../types'
 
 interface AssignPermModalProps {
@@ -96,21 +97,14 @@ export default function AssignPermModal({
                   {perms.map((p) => {
                     const isChecked = tempPermIds.includes(p.id)
                     return (
-                      <label
+                      <AppCheckbox
                         key={p.id}
-                        className="flex items-center space-x-2 bg-background border border-border/50 hover:border-border px-3 py-2 rounded-lg cursor-pointer select-none transition-all hover:bg-background/80"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isChecked}
-                          onChange={() => handleCheckboxChange(p.id)}
-                          className="w-3.5 h-3.5 text-primary border-2 border-border rounded cursor-pointer focus:ring-0"
-                        />
-                        <div className="text-[11px]">
-                          <p className="font-bold text-foreground">{p.name}</p>
-                          <p className="text-[9px] text-muted-foreground font-mono">{p.code}</p>
-                        </div>
-                      </label>
+                        checked={isChecked}
+                        onCheckedChange={() => handleCheckboxChange(p.id)}
+                        label={p.name}
+                        description={p.code}
+                        size="sm"
+                      />
                     )
                   })}
                 </div>

@@ -7,6 +7,7 @@ import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
+import AppCheckbox from '@/components/common/AppCheckbox'
 
 interface BannerFormProps {
   isOpen: boolean
@@ -148,17 +149,15 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             {/* 启用状态 */}
             <AppFormItem label="分发状态 / DISPATCH STATUS">
               <div className="flex items-center h-11 pl-1">
-                <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={isActive}
-                    onChange={(e) => setIsActive(e.target.checked)}
-                    className="w-4 h-4 bg-background border-2 border-border text-primary focus:ring-0 rounded-md cursor-pointer"
-                  />
-                  <span className={`text-xs font-bold ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}>
-                    {isActive ? '分发启用 (ACTIVE)' : '下线搁置 (INACTIVE)'}
-                  </span>
-                </label>
+                <AppCheckbox
+                  checked={isActive}
+                  onCheckedChange={setIsActive}
+                  label={
+                    <span className={isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
+                      {isActive ? '分发启用 (ACTIVE)' : '下线搁置 (INACTIVE)'}
+                    </span>
+                  }
+                />
               </div>
             </AppFormItem>
           </div>

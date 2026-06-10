@@ -4,6 +4,7 @@ import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppRichEditor from '@/components/common/AppRichEditor'
+import AppCheckbox from '@/components/common/AppCheckbox'
 import type { INewsArticle } from '../types'
 
 interface NewsFormProps {
@@ -218,17 +219,11 @@ export default function NewsForm({
 
             {/* 置顶属性 */}
             <div className="space-y-2 pt-2 border-t border-border/40">
-              <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={isTop}
-                  onChange={(e) => setIsTop(e.target.checked)}
-                  className="w-4 h-4 bg-background border-2 border-border text-primary focus:ring-0 rounded-md cursor-pointer"
-                />
-                <span className="text-xs font-bold text-foreground">
-                  设置此文章置顶 (STICK TO TOP)
-                </span>
-              </label>
+              <AppCheckbox
+                checked={isTop}
+                onCheckedChange={setIsTop}
+                label="设置此文章置顶 (STICK TO TOP)"
+              />
             </div>
           </div>
         </div>

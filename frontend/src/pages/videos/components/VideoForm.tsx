@@ -3,6 +3,7 @@ import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppVideoUploader from '@/components/business/AppVideoUploader'
+import AppCheckbox from '@/components/common/AppCheckbox'
 import type { IOperationVideo } from '../types'
 
 interface VideoFormProps {
@@ -212,17 +213,11 @@ export default function VideoForm({
 
             {/* 发布状态 */}
             <div className="space-y-2 pt-2 border-t border-border/40">
-              <label className="inline-flex items-center space-x-2.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={isActive}
-                  onChange={(e) => setIsActive(e.target.checked)}
-                  className="w-4 h-4 bg-background border-2 border-border text-primary focus:ring-0 rounded-md cursor-pointer"
-                />
-                <span className="text-xs font-bold text-foreground">
-                  启用并发布此操作视频 (ACTIVE)
-                </span>
-              </label>
+              <AppCheckbox
+                checked={isActive}
+                onCheckedChange={setIsActive}
+                label="启用并发布此操作视频 (ACTIVE)"
+              />
             </div>
           </div>
         </div>

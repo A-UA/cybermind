@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
+import AppCheckbox from '@/components/common/AppCheckbox'
 import type { IUser, IRole } from '../types'
 
 interface AssignRoleModalProps {
@@ -67,21 +68,13 @@ export default function AssignRoleModal({
           {roles.map((r) => {
             const isChecked = tempRoleIds.includes(r.id)
             return (
-              <label
+              <AppCheckbox
                 key={r.id}
-                className="flex items-center space-x-2.5 px-3 py-2 border-2 border-border rounded-lg bg-background hover:bg-accent/20 cursor-pointer select-none transition-all"
-              >
-                <input
-                  type="checkbox"
-                  checked={isChecked}
-                  onChange={() => handleCheckboxChange(r.id)}
-                  className="w-4 h-4 text-primary border-2 border-border rounded cursor-pointer focus:ring-0"
-                />
-                <div>
-                  <p className="font-bold text-foreground">{r.name}</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">{r.code}</p>
-                </div>
-              </label>
+                checked={isChecked}
+                onCheckedChange={() => handleCheckboxChange(r.id)}
+                label={r.name}
+                description={r.code}
+              />
             )
           })}
         </div>
