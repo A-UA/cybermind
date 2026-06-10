@@ -10,7 +10,7 @@ from app.services import banner as banner_service
 router = APIRouter(prefix="/banners", tags=["公开-Banner"])
 
 
-@router.get("", response_model=ApiResponse[list[BannerResponse]])
+@router.get("", response_model=ApiResponse[list[BannerResponse]], summary="获取公开 Banner 列表")
 async def list_public_banners(session: Session = Depends(get_session)):
     """获取公开 Banner 列表（仅已启用的）"""
     banners = banner_service.get_public_banners(session)

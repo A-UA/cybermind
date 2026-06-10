@@ -34,7 +34,7 @@ def _generate_path(file_type: str, filename: str) -> str:
     return f"{file_type}/{now.year}/{now.month:02d}/{unique_name}"
 
 
-@router.post("/image", response_model=ApiResponse[dict])
+@router.post("/image", response_model=ApiResponse[dict], summary="上传图片")
 async def upload_image(
     file: UploadFile = File(...),
     current_user: SysUser = Depends(get_current_user),
@@ -57,7 +57,7 @@ async def upload_image(
     return ApiResponse(data={"url": url, "path": path})
 
 
-@router.post("/video", response_model=ApiResponse[dict])
+@router.post("/video", response_model=ApiResponse[dict], summary="上传视频")
 async def upload_video(
     file: UploadFile = File(...),
     current_user: SysUser = Depends(get_current_user),
@@ -79,7 +79,7 @@ async def upload_video(
     return ApiResponse(data={"url": url, "path": path})
 
 
-@router.post("/file", response_model=ApiResponse[dict])
+@router.post("/file", response_model=ApiResponse[dict], summary="上传文件")
 async def upload_file(
     file: UploadFile = File(...),
     current_user: SysUser = Depends(get_current_user),

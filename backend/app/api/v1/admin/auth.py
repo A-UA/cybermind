@@ -21,7 +21,7 @@ from app.models.user import SysUser
 router = APIRouter(prefix="/auth", tags=["认证"])
 
 
-@router.post("/login", response_model=ApiResponse[TokenResponse])
+@router.post("/login", response_model=ApiResponse[TokenResponse], summary="用户登录")
 async def login(
     body: LoginRequest,
     response: Response,
@@ -44,7 +44,7 @@ async def login(
     return ApiResponse(data=TokenResponse(access_token=tokens["access_token"]))
 
 
-@router.post("/refresh", response_model=ApiResponse[TokenResponse])
+@router.post("/refresh", response_model=ApiResponse[TokenResponse], summary="刷新 Access Token")
 async def refresh_token(
     response: Response,
     refresh_token: str = Cookie(None),
@@ -85,7 +85,7 @@ async def refresh_token(
     return ApiResponse(data=TokenResponse(access_token=tokens["access_token"]))
 
 
-@router.post("/logout", response_model=ApiResponse)
+@router.post("/logout", response_model=ApiResponse, summary="用户登出")
 async def logout(
     response: Response,
     current_user: SysUser = Depends(get_current_user),
@@ -99,7 +99,7 @@ async def logout(
     return ApiResponse(message="登出成功")
 
 
-@router.get("/me", response_model=ApiResponse[UserInfoResponse])
+@router.get("/me", response_model=ApiResponse[UserInfoResponse], summary="获取当前用户信息")
 async def get_current_user_info(
     current_user: SysUser = Depends(get_current_user),
 ):
@@ -122,7 +122,7 @@ async def get_current_user_info(
     ))
 
 
-@router.put("/me", response_model=ApiResponse[UserInfoResponse])
+@router.put("/me", response_model=ApiResponse[UserInfoResponse], summary="更新当前用户信息")
 async def update_profile(
     body: UpdateProfileRequest,
     current_user: SysUser = Depends(get_current_user),

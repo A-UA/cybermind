@@ -10,7 +10,7 @@ from app.services import help as help_service
 router = APIRouter(prefix="/help", tags=["公开-帮助中心"])
 
 
-@router.get("/categories", response_model=ApiResponse[list[CategoryResponse]])
+@router.get("/categories", response_model=ApiResponse[list[CategoryResponse]], summary="获取帮助分类列表")
 async def list_public_categories(session: Session = Depends(get_session)):
     """获取帮助中心分类列表"""
     categories = help_service.get_all_categories(session)
@@ -23,7 +23,7 @@ async def list_public_categories(session: Session = Depends(get_session)):
     return ApiResponse(data=items)
 
 
-@router.get("/questions", response_model=ApiResponse[list[QuestionResponse]])
+@router.get("/questions", response_model=ApiResponse[list[QuestionResponse]], summary="获取公开常见问题列表")
 async def list_public_questions(
     category_id: int | None = Query(None),
     session: Session = Depends(get_session),

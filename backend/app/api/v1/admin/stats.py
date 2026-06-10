@@ -11,7 +11,7 @@ router = APIRouter(prefix="/stats", tags=["数据统计"])
 
 
 @router.get("/overview", response_model=ApiResponse[dict],
-            dependencies=[Depends(require_permission("stats:read"))])
+            dependencies=[Depends(require_permission("stats:read"))], summary="获取数据总览")
 async def get_overview(session: Session = Depends(get_session)):
     """获取看板顶部四个维度的总览数据指标"""
     data = stats_service.get_overview_stats(session)
@@ -19,7 +19,7 @@ async def get_overview(session: Session = Depends(get_session)):
 
 
 @router.get("/trend", response_model=ApiResponse[list[dict]],
-            dependencies=[Depends(require_permission("stats:read"))])
+            dependencies=[Depends(require_permission("stats:read"))], summary="获取访问趋势")
 async def get_trend(
     days: int = Query(default=7, ge=1, le=90, description="获取的历史趋势天数"),
     session: Session = Depends(get_session)
@@ -30,7 +30,7 @@ async def get_trend(
 
 
 @router.get("/top-pages", response_model=ApiResponse[list[dict]],
-            dependencies=[Depends(require_permission("stats:read"))])
+            dependencies=[Depends(require_permission("stats:read"))], summary="获取热门页面排行")
 async def get_top_pages(
     limit: int = Query(default=10, ge=1, le=50, description="页面排行榜单数"),
     session: Session = Depends(get_session)

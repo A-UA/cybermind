@@ -14,7 +14,7 @@ router = APIRouter(prefix="/banners", tags=["Banner管理"])
 
 
 @router.get("", response_model=ApiResponse[PaginatedData[BannerResponse]],
-            dependencies=[Depends(require_permission("banner:read"))])
+            dependencies=[Depends(require_permission("banner:read"))], summary="获取 Banner 列表")
 async def list_banners(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -43,7 +43,7 @@ async def list_banners(
     ))
 
 
-@router.post("", response_model=ApiResponse[BannerResponse])
+@router.post("", response_model=ApiResponse[BannerResponse], summary="创建 Banner")
 async def create_banner(
     body: BannerCreate,
     current_user: SysUser = Depends(require_permission("banner:create")),
@@ -65,7 +65,7 @@ async def create_banner(
 
 
 @router.get("/{banner_id}", response_model=ApiResponse[BannerResponse],
-            dependencies=[Depends(require_permission("banner:read"))])
+            dependencies=[Depends(require_permission("banner:read"))], summary="获取 Banner 详情")
 async def get_banner(banner_id: int, session: Session = Depends(get_session)):
     """获取 Banner 详情"""
     banner = banner_service.get_banner_by_id(session, banner_id)
@@ -83,7 +83,7 @@ async def get_banner(banner_id: int, session: Session = Depends(get_session)):
 
 
 @router.put("/{banner_id}", response_model=ApiResponse[BannerResponse],
-            dependencies=[Depends(require_permission("banner:update"))])
+            dependencies=[Depends(require_permission("banner:update"))], summary="更新 Banner")
 async def update_banner(
     banner_id: int,
     body: BannerUpdate,
@@ -105,7 +105,7 @@ async def update_banner(
 
 
 @router.delete("/{banner_id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("banner:delete"))])
+               dependencies=[Depends(require_permission("banner:delete"))], summary="删除 Banner")
 async def delete_banner(banner_id: int, session: Session = Depends(get_session)):
     """删除 Banner"""
     banner_service.delete_banner(session, banner_id)

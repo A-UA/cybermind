@@ -14,7 +14,7 @@ router = APIRouter(prefix="/news", tags=["新闻资讯"])
 
 
 @router.get("", response_model=ApiResponse[PaginatedData[NewsResponse]],
-            dependencies=[Depends(require_permission("news:read"))])
+            dependencies=[Depends(require_permission("news:read"))], summary="获取新闻资讯列表")
 async def list_news(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -51,7 +51,7 @@ async def list_news(
 
 
 @router.get("/stats", response_model=ApiResponse[NewsStatsResponse],
-            dependencies=[Depends(require_permission("news:read"))])
+            dependencies=[Depends(require_permission("news:read"))], summary="获取新闻统计数据")
 async def get_news_stats_api(session: Session = Depends(get_session)):
     """获取文章浏览量统计数据（总文章数、总浏览量及阅读排行 Top 10）"""
     total_articles, total_views, hot_articles = news_service.get_news_stats(session)
@@ -71,7 +71,7 @@ async def get_news_stats_api(session: Session = Depends(get_session)):
     ))
 
 
-@router.post("", response_model=ApiResponse[NewsResponse])
+@router.post("", response_model=ApiResponse[NewsResponse], summary="创建新闻文章")
 async def create_news_article(
     body: NewsCreate,
     current_user: SysUser = Depends(require_permission("news:create")),
@@ -98,7 +98,7 @@ async def create_news_article(
 
 
 @router.get("/{id}", response_model=ApiResponse[NewsResponse],
-            dependencies=[Depends(require_permission("news:read"))])
+            dependencies=[Depends(require_permission("news:read"))], summary="获取文章详情")
 async def get_news_article(
     id: int, 
     session: Session = Depends(get_session)
@@ -124,7 +124,7 @@ async def get_news_article(
 
 
 @router.put("/{id}", response_model=ApiResponse[NewsResponse],
-            dependencies=[Depends(require_permission("news:update"))])
+            dependencies=[Depends(require_permission("news:update"))], summary="更新文章信息")
 async def update_news_article(
     id: int,
     body: NewsUpdate,
@@ -151,7 +151,7 @@ async def update_news_article(
 
 
 @router.put("/{id}/status", response_model=ApiResponse[NewsResponse],
-            dependencies=[Depends(require_permission("news:update"))])
+            dependencies=[Depends(require_permission("news:update"))], summary="变更文章发布状态")
 async def update_article_publish_status(
     id: int,
     body: NewsStatusUpdate,
@@ -178,7 +178,7 @@ async def update_article_publish_status(
 
 
 @router.delete("/{id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("news:delete"))])
+               dependencies=[Depends(require_permission("news:delete"))], summary="删除文章")
 async def delete_news_article(
     id: int,
     session: Session = Depends(get_session),

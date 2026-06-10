@@ -13,20 +13,8 @@ from app.services import contact as contact_service
 router = APIRouter(prefix="/contact-submissions", tags=["联系我们"])
 
 
-@router.post("", response_model=ApiResponse[ContactResponse])
-async def submit_contact(
-    body: ContactSubmitRequest,
-    session: Session = Depends(get_session)
-):
-    """前台用户提交留言 (公开接口)"""
-    submission = contact_service.create_submission(session, body)
-    # 刚提交的留言没有被处理，所以 processed_by_username 为 None
-    data = ContactResponse.model_validate(submission)
-    return ApiResponse(data=data, message="留言提交成功")
-
-
 @router.get("", response_model=ApiResponse[PaginatedData[ContactResponse]],
-            dependencies=[Depends(require_permission("contact:read"))])
+            dependencies=[Depends(require_permission("contact:read"))], summary="获取留言列表")
 async def list_contact_submissions(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -45,7 +33,7 @@ async def list_contact_submissions(
 
 
 @router.get("/{id}", response_model=ApiResponse[ContactResponse],
-            dependencies=[Depends(require_permission("contact:read"))])
+            dependencies=[Depends(require_permission("contact:read"))], summary="获取留言详情")
 async def get_contact_submission(
     id: int,
     session: Session = Depends(get_session)
@@ -55,7 +43,7 @@ async def get_contact_submission(
     return ApiResponse(data=ContactResponse(**sub_dict))
 
 
-@router.put("/{id}/process", response_model=ApiResponse[ContactResponse])
+@router.put("/{id}/process", response_model=ApiResponse[ContactResponse], summary="处理留言")
 async def process_contact_submission(
     id: int,
     body: ContactProcessRequest,
@@ -68,7 +56,7 @@ async def process_contact_submission(
 
 
 @router.delete("/{id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("contact:delete"))])
+               dependencies=[Depends(require_permission("contact:delete"))], summary="删除留言")
 async def delete_contact_submission(
     id: int,
     session: Session = Depends(get_session)

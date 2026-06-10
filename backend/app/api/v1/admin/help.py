@@ -19,7 +19,7 @@ router = APIRouter(prefix="/help", tags=["帮助中心"])
 # --- 分类控制端点 ---
 
 @router.get("/categories", response_model=ApiResponse[List[CategoryResponse]],
-            dependencies=[Depends(require_permission("help:read"))])
+            dependencies=[Depends(require_permission("help:read"))], summary="获取分类列表")
 async def list_categories(session: Session = Depends(get_session)):
     """获取所有帮助中心分类列表"""
     categories = help_service.get_all_categories(session)
@@ -35,7 +35,7 @@ async def list_categories(session: Session = Depends(get_session)):
 
 
 @router.post("/categories", response_model=ApiResponse[CategoryResponse],
-             dependencies=[Depends(require_permission("help:create"))])
+             dependencies=[Depends(require_permission("help:create"))], summary="创建分类")
 async def create_category(body: CategoryCreate, session: Session = Depends(get_session)):
     """创建分类"""
     category = help_service.create_category(session, body)
@@ -51,7 +51,7 @@ async def create_category(body: CategoryCreate, session: Session = Depends(get_s
 
 
 @router.put("/categories/{id}", response_model=ApiResponse[CategoryResponse],
-            dependencies=[Depends(require_permission("help:update"))])
+            dependencies=[Depends(require_permission("help:update"))], summary="更新分类")
 async def update_category(id: int, body: CategoryUpdate, session: Session = Depends(get_session)):
     """更新分类属性"""
     category = help_service.update_category(session, id, body)
@@ -67,7 +67,7 @@ async def update_category(id: int, body: CategoryUpdate, session: Session = Depe
 
 
 @router.delete("/categories/{id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("help:delete"))])
+               dependencies=[Depends(require_permission("help:delete"))], summary="删除分类")
 async def delete_category(id: int, session: Session = Depends(get_session)):
     """删除分类"""
     help_service.delete_category(session, id)
@@ -77,7 +77,7 @@ async def delete_category(id: int, session: Session = Depends(get_session)):
 # --- 问答控制端点 ---
 
 @router.get("/questions", response_model=ApiResponse[List[QuestionResponse]],
-            dependencies=[Depends(require_permission("help:read"))])
+            dependencies=[Depends(require_permission("help:read"))], summary="获取问答列表")
 async def list_questions(
     category_id: Optional[int] = Query(None),
     query: Optional[str] = Query(None),
@@ -101,7 +101,7 @@ async def list_questions(
     return ApiResponse(data=items)
 
 
-@router.post("/questions", response_model=ApiResponse[QuestionResponse])
+@router.post("/questions", response_model=ApiResponse[QuestionResponse], summary="创建问答")
 async def create_question(
     body: QuestionCreate,
     current_user: SysUser = Depends(require_permission("help:create")),
@@ -126,7 +126,7 @@ async def create_question(
 
 
 @router.put("/questions/{id}", response_model=ApiResponse[QuestionResponse],
-            dependencies=[Depends(require_permission("help:update"))])
+            dependencies=[Depends(require_permission("help:update"))], summary="更新问答")
 async def update_question(
     id: int,
     body: QuestionUpdate,
@@ -151,7 +151,7 @@ async def update_question(
 
 
 @router.delete("/questions/{id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("help:delete"))])
+               dependencies=[Depends(require_permission("help:delete"))], summary="删除问答")
 async def delete_question(id: int, session: Session = Depends(get_session)):
     """删除问答"""
     help_service.delete_question(session, id)

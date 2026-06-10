@@ -14,7 +14,7 @@ router = APIRouter(prefix="/videos", tags=["操作视频管理"])
 
 
 @router.get("", response_model=ApiResponse[PaginatedData[VideoResponse]],
-            dependencies=[Depends(require_permission("video:read"))])
+            dependencies=[Depends(require_permission("video:read"))], summary="获取视频列表")
 async def list_videos(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -49,7 +49,7 @@ async def list_videos(
     ))
 
 
-@router.post("", response_model=ApiResponse[VideoResponse])
+@router.post("", response_model=ApiResponse[VideoResponse], summary="创建视频记录")
 async def create_video(
     body: VideoCreate,
     current_user: SysUser = Depends(require_permission("video:create")),
@@ -75,7 +75,7 @@ async def create_video(
 
 
 @router.get("/{video_id}", response_model=ApiResponse[VideoResponse],
-            dependencies=[Depends(require_permission("video:read"))])
+            dependencies=[Depends(require_permission("video:read"))], summary="获取视频详情")
 async def get_video(
     video_id: int,
     increment_view: bool = Query(False, description="是否自增播放次数"),
@@ -101,7 +101,7 @@ async def get_video(
 
 
 @router.put("/{video_id}", response_model=ApiResponse[VideoResponse],
-            dependencies=[Depends(require_permission("video:update"))])
+            dependencies=[Depends(require_permission("video:update"))], summary="更新视频信息")
 async def update_video(
     video_id: int,
     body: VideoUpdate,
@@ -127,7 +127,7 @@ async def update_video(
 
 
 @router.delete("/{video_id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("video:delete"))])
+               dependencies=[Depends(require_permission("video:delete"))], summary="删除视频")
 async def delete_video(video_id: int, session: Session = Depends(get_session)):
     """删除操作视频"""
     video_service.delete_video(session, video_id)

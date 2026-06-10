@@ -10,7 +10,7 @@ from app.services import tracking as tracking_service
 router = APIRouter(prefix="/tracking", tags=["公开-访问埋点"])
 
 
-@router.post("/event", response_model=ApiResponse[dict])
+@router.post("/event", response_model=ApiResponse[dict], summary="上报埋点事件")
 async def report_tracking_event(
     body: TrackingEventRequest,
     request: Request,

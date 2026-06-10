@@ -10,7 +10,7 @@ from app.services import news as news_service
 router = APIRouter(prefix="/news", tags=["公开-新闻资讯"])
 
 
-@router.get("", response_model=ApiResponse[PaginatedData[NewsResponse]])
+@router.get("", response_model=ApiResponse[PaginatedData[NewsResponse]], summary="获取公开新闻列表")
 async def list_public_news(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -45,7 +45,7 @@ async def list_public_news(
     )
 
 
-@router.get("/{id}", response_model=ApiResponse[NewsResponse])
+@router.get("/{id}", response_model=ApiResponse[NewsResponse], summary="获取公开新闻详情")
 async def get_public_news_detail(id: int, session: Session = Depends(get_session)):
     """获取公开新闻详情（浏览量 +1）"""
     article = news_service.get_public_news_detail(session, id)

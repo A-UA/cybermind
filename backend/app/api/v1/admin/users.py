@@ -13,7 +13,7 @@ router = APIRouter(prefix="/users", tags=["用户管理"])
 
 
 @router.get("", response_model=ApiResponse[PaginatedData[UserResponse]],
-            dependencies=[Depends(require_permission("user:read"))])
+            dependencies=[Depends(require_permission("user:read"))], summary="获取用户列表")
 async def list_users(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
@@ -36,7 +36,7 @@ async def list_users(
 
 
 @router.post("", response_model=ApiResponse[UserResponse],
-             dependencies=[Depends(require_permission("user:create"))])
+             dependencies=[Depends(require_permission("user:create"))], summary="创建用户")
 async def create_user(body: UserCreate, session: Session = Depends(get_session)):
     """创建用户"""
     user = user_service.create_user(
@@ -55,7 +55,7 @@ async def create_user(body: UserCreate, session: Session = Depends(get_session))
 
 
 @router.get("/{user_id}", response_model=ApiResponse[UserResponse],
-            dependencies=[Depends(require_permission("user:read"))])
+            dependencies=[Depends(require_permission("user:read"))], summary="获取用户详情")
 async def get_user(user_id: int, session: Session = Depends(get_session)):
     """获取用户详情"""
     user = user_service.get_user_by_id(session, user_id)
@@ -68,7 +68,7 @@ async def get_user(user_id: int, session: Session = Depends(get_session)):
 
 
 @router.put("/{user_id}", response_model=ApiResponse[UserResponse],
-            dependencies=[Depends(require_permission("user:update"))])
+            dependencies=[Depends(require_permission("user:update"))], summary="更新用户信息")
 async def update_user(
     user_id: int, body: UserUpdate, session: Session = Depends(get_session)
 ):
@@ -85,7 +85,7 @@ async def update_user(
 
 
 @router.delete("/{user_id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("user:delete"))])
+               dependencies=[Depends(require_permission("user:delete"))], summary="禁用用户")
 async def delete_user(user_id: int, session: Session = Depends(get_session)):
     """删除用户（软删除）"""
     user_service.delete_user(session, user_id)
@@ -93,7 +93,7 @@ async def delete_user(user_id: int, session: Session = Depends(get_session)):
 
 
 @router.put("/{user_id}/roles", response_model=ApiResponse,
-            dependencies=[Depends(require_permission("user:update"))])
+            dependencies=[Depends(require_permission("user:update"))], summary="为用户分配角色")
 async def assign_roles(
     user_id: int, body: AssignRolesRequest, session: Session = Depends(get_session)
 ):

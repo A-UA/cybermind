@@ -10,7 +10,7 @@ from app.services import contact as contact_service
 router = APIRouter(prefix="/contact", tags=["公开-联系我们"])
 
 
-@router.post("", response_model=ApiResponse[ContactResponse])
+@router.post("", response_model=ApiResponse[ContactResponse], summary="提交联系我们留言")
 async def submit_public_contact(
     body: ContactSubmitRequest,
     session: Session = Depends(get_session),

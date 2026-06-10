@@ -15,7 +15,7 @@ router = APIRouter(prefix="/roles", tags=["角色权限"])
 
 
 @router.get("", response_model=ApiResponse[list[RoleResponse]],
-            dependencies=[Depends(require_permission("role:read"))])
+            dependencies=[Depends(require_permission("role:read"))], summary="获取角色列表")
 async def list_roles(session: Session = Depends(get_session)):
     """获取角色列表"""
     roles = role_service.get_role_list(session)
@@ -31,7 +31,7 @@ async def list_roles(session: Session = Depends(get_session)):
 
 
 @router.post("", response_model=ApiResponse[RoleResponse],
-             dependencies=[Depends(require_permission("role:create"))])
+             dependencies=[Depends(require_permission("role:create"))], summary="创建角色")
 async def create_role(body: RoleCreate, session: Session = Depends(get_session)):
     """创建角色"""
     role = role_service.create_role(session, body.name, body.code, body.description)
@@ -43,7 +43,7 @@ async def create_role(body: RoleCreate, session: Session = Depends(get_session))
 
 
 @router.put("/{role_id}", response_model=ApiResponse[RoleResponse],
-            dependencies=[Depends(require_permission("role:update"))])
+            dependencies=[Depends(require_permission("role:update"))], summary="更新角色信息")
 async def update_role(
     role_id: int, body: RoleUpdate, session: Session = Depends(get_session)
 ):
@@ -60,7 +60,7 @@ async def update_role(
 
 
 @router.delete("/{role_id}", response_model=ApiResponse,
-               dependencies=[Depends(require_permission("role:delete"))])
+               dependencies=[Depends(require_permission("role:delete"))], summary="删除角色")
 async def delete_role(role_id: int, session: Session = Depends(get_session)):
     """删除角色"""
     role_service.delete_role(session, role_id)
@@ -68,7 +68,7 @@ async def delete_role(role_id: int, session: Session = Depends(get_session)):
 
 
 @router.put("/{role_id}/permissions", response_model=ApiResponse,
-            dependencies=[Depends(require_permission("role:update"))])
+            dependencies=[Depends(require_permission("role:update"))], summary="为角色分配权限")
 async def assign_permissions(
     role_id: int, body: AssignPermissionsRequest,
     session: Session = Depends(get_session),
@@ -79,7 +79,7 @@ async def assign_permissions(
 
 
 @router.get("/permissions", response_model=ApiResponse[list[PermissionResponse]],
-            dependencies=[Depends(require_permission("role:read"))])
+            dependencies=[Depends(require_permission("role:read"))], summary="获取所有权限列表")
 async def list_permissions(session: Session = Depends(get_session)):
     """获取所有权限列表"""
     perms = role_service.get_all_permissions(session)

@@ -10,7 +10,7 @@ from app.services import video as video_service
 router = APIRouter(prefix="/videos", tags=["公开-操作视频"])
 
 
-@router.get("", response_model=ApiResponse[PaginatedData[VideoResponse]])
+@router.get("", response_model=ApiResponse[PaginatedData[VideoResponse]], summary="获取公开视频列表")
 async def list_public_videos(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),

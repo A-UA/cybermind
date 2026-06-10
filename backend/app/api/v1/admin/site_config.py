@@ -14,7 +14,7 @@ router = APIRouter(prefix="/site-config", tags=["站点配置"])
 
 
 @router.get("", response_model=ApiResponse[List[SiteConfigResponse]],
-            dependencies=[Depends(require_permission("config:read"))])
+            dependencies=[Depends(require_permission("config:read"))], summary="获取所有配置项")
 async def list_configs(session: Session = Depends(get_session)):
     """获取所有配置项"""
     configs = config_service.get_all_configs(session)
@@ -32,7 +32,7 @@ async def list_configs(session: Session = Depends(get_session)):
     return ApiResponse(data=items)
 
 
-@router.put("", response_model=ApiResponse[List[SiteConfigResponse]])
+@router.put("", response_model=ApiResponse[List[SiteConfigResponse]], summary="批量更新配置")
 async def batch_update_configs(
     body: SiteConfigBatchUpdate,
     current_user: SysUser = Depends(require_permission("config:update")),
@@ -54,7 +54,7 @@ async def batch_update_configs(
     return ApiResponse(data=items, message="批量更新配置成功")
 
 
-@router.put("/{key}", response_model=ApiResponse[SiteConfigResponse])
+@router.put("/{key}", response_model=ApiResponse[SiteConfigResponse], summary="更新单个配置")
 async def update_single_config(
     key: str,
     body: SiteConfigUpdate,
