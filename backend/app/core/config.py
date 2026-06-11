@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     MYSQL_HOST: str = "localhost"
     MYSQL_PORT: int = 3306
     MYSQL_USER: str = "cybermind"
-    MYSQL_PASSWORD: str = ""
+    MYSQL_PASSWORD: str = "cybermind123"
     MYSQL_DATABASE: str = "cybermind"
 
     @property
