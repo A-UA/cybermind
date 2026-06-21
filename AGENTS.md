@@ -88,6 +88,7 @@ cybermind/
 │   │   ├── components/business/# 带业务逻辑的通用组件（如 AppProtectedRoute, AppImageUploader 等）
 │   │   ├── pages/              # 页面组件（按模块分目录）
 │   │   ├── hooks/              # 自定义 Hooks
+│   │   ├── queries/            # TanStack Query 自定义 Hooks（按模块分文件）
 │   │   ├── lib/                # 工具函数 + Axios 实例
 │   │   ├── stores/             # Zustand 状态管理
 │   │   ├── types/              # TypeScript 类型定义
@@ -303,7 +304,81 @@ pages/banners/
 - **组件局部状态**用 `useState` / `useReducer`
 - 禁止将可以通过 TanStack Query 管理的服务端数据放入 Zustand
 
-### 6.4 API 请求
+### 6.4 TanStack Query 规范
+
+#### 目录结构
+
+所有 TanStack Query 自定义 Hooks 统一放在 `src/queries/` 目录下，按业务模块分文件：
+
+```
+src/queries/
+├── useBannerQuery.ts      # Banner 相关查询
+├── useNewsQuery.ts        # 新闻相关查询
+├── useContactQuery.ts     # 留言相关查询
+├── useUserQuery.ts        # 用户管理相关查询
+├── useRoleQuery.ts        # 角色权限相关查询
+├── useHelpQuery.ts        # 帮助中心相关查询
+├── useVideoQuery.ts       # 视频相关查询
+├── useSiteConfigQuery.ts  # 站点配置相关查询
+└── useStatsQuery.ts       # 统计数据相关查询
+```
+
+#### 命名规范
+
+- 查询 Hooks（useQuery）：`use{Resource}List`、`use{Resource}Detail`、`use{Resource}Stats`
+- 变更 Hooks（useMutation）：`useCreate{Resource}`、`useUpdate{Resource}`、`useDelete{Resource}`
+- Query Key 统一定义在各文件顶部，使用 `queryKeys` 对象管理
+
+#### 代码模板
+
+```typescript
+// src/queries/useBannerQuery.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import apiClient from '@/lib/api'
+import type { IBanner, IBannerCreate, IBannerUpdate } from '@/types/banner'
+import type { ApiResponse, PaginatedData } from '@/types/api'
+
+// Query Keys 统一管理
+export const bannerKeys = {
+  all: ['banners'] as const,
+  list: (params?: Record<string, unknown>) => [...bannerKeys.all, 'list', params] as const,
+  detail: (id: number) => [...bannerKeys.all, 'detail', id] as const,
+}
+
+// 列表查询
+export function useBannerList(params: { page: number; page_size: number; is_active?: boolean }) {
+  return useQuery({
+    queryKey: bannerKeys.list(params),
+    queryFn: async () => {
+      const res = await apiClient.get<ApiResponse<PaginatedData<IBanner>>>('/banners', { params })
+      return res.data.data
+    },
+  })
+}
+
+// 创建变更
+export function useCreateBanner() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async (payload: IBannerCreate) => {
+      const res = await apiClient.post<ApiResponse<IBanner>>('/banners', payload)
+      return res.data.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: bannerKeys.all })
+    },
+  })
+}
+```
+
+#### 使用规范
+
+- 页面组件中**禁止内联** `useQuery` / `useMutation` 调用，必须从 `src/queries/` 导入
+- 每个 `useMutation` 必须在 `onSuccess` 中调用 `queryClient.invalidateQueries` 刷新相关缓存
+- 错误处理统一在页面组件中通过 `onError` 回调调用 `toast.error(getApiErrorMessage(err))`
+- 禁止在 queries 目录中处理 UI 逻辑（如 toast 提示），queries 只负责数据获取与缓存管理
+
+### 6.5 API 请求
 
 - 所有请求通过 `lib/api.ts` 中的 Axios 实例发起
 - Axios 实例必须配置：
