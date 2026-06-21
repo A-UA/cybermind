@@ -2,6 +2,8 @@
 from datetime import datetime
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, TEXT, BigInteger
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class TrackingEvent(SQLModel, table=True):
@@ -21,4 +23,4 @@ class TrackingEvent(SQLModel, table=True):
         index=True,
         description="基于 IP+页面路径+5分钟窗口 的唯一 SHA256 指纹"
     )
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="记录时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="记录时间")

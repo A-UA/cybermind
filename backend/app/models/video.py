@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import Optional
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, TEXT
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class OperationVideo(SQLModel, table=True):
@@ -20,5 +22,5 @@ class OperationVideo(SQLModel, table=True):
     is_active: bool = Field(default=True, description="是否启用")
     view_count: int = Field(default=0, description="观看量统计")
     created_by: int = Field(foreign_key="sys_users.id", description="上传人ID")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
-    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")
+    updated_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="更新时间")

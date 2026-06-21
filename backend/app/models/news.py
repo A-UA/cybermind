@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import Optional
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, TEXT
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class NewsArticle(SQLModel, table=True):
@@ -19,7 +21,7 @@ class NewsArticle(SQLModel, table=True):
     status: str = Field(default="draft", max_length=20, description="状态: draft / published / archived")
     view_count: int = Field(default=0, description="浏览量")
     is_top: bool = Field(default=False, description="是否置顶")
-    published_at: Optional[datetime] = Field(default=None, description="发布时间")
+    published_at: Optional[datetime] = Field(sa_column=Column(UTCDateTime, nullable=True), default=None, description="发布时间")
     created_by: int = Field(foreign_key="sys_users.id", description="作者ID")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
-    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")
+    updated_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="更新时间")

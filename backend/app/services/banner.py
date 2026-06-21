@@ -1,7 +1,7 @@
 """Banner 业务逻辑层"""
 from typing import Optional
-from datetime import datetime
 from sqlmodel import Session, select, func, col
+from app.core.time import utc_now
 
 from app.models.banner import Banner
 from app.schemas.banner import BannerCreate, BannerUpdate
@@ -51,8 +51,8 @@ def create_banner(session: Session, banner_in: BannerCreate, creator_id: int) ->
         sort_order=banner_in.sort_order,
         is_active=banner_in.is_active,
         created_by=creator_id,
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow(),
+        created_at=utc_now(),
+        updated_at=utc_now(),
     )
     session.add(banner)
     session.commit()
@@ -68,7 +68,7 @@ def update_banner(session: Session, banner_id: int, banner_in: BannerUpdate) -> 
     for key, value in update_data.items():
         setattr(banner, key, value)
 
-    banner.updated_at = datetime.utcnow()
+    banner.updated_at = utc_now()
     
     session.add(banner)
     session.commit()

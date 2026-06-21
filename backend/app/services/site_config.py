@@ -1,6 +1,6 @@
 """站点配置业务逻辑服务"""
-from datetime import datetime
 from sqlmodel import Session, select
+from app.core.time import utc_now
 from fastapi import HTTPException, status
 from typing import List, Dict
 
@@ -27,7 +27,7 @@ def update_config(session: Session, key: str, value: str, user_id: int) -> SiteC
     """更新单个配置项"""
     config = get_config_by_key(session, key)
     config.config_value = value
-    config.updated_at = datetime.utcnow()
+    config.updated_at = utc_now()
     config.updated_by = user_id
     session.add(config)
     session.commit()
@@ -46,7 +46,7 @@ def batch_update_configs(session: Session, configs_dict: Dict[str, str], user_id
         config = session.exec(select(SiteConfig).where(SiteConfig.config_key == key)).first()
         if config:
             config.config_value = value
-            config.updated_at = datetime.utcnow()
+            config.updated_at = utc_now()
             config.updated_by = user_id
             session.add(config)
             updated_configs.append(config)

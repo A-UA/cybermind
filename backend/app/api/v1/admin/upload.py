@@ -1,12 +1,12 @@
 """文件上传路由"""
 import uuid
-from datetime import datetime
 from fastapi import APIRouter, Depends, UploadFile, File
 from app.core.deps import get_current_user
 from app.core.exceptions import BadRequestException
 from app.schemas.common import ApiResponse
 from app.storage import get_storage
 from app.models.user import SysUser
+from app.core.time import utc_now
 
 router = APIRouter(prefix="/upload", tags=["文件上传"])
 
@@ -28,7 +28,7 @@ def _get_extension(filename: str) -> str:
 
 def _generate_path(file_type: str, filename: str) -> str:
     """生成存储路径"""
-    now = datetime.utcnow()
+    now = utc_now()
     ext = _get_extension(filename)
     unique_name = f"{uuid.uuid4().hex}.{ext}"
     return f"{file_type}/{now.year}/{now.month:02d}/{unique_name}"

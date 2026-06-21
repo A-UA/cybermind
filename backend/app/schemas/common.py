@@ -1,8 +1,18 @@
 """通用响应模式"""
+from datetime import datetime, timezone
 from typing import TypeVar, Generic, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 
 T = TypeVar("T")
+
+
+class BaseModel(PydanticBaseModel):
+    """所有 API Schema 继承此基类，统一 datetime 序列化为 UTC ISO 8601"""
+    model_config = {
+        "json_encoders": {
+            datetime: lambda v: v.astimezone(timezone.utc).isoformat()
+        }
+    }
 
 
 class ApiResponse(BaseModel, Generic[T]):

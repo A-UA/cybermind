@@ -1,6 +1,6 @@
 """新闻资讯业务逻辑服务"""
-from datetime import datetime
 from sqlmodel import Session, select, func
+from app.core.time import utc_now
 from fastapi import HTTPException, status
 from typing import List, Tuple, Optional
 
@@ -82,7 +82,7 @@ def update_article(session: Session, id: int, body: NewsUpdate) -> NewsArticle:
     for key, value in update_data.items():
         setattr(article, key, value)
         
-    article.updated_at = datetime.utcnow()
+    article.updated_at = utc_now()
     session.add(article)
     session.commit()
     session.refresh(article)
@@ -97,12 +97,12 @@ def update_article_status(session: Session, id: int, target_status: str) -> News
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="无效的状态值"
         )
-        
+
     article.status = target_status
     if target_status == "published":
-        article.published_at = datetime.utcnow()
-        
-    article.updated_at = datetime.utcnow()
+        article.published_at = utc_now()
+
+    article.updated_at = utc_now()
     session.add(article)
     session.commit()
     session.refresh(article)

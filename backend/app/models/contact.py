@@ -3,6 +3,8 @@ from datetime import datetime
 from typing import Optional
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, TEXT
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class ContactSubmission(SQLModel, table=True):
@@ -19,6 +21,6 @@ class ContactSubmission(SQLModel, table=True):
     status: str = Field(default="unread", max_length=20, description="状态: unread/read/processed")
     remark: Optional[str] = Field(default=None, sa_column=Column(TEXT), description="客服备注/处理意见")
     processed_by: Optional[int] = Field(default=None, foreign_key="sys_users.id", description="处理人ID")
-    processed_at: Optional[datetime] = Field(default=None, description="处理时间")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
-    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    processed_at: Optional[datetime] = Field(sa_column=Column(UTCDateTime, nullable=True), default=None, description="处理时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")
+    updated_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="更新时间")

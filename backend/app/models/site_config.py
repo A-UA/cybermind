@@ -1,6 +1,9 @@
 """站点配置数据模型"""
 from datetime import datetime
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class SiteConfig(SQLModel, table=True):
@@ -12,5 +15,5 @@ class SiteConfig(SQLModel, table=True):
     config_value: str = Field(description="配置内容")
     config_type: str = Field(max_length=50, default="text", description="值类型: text / image / json")
     description: str | None = Field(default=None, max_length=255, description="配置描述")
-    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    updated_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="更新时间")
     updated_by: int | None = Field(default=None, foreign_key="sys_users.id", description="更新人ID")

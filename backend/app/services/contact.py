@@ -1,6 +1,6 @@
 """联系我们留言业务逻辑服务"""
-from datetime import datetime
 from sqlmodel import Session, select
+from app.core.time import utc_now
 from fastapi import HTTPException, status
 from typing import List, Tuple, Optional
 
@@ -108,8 +108,8 @@ def process_submission(
     submission.remark = body.remark
     submission.status = body.status
     submission.processed_by = processed_by
-    submission.processed_at = datetime.utcnow()
-    submission.updated_at = datetime.utcnow()
+    submission.processed_at = utc_now()
+    submission.updated_at = utc_now()
 
     session.add(submission)
     session.commit()

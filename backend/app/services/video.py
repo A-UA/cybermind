@@ -1,6 +1,6 @@
 """操作视频业务逻辑服务"""
-from datetime import datetime
 from sqlmodel import Session, select, func, col
+from app.core.time import utc_now
 from fastapi import HTTPException, status
 from typing import List, Optional, Tuple
 
@@ -94,7 +94,7 @@ def update_video(session: Session, id: int, body: VideoUpdate) -> OperationVideo
     for key, value in update_data.items():
         setattr(video, key, value)
         
-    video.updated_at = datetime.utcnow()
+    video.updated_at = utc_now()
     session.add(video)
     session.commit()
     session.refresh(video)

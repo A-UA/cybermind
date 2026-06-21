@@ -1,6 +1,6 @@
 """帮助中心业务逻辑服务"""
-from datetime import datetime
 from sqlmodel import Session, select
+from app.core.time import utc_now
 from fastapi import HTTPException, status
 from typing import List, Optional
 
@@ -125,7 +125,7 @@ def update_question(session: Session, id: int, body: QuestionUpdate) -> HelpQues
     for key, value in update_data.items():
         setattr(question, key, value)
         
-    question.updated_at = datetime.utcnow()
+    question.updated_at = utc_now()
     session.add(question)
     session.commit()
     session.refresh(question)

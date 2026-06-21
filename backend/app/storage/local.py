@@ -1,11 +1,11 @@
 """本地文件系统存储实现"""
 import os
 import uuid
-from datetime import datetime
 from pathlib import Path
 from fastapi import UploadFile
 from app.storage.base import StorageBackend
 from app.core.config import settings
+from app.core.time import utc_now
 
 
 class LocalStorage(StorageBackend):
@@ -17,7 +17,7 @@ class LocalStorage(StorageBackend):
 
     def _generate_path(self, file_type: str, filename: str) -> str:
         """生成存储路径: {type}/{yyyy}/{mm}/{uuid}.{ext}"""
-        now = datetime.utcnow()
+        now = utc_now()
         ext = filename.rsplit(".", 1)[-1] if "." in filename else "bin"
         unique_name = f"{uuid.uuid4().hex}.{ext}"
         return f"{file_type}/{now.year}/{now.month:02d}/{unique_name}"

@@ -1,5 +1,6 @@
 """数据库连接与会话管理"""
 from sqlmodel import SQLModel, create_engine, Session
+from sqlalchemy import event
 from app.core.config import settings
 
 engine = create_engine(
@@ -9,6 +10,14 @@ engine = create_engine(
     pool_size=10,
     max_overflow=20,
 )
+
+
+@event.listens_for(engine, "connect")
+def _set_mysql_timezone(dbapi_conn, connection_record):
+    """每次 MySQL 连接建立时，设置会话时区为 UTC"""
+    cursor = dbapi_conn.cursor()
+    cursor.execute("SET time_zone = '+00:00'")
+    cursor.close()
 
 
 def get_session():

@@ -1,6 +1,9 @@
 """每日统计汇总数据模型"""
 from datetime import datetime, date
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class DailyStats(SQLModel, table=True):
@@ -11,4 +14,4 @@ class DailyStats(SQLModel, table=True):
     stat_date: date = Field(unique=True, index=True, description="统计日期")
     total_views: int = Field(default=0, description="总浏览量（去重后）")
     unique_ips: int = Field(default=0, description="独立IP数")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")

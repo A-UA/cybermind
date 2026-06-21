@@ -2,6 +2,9 @@
 from datetime import datetime
 from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import Column
+from app.core.db_types import UTCDateTime
+from app.core.time import utc_now
 
 
 class SysUserRole(SQLModel, table=True):
@@ -31,8 +34,8 @@ class SysUser(SQLModel, table=True):
     hashed_password: str = Field(max_length=255, description="密码哈希")
     is_active: bool = Field(default=True, description="是否启用")
     avatar: Optional[str] = Field(default=None, max_length=500, description="头像URL")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
-    updated_at: datetime = Field(default_factory=datetime.utcnow, description="更新时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")
+    updated_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="更新时间")
 
     # 关系
     roles: list["SysRole"] = Relationship(back_populates="users", link_model=SysUserRole)
@@ -46,7 +49,7 @@ class SysRole(SQLModel, table=True):
     name: str = Field(max_length=50, unique=True, description="角色名称")
     code: str = Field(max_length=50, unique=True, description="角色代码")
     description: Optional[str] = Field(default=None, max_length=255, description="角色描述")
-    created_at: datetime = Field(default_factory=datetime.utcnow, description="创建时间")
+    created_at: datetime = Field(sa_column=Column(UTCDateTime, nullable=False), default_factory=utc_now, description="创建时间")
 
     # 关系
     users: list[SysUser] = Relationship(back_populates="roles", link_model=SysUserRole)
