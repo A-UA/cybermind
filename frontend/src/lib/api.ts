@@ -94,10 +94,10 @@ apiClient.interceptors.response.use(
       originalRequest.headers.Authorization = `Bearer ${newToken}`
       return apiClient(originalRequest)
     } catch (refreshError) {
-      // 刷新失败：拒绝所有排队请求，清除状态，跳转登录
+      // 刷新失败：拒绝所有排队请求，清除状态，通知应用跳转登录
       onTokenRefreshFailed(refreshError)
       useAuthStore.getState().logout()
-      window.location.href = '/login'
+      window.dispatchEvent(new Event('auth:logout'))
       return Promise.reject(refreshError)
     } finally {
       isRefreshing = false

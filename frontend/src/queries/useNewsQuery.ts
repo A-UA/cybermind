@@ -5,11 +5,13 @@ import type { INewsArticle, INewsStats } from '@/types/news'
 
 export const newsKeys = {
   all: ['news'] as const,
-  list: (params?: Record<string, unknown>) => [...newsKeys.all, 'list', params] as const,
+  list: (params: { page: number; page_size: number; title?: string; status?: string; category?: string }) =>
+    [...newsKeys.all, params.page, params.title, params.status, params.category] as const,
   detail: (id: number) => [...newsKeys.all, 'detail', id] as const,
   stats: ['news-stats'] as const,
 }
 
+/** 获取新闻列表 */
 export function useNewsList(params: {
   page: number; page_size: number; title?: string; status?: string; category?: string
 }) {
@@ -22,6 +24,7 @@ export function useNewsList(params: {
   })
 }
 
+/** 获取新闻统计 */
 export function useNewsStats() {
   return useQuery({
     queryKey: newsKeys.stats,
@@ -32,6 +35,7 @@ export function useNewsStats() {
   })
 }
 
+/** 创建新闻 */
 export function useCreateNews() {
   const qc = useQueryClient()
   return useMutation({
@@ -39,10 +43,14 @@ export function useCreateNews() {
       const res = await apiClient.post<ApiResponse<INewsArticle>>('/news', payload)
       return res.data.data
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: newsKeys.all }); qc.invalidateQueries({ queryKey: newsKeys.stats }) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: newsKeys.all })
+      qc.invalidateQueries({ queryKey: newsKeys.stats })
+    },
   })
 }
 
+/** 更新新闻 */
 export function useUpdateNews() {
   const qc = useQueryClient()
   return useMutation({
@@ -50,18 +58,28 @@ export function useUpdateNews() {
       const res = await apiClient.put<ApiResponse<INewsArticle>>(`/news/${id}`, payload)
       return res.data.data
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: newsKeys.all }); qc.invalidateQueries({ queryKey: newsKeys.stats }) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: newsKeys.all })
+      qc.invalidateQueries({ queryKey: newsKeys.stats })
+    },
   })
 }
 
+/** 删除新闻 */
 export function useDeleteNews() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (id: number) => { await apiClient.delete(`/news/${id}`) },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: newsKeys.all }); qc.invalidateQueries({ queryKey: newsKeys.stats }) },
+    mutationFn: async (id: number) => {
+      await apiClient.delete(`/news/${id}`)
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: newsKeys.all })
+      qc.invalidateQueries({ queryKey: newsKeys.stats })
+    },
   })
 }
 
+/** 切换置顶 */
 export function useToggleTopNews() {
   const qc = useQueryClient()
   return useMutation({
@@ -72,12 +90,16 @@ export function useToggleTopNews() {
   })
 }
 
+/** 切换发布状态 */
 export function useChangeNewsStatus() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
       await apiClient.put(`/news/${id}/status`, { status })
     },
-    onSuccess: () => { qc.invalidateQueries({ queryKey: newsKeys.all }); qc.invalidateQueries({ queryKey: newsKeys.stats }) },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: newsKeys.all })
+      qc.invalidateQueries({ queryKey: newsKeys.stats })
+    },
   })
 }

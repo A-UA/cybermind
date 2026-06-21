@@ -1,17 +1,31 @@
-import { Routes, Route, Link } from 'react-router'
-import LoginPage from '@/pages/login'
-import DashboardPage from '@/pages/dashboard'
-import BannersPage from '@/pages/banners'
-import SiteConfigPage from '@/pages/site-config'
-import NewsPage from '@/pages/news'
-import HelpPage from '@/pages/help'
-import VideosPage from '@/pages/videos'
-import ContactsPage from '@/pages/contacts'
-import UsersPage from '@/pages/users'
+import { lazy, Suspense, useEffect } from 'react'
+import { Routes, Route, Link, useNavigate } from 'react-router'
 import AdminLayout from '@/components/layout/AdminLayout'
 import { AppProtectedRoute } from '@/components/business/AppProtectedRoute'
 import AppConfirm from '@/components/common/AppConfirm'
-import { AlertTriangle } from 'lucide-react'
+import AppErrorBoundary from '@/components/common/AppErrorBoundary'
+import { AlertTriangle, RefreshCw } from 'lucide-react'
+
+// 路由懒加载
+const LoginPage = lazy(() => import('@/pages/login'))
+const DashboardPage = lazy(() => import('@/pages/dashboard'))
+const BannersPage = lazy(() => import('@/pages/banners'))
+const SiteConfigPage = lazy(() => import('@/pages/site-config'))
+const NewsPage = lazy(() => import('@/pages/news'))
+const HelpPage = lazy(() => import('@/pages/help'))
+const VideosPage = lazy(() => import('@/pages/videos'))
+const ContactsPage = lazy(() => import('@/pages/contacts'))
+const UsersPage = lazy(() => import('@/pages/users'))
+
+// 页面加载骨架屏
+function PageLoading() {
+  return (
+    <div className="flex flex-col justify-center items-center h-64 space-y-3">
+      <RefreshCw className="h-8 w-8 text-primary animate-spin" />
+      <span className="text-xs text-muted-foreground font-semibold">正在加载模块...</span>
+    </div>
+  )
+}
 
 // 403 页面 (高亮波普警告风格)
 function ForbiddenPage() {
@@ -56,9 +70,20 @@ function NotFoundPage() {
   )
 }
 
+function AuthLogoutListener() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const handleLogout = () => navigate('/login', { replace: true })
+    window.addEventListener('auth:logout', handleLogout)
+    return () => window.removeEventListener('auth:logout', handleLogout)
+  }, [navigate])
+  return null
+}
+
 export default function App() {
   return (
-    <>
+    <AppErrorBoundary>
+    <Suspense fallback={<PageLoading />}>
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/403" element={<ForbiddenPage />} />
@@ -67,7 +92,7 @@ export default function App() {
       <Route element={<AppProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/" element={<DashboardPage />} />
-          
+
           {/* 带权限控制的路由 */}
           <Route element={<AppProtectedRoute permission="banner:read" />}>
             <Route path="/banners" element={<BannersPage />} />
@@ -101,7 +126,9 @@ export default function App() {
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
+    </Suspense>
+    <AuthLogoutListener />
     <AppConfirm />
-    </>
+    </AppErrorBoundary>
   )
 }

@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import apiClient from '@/lib/api'
 import { toast } from 'sonner'
 
 import HelpCategoryList from './components/HelpCategoryList'
@@ -8,6 +6,15 @@ import HelpQuestionList from './components/HelpQuestionList'
 import HelpQuestionForm from './components/HelpQuestionForm'
 import type { IHelpCategory, IHelpQuestion } from './types'
 import { useConfirmStore } from '@/stores/useConfirmStore'
+import {
+  useHelpCategories,
+  useHelpQuestions,
+  useSaveHelpCategory,
+  useDeleteHelpCategory,
+  useSaveHelpQuestion,
+  useDeleteHelpQuestion,
+  useToggleHelpQuestionActive,
+} from '@/queries/useHelpQuery'
 
 export default function HelpPage() {
   // 问答主视图: 'list' | 'create' | 'edit'
@@ -21,111 +28,21 @@ export default function HelpPage() {
 
   // ==================== 1. API 数据拉取 ====================
 
-  // 获取分类列表
-  const { data: categories = [], isLoading: isCategoriesLoading, refetch: refetchCategories } = useQuery<IHelpCategory[]>({
-    queryKey: ['help-categories'],
-    queryFn: async () => {
-      const res = await apiClient.get('/help/categories')
-      return res.data.data
-    }
-  })
-
-  // 获取问题列表
-  const { data: questions = [], isLoading: isQuestionsLoading, refetch: refetchQuestions } = useQuery<IHelpQuestion[]>({
-    queryKey: ['help-questions', selectedCategoryId, searchQuery],
-    queryFn: async () => {
-      const params: any = {}
-      if (selectedCategoryId !== null) params.category_id = selectedCategoryId
-      if (searchQuery.trim()) params.query = searchQuery
-      const res = await apiClient.get('/help/questions', { params })
-      return res.data.data
-    }
+  const { data: categories = [], isLoading: isCategoriesLoading } = useHelpCategories()
+  const { data: questions = [], isLoading: isQuestionsLoading, refetch: refetchQuestions } = useHelpQuestions({
+    category_id: selectedCategoryId,
+    query: searchQuery.trim() || undefined,
   })
 
   // ==================== 2. API Mutations ====================
 
-  // 保存分类
-  const saveCategoryMutation = useMutation({
-    mutationFn: async ({ name, sortOrder, category }: { name: string; sortOrder: number; category: IHelpCategory | null }) => {
-      const payload = { name, sort_order: sortOrder }
-      if (category) {
-        await apiClient.put(`/help/categories/${category.id}`, payload)
-      } else {
-        await apiClient.post('/help/categories', payload)
-      }
-    },
-    onSuccess: (_, variables) => {
-      toast.success(variables.category ? '分类更名成功' : '新增常见问题分类成功')
-      refetchCategories()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '操作分类失败')
-    }
-  })
+  const saveCategoryMutation = useSaveHelpCategory()
+  const deleteCategoryMutation = useDeleteHelpCategory()
+  const saveQuestionMutation = useSaveHelpQuestion()
+  const deleteQuestionMutation = useDeleteHelpQuestion()
+  const toggleActiveMutation = useToggleHelpQuestionActive()
 
-  // 删除分类
-  const deleteCategoryMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/help/categories/${id}`)
-    },
-    onSuccess: (_, id) => {
-      toast.success('分类已成功擦除')
-      if (selectedCategoryId === id) {
-        setSelectedCategoryId(null)
-      }
-      refetchCategories()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '删除分类失败')
-    }
-  })
-
-  // 保存问答
-  const saveQuestionMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      if (view === 'edit' && editingQuestion) {
-        await apiClient.put(`/help/questions/${editingQuestion.id}`, payload)
-      } else {
-        await apiClient.post('/help/questions', payload)
-      }
-    },
-    onSuccess: () => {
-      toast.success(view === 'edit' ? '常见问答更新成功' : '新增常见问答成功')
-      setView('list')
-      refetchQuestions()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '保存问答数据失败')
-    }
-  })
-
-  // 删除问答
-  const deleteQuestionMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/help/questions/${id}`)
-    },
-    onSuccess: () => {
-      toast.success('常见问答已成功物理删除')
-      refetchQuestions()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '操作失败')
-    }
-  })
-
-  // 状态改变
-  const toggleActiveMutation = useMutation({
-    mutationFn: async ({ id, activeVal }: { id: number; activeVal: boolean }) => {
-      await apiClient.put(`/help/questions/${id}`, { is_active: activeVal })
-    },
-    onSuccess: () => {
-      toast.success('问答前台分发状态已改变')
-      refetchQuestions()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '更新状态失败')
-    }
-  })
+  const isSavingQuestion = saveQuestionMutation.isPending
 
   // ==================== 3. 页面渲染逻辑 ====================
 
@@ -138,7 +55,12 @@ export default function HelpPage() {
           onSelectCategory={setSelectedCategoryId}
           isLoading={isCategoriesLoading}
           onSaveCategory={async (name, sortOrder, category) => {
-            await saveCategoryMutation.mutateAsync({ name, sortOrder, category })
+            await saveCategoryMutation.mutateAsync({
+              id: category?.id,
+              name,
+              sort_order: sortOrder,
+            })
+            toast.success(category ? '分类更名成功' : '新增常见问题分类成功')
           }}
           onDeleteCategory={(id) => {
             showConfirm({
@@ -146,6 +68,8 @@ export default function HelpPage() {
               message: '确认要删除此分类吗？若分类下含有问答关联，操作将被系统阻断。',
               onConfirm: async () => {
                 await deleteCategoryMutation.mutateAsync(id)
+                toast.success('分类已成功擦除')
+                if (selectedCategoryId === id) setSelectedCategoryId(null)
               }
             })
           }}
@@ -157,10 +81,7 @@ export default function HelpPage() {
           isLoading={isQuestionsLoading}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
-          onRefetch={() => {
-            refetchCategories()
-            refetchQuestions()
-          }}
+          onRefetch={() => refetchQuestions()}
           onCreateQuestion={() => {
             if (categories.length === 0) {
               toast.error('请先在左侧建立常见问题分类！')
@@ -179,11 +100,15 @@ export default function HelpPage() {
               message: '确认要物理删除此问答项吗？此操作不可撤销。',
               onConfirm: async () => {
                 await deleteQuestionMutation.mutateAsync(id)
+                toast.success('常见问答已成功物理删除')
               }
             })
           }}
           onToggleActive={(id, currentActive) => {
-            toggleActiveMutation.mutate({ id, activeVal: currentActive })
+            toggleActiveMutation.mutate(
+              { id, is_active: currentActive },
+              { onSuccess: () => toast.success('问答前台分发状态已改变') }
+            )
           }}
         />
       </div>
@@ -195,9 +120,20 @@ export default function HelpPage() {
       question={editingQuestion}
       categories={categories}
       defaultCategoryId={selectedCategoryId || (categories.length > 0 ? categories[0].id : '')}
-      isSaving={saveQuestionMutation.isPending}
+      isSaving={isSavingQuestion}
       onCancel={() => setView('list')}
-      onSave={(payload) => saveQuestionMutation.mutate(payload)}
+      onSave={(payload) => {
+        saveQuestionMutation.mutate(
+          { id: editingQuestion?.id, payload },
+          {
+            onSuccess: () => {
+              toast.success(view === 'edit' ? '常见问答更新成功' : '新增常见问答成功')
+              setView('list')
+            },
+            onError: (err: any) => toast.error(err.response?.data?.message || '保存问答数据失败'),
+          }
+        )
+      }}
     />
   )
 }

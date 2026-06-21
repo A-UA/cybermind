@@ -29,9 +29,10 @@ export default function AppRichEditor({ value, onChange }: AppRichEditorProps) {
   })
 
   // 当外部 value 发生改变且不同于当前 editor 的 HTML 时，进行同步回填
+  // 仅在编辑器非聚焦状态下同步，避免光标跳到末尾
   useEffect(() => {
-    if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value)
+    if (editor && !editor.isFocused && value !== editor.getHTML()) {
+      editor.commands.setContent(value, false)
     }
   }, [value, editor])
 

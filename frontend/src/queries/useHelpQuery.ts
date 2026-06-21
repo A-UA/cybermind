@@ -4,12 +4,13 @@ import type { ApiResponse } from '@/types/api'
 import type { IHelpCategory, IHelpQuestion } from '@/types/help'
 
 export const helpKeys = {
-  all: ['help'] as const,
   categories: ['help-categories'] as const,
-  questions: (params?: Record<string, unknown>) => ['help-questions', params] as const,
+  questions: (category_id?: number | null, query?: string) =>
+    ['help-questions', category_id, query] as const,
 }
 
-export function useCategoryList() {
+/** 获取帮助分类列表 */
+export function useHelpCategories() {
   return useQuery({
     queryKey: helpKeys.categories,
     queryFn: async () => {
@@ -19,39 +20,50 @@ export function useCategoryList() {
   })
 }
 
-export function useQuestionList(params?: { category_id?: number; query?: string }) {
+/** 获取帮助问答列表 */
+export function useHelpQuestions(params: { category_id?: number | null; query?: string }) {
   return useQuery({
-    queryKey: helpKeys.questions(params),
+    queryKey: helpKeys.questions(params.category_id, params.query),
     queryFn: async () => {
-      const res = await apiClient.get<ApiResponse<IHelpQuestion[]>>('/help/questions', { params })
+      const queryParams: Record<string, unknown> = {}
+      if (params.category_id !== null && params.category_id !== undefined) {
+        queryParams.category_id = params.category_id
+      }
+      if (params.query?.trim()) queryParams.query = params.query
+      const res = await apiClient.get<ApiResponse<IHelpQuestion[]>>('/help/questions', { params: queryParams })
       return res.data.data ?? []
     },
   })
 }
 
-export function useSaveCategory() {
+/** 保存分类（创建或更新） */
+export function useSaveHelpCategory() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, payload }: { id?: number; payload: { name: string; sort_order: number } }) => {
+    mutationFn: async ({ id, name, sort_order }: { id?: number; name: string; sort_order: number }) => {
       if (id) {
-        await apiClient.put(`/help/categories/${id}`, payload)
+        await apiClient.put(`/help/categories/${id}`, { name, sort_order })
       } else {
-        await apiClient.post('/help/categories', payload)
+        await apiClient.post('/help/categories', { name, sort_order })
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.all }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.categories }),
   })
 }
 
-export function useDeleteCategory() {
+/** 删除分类 */
+export function useDeleteHelpCategory() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (id: number) => { await apiClient.delete(`/help/categories/${id}`) },
-    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.all }),
+    mutationFn: async (id: number) => {
+      await apiClient.delete(`/help/categories/${id}`)
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.categories }),
   })
 }
 
-export function useSaveQuestion() {
+/** 保存问答（创建或更新） */
+export function useSaveHelpQuestion() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, payload }: { id?: number; payload: Partial<IHelpQuestion> }) => {
@@ -61,24 +73,28 @@ export function useSaveQuestion() {
         await apiClient.post('/help/questions', payload)
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.all }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['help-questions'] }),
   })
 }
 
-export function useDeleteQuestion() {
+/** 删除问答 */
+export function useDeleteHelpQuestion() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (id: number) => { await apiClient.delete(`/help/questions/${id}`) },
-    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.all }),
+    mutationFn: async (id: number) => {
+      await apiClient.delete(`/help/questions/${id}`)
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['help-questions'] }),
   })
 }
 
-export function useToggleQuestionActive() {
+/** 切换问答启用状态 */
+export function useToggleHelpQuestionActive() {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: async ({ id, is_active }: { id: number; is_active: boolean }) => {
       await apiClient.put(`/help/questions/${id}`, { is_active })
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: helpKeys.all }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['help-questions'] }),
   })
 }

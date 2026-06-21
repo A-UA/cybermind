@@ -75,7 +75,7 @@ export function AppTable<T>({
             <TableBody>
               {data.map((row, rowIndex) => (
                 <TableRow
-                  key={rowIndex}
+                  key={(row as any)?.id ?? rowIndex}
                   className="border-b-2 border-border last:border-b-0 hover:bg-secondary/40"
                 >
                   {columns.map((col) => (

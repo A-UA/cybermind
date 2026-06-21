@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import {
   TrendingUp, Eye, BookOpen, MessageSquare,
-  Clock, ArrowRight, Activity, Terminal, RefreshCw,
+  Clock, ArrowRight, Activity, RefreshCw,
 } from 'lucide-react'
 import {
   useOverview, useTrend, useTopPages,
@@ -207,27 +207,6 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* 运行日志 (科技感) */}
-          <div className="bg-card border-2 border-border rounded-xl p-6 pop-shadow">
-            <h4 className="text-xs font-heading font-bold text-foreground flex items-center space-x-2 border-b-2 border-border pb-3 mb-4">
-              <Terminal className="h-4 w-4 text-primary" />
-              <span>控制台状态 // CONSOLE</span>
-            </h4>
-            <div className="space-y-3 font-mono text-[10px]">
-              <div className="flex items-start justify-between p-2 bg-background border border-border rounded">
-                <span className="text-muted-foreground">STATS_SYNC // 统计同步</span>
-                <span className="text-emerald-500 font-bold">ACTIVE</span>
-              </div>
-              <div className="flex items-start justify-between p-2 bg-background border border-border rounded">
-                <span className="text-muted-foreground">DB_STATUS // 数据库</span>
-                <span className="text-emerald-500 font-bold">ONLINE</span>
-              </div>
-              <div className="flex items-start justify-between p-2 bg-background border border-border rounded">
-                <span className="text-muted-foreground">UPLOAD_DRIVER // 上传驱动</span>
-                <span className="text-foreground font-bold">LOCAL_FS</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

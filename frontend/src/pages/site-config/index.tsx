@@ -1,19 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import apiClient from '@/lib/api'
+import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { Settings, RefreshCw, Save, Phone, Mail, Globe } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
-
-interface ISiteConfigItem {
-  id: number
-  config_key: string
-  config_value: string
-  config_type: string
-  description: string
-  updated_at: string
-}
+import { useSiteConfig, useSaveSiteConfig } from '@/queries/useSiteConfigQuery'
 
 export default function SiteConfigPage() {
   // 状态绑定
@@ -23,14 +13,9 @@ export default function SiteConfigPage() {
   const [contactEmail, setContactEmail] = useState('')
   const [qrCodeImage, setQrCodeImage] = useState('')
 
-  // 拉取全站配置
-  const { data: configs, isLoading, isFetching, refetch } = useQuery<ISiteConfigItem[]>({
-    queryKey: ['site-config'],
-    queryFn: async () => {
-      const res = await apiClient.get('/site-config')
-      return res.data.data
-    }
-  })
+  // ==================== 1. API 数据拉取 ====================
+
+  const { data: configs, isLoading, isFetching, refetch } = useSiteConfig()
 
   // 当配置加载完毕，回填状态
   useEffect(() => {
@@ -45,30 +30,25 @@ export default function SiteConfigPage() {
     }
   }, [configs])
 
-  // 批量保存
-  const saveMutation = useMutation({
-    mutationFn: async () => {
-      const payload = {
+  // ==================== 2. API Mutations ====================
+
+  const saveMutation = useSaveSiteConfig()
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    saveMutation.mutate(
+      {
         site_name: siteName,
         site_logo: siteLogo,
         contact_phone: contactPhone,
         contact_email: contactEmail,
-        qr_code_image: qrCodeImage
+        qr_code_image: qrCodeImage,
+      },
+      {
+        onSuccess: () => toast.success('系统配置保存成功'),
+        onError: (err: any) => toast.error(err.response?.data?.message || '保存配置失败'),
       }
-      await apiClient.put('/site-config', { configs: payload })
-    },
-    onSuccess: () => {
-      toast.success('系统配置保存成功')
-      refetch()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '保存配置失败')
-    }
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    saveMutation.mutate()
+    )
   }
 
   return (
@@ -84,7 +64,7 @@ export default function SiteConfigPage() {
             <RefreshCw className="h-3.5 w-3.5 text-primary animate-spin" />
           )}
         </div>
-        
+
         <button
           onClick={() => refetch()}
           className="p-2 border-2 border-border bg-background text-foreground hover:bg-accent transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer max-w-fit"
@@ -102,7 +82,7 @@ export default function SiteConfigPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
+
             {/* 左半部分：基本信息（粉蓝拼色卡片） */}
             <div className="bg-[#E8F4FD] dark:bg-[#1E293B] border-2 border-border rounded-xl p-6 pop-shadow space-y-6">
               <h3 className="text-sm font-heading font-bold text-foreground border-b-2 border-border pb-3 flex items-center space-x-2 select-none">

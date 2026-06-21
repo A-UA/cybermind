@@ -1,11 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import apiClient from '@/lib/api'
 import type { ApiResponse, PaginatedData } from '@/types/api'
-import type { IBanner, IBannerCreate, IBannerUpdate } from '@/types/banner'
+import type { IBanner } from '@/types/banner'
 
 export const bannerKeys = {
   all: ['banners'] as const,
-  list: (params?: Record<string, unknown>) => [...bannerKeys.all, 'list', params] as const,
+  list: (params: { page: number; page_size: number; is_active?: boolean }) =>
+    [...bannerKeys.all, params.page, params.page_size, params.is_active] as const,
   detail: (id: number) => [...bannerKeys.all, 'detail', id] as const,
 }
 
@@ -22,7 +23,7 @@ export function useBannerList(params: { page: number; page_size: number; is_acti
 export function useCreateBanner() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async (payload: IBannerCreate) => {
+    mutationFn: async (payload: Partial<IBanner>) => {
       const res = await apiClient.post<ApiResponse<IBanner>>('/banners', payload)
       return res.data.data
     },
@@ -33,7 +34,7 @@ export function useCreateBanner() {
 export function useUpdateBanner() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ id, payload }: { id: number; payload: IBannerUpdate }) => {
+    mutationFn: async ({ id, payload }: { id: number; payload: Partial<IBanner> }) => {
       const res = await apiClient.put<ApiResponse<IBanner>>(`/banners/${id}`, payload)
       return res.data.data
     },

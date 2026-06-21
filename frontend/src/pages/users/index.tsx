@@ -1,6 +1,4 @@
 import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
-import apiClient from '@/lib/api'
 import { toast } from 'sonner'
 import { ShieldAlert } from 'lucide-react'
 
@@ -10,8 +8,21 @@ import UserFormModal from './components/UserFormModal'
 import RoleFormModal from './components/RoleFormModal'
 import AssignRoleModal from './components/AssignRoleModal'
 import AssignPermModal from './components/AssignPermModal'
-import type { IUser, IRole, IPermission } from './types'
+import type { IUser, IRole } from './types'
 import { useConfirmStore } from '@/stores/useConfirmStore'
+import {
+  useUserList,
+  useRoleList,
+  usePermissionList,
+  useCreateUser,
+  useUpdateUser,
+  useDeleteUser,
+  useCreateRole,
+  useUpdateRole,
+  useDeleteRole,
+  useAssignRoles,
+  useAssignPermissions,
+} from '@/queries/useUserQuery'
 
 export default function UsersPage() {
   const [activeTab, setActiveTab] = useState<'users' | 'roles'>('users')
@@ -28,144 +39,39 @@ export default function UsersPage() {
   const [isAssignPermOpen, setIsAssignPermOpen] = useState(false)
   const { showConfirm } = useConfirmStore()
 
-  // 获取用户列表
-  const { data: usersData, isLoading: isUsersLoading, refetch: refetchUsers } = useQuery<{
-    items: IUser[]
-    total: number
-  }>({
-    queryKey: ['users', userPage, userSearch],
-    queryFn: async () => {
-      const params: any = { page: userPage, page_size: userPageSize }
-      if (userSearch.trim()) params.keyword = userSearch
-      const res = await apiClient.get('/users', { params })
-      return res.data.data
-    }
+  // ==================== 1. API 数据拉取 ====================
+
+  const { data: usersData, isLoading: isUsersLoading, refetch: refetchUsers } = useUserList({
+    page: userPage,
+    page_size: userPageSize,
+    keyword: userSearch.trim() || undefined,
   })
 
-  // 获取角色列表
-  const { data: roles = [], isLoading: isRolesLoading, refetch: refetchRoles } = useQuery<IRole[]>({
-    queryKey: ['roles'],
-    queryFn: async () => {
-      const res = await apiClient.get('/roles')
-      return res.data.data
-    }
-  })
-
-  // 获取所有权限字典
-  const { data: permissions = [] } = useQuery<IPermission[]>({
-    queryKey: ['permissions'],
-    queryFn: async () => {
-      const res = await apiClient.get('/roles/permissions')
-      return res.data.data
-    }
-  })
+  const { data: roles = [], isLoading: isRolesLoading, refetch: refetchRoles } = useRoleList()
+  const { data: permissions = [] } = usePermissionList()
 
   const usersList = usersData?.items || []
   const userTotal = usersData?.total || 0
 
-  // 保存/编辑管理员
-  const saveUserMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      if (selectedUser) {
-        await apiClient.put(`/users/${selectedUser.id}`, payload)
-      } else {
-        await apiClient.post('/users', payload)
-      }
-    },
-    onSuccess: () => {
-      toast.success(selectedUser ? '用户信息已更新' : '创建新管理员成功')
-      setIsUserModalOpen(false)
-      refetchUsers()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '保存管理员信息失败')
-    }
-  })
+  // ==================== 2. API Mutations ====================
 
-  // 软删除管理员 (禁用)
-  const deleteUserMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/users/${id}`)
-    },
-    onSuccess: () => {
-      toast.success('管理员已被成功禁用(软删除)')
-      refetchUsers()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '禁用操作失败')
-    }
-  })
+  const createUserMutation = useCreateUser()
+  const updateUserMutation = useUpdateUser()
+  const deleteUserMutation = useDeleteUser()
+  const createRoleMutation = useCreateRole()
+  const updateRoleMutation = useUpdateRole()
+  const deleteRoleMutation = useDeleteRole()
+  const assignRolesMutation = useAssignRoles()
+  const assignPermissionsMutation = useAssignPermissions()
 
-  // 保存/编辑角色
-  const saveRoleMutation = useMutation({
-    mutationFn: async (payload: any) => {
-      if (selectedRole) {
-        await apiClient.put(`/roles/${selectedRole.id}`, payload)
-      } else {
-        await apiClient.post('/roles', payload)
-      }
-    },
-    onSuccess: () => {
-      toast.success(selectedRole ? '角色基本信息已修改' : '成功创建新角色')
-      setIsRoleModalOpen(false)
-      refetchRoles()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '保存角色失败')
-    }
-  })
-
-  // 物理删除角色
-  const deleteRoleMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/roles/${id}`)
-    },
-    onSuccess: () => {
-      toast.success('角色已成功物理删除')
-      refetchRoles()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '删除角色失败')
-    }
-  })
-
-  // 给管理员分配角色
-  const assignRolesMutation = useMutation({
-    mutationFn: async (roleIds: number[]) => {
-      if (!selectedUser) return
-      await apiClient.put(`/users/${selectedUser.id}/roles`, { role_ids: roleIds })
-    },
-    onSuccess: () => {
-      toast.success('角色分配已成功更新')
-      setIsAssignRoleOpen(false)
-      refetchUsers()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '更新授权失败')
-    }
-  })
-
-  // 给角色分配权限
-  const assignPermissionsMutation = useMutation({
-    mutationFn: async (permissionIds: number[]) => {
-      if (!selectedRole) return
-      await apiClient.put(`/roles/${selectedRole.id}/permissions`, { permission_ids: permissionIds })
-    },
-    onSuccess: () => {
-      toast.success('角色权限配置已生效')
-      setIsAssignPermOpen(false)
-      refetchRoles()
-    },
-    onError: (err: any) => {
-      toast.error(err.response?.data?.message || '权限分配失败')
-    }
-  })
+  const isSavingUser = createUserMutation.isPending || updateUserMutation.isPending
+  const isSavingRole = createRoleMutation.isPending || updateRoleMutation.isPending
 
   // ==================== 3. 页面渲染逻辑 ====================
 
   return (
     <div className="space-y-6 text-foreground font-sans">
-      
+
       {/* 顶部控制栏 */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl text-xs">
         <div className="flex items-center space-x-2.5">
@@ -227,6 +133,7 @@ export default function UsersPage() {
               message: `确认要禁用管理员 ${username} 吗？`,
               onConfirm: async () => {
                 await deleteUserMutation.mutateAsync(id)
+                toast.success('管理员已被成功禁用(软删除)')
               }
             })
           }}
@@ -254,6 +161,7 @@ export default function UsersPage() {
               message: `确定要物理删除角色 [${name}] 吗？`,
               onConfirm: async () => {
                 await deleteRoleMutation.mutateAsync(id)
+                toast.success('角色已成功物理删除')
               }
             })
           }}
@@ -268,20 +176,34 @@ export default function UsersPage() {
       <UserFormModal
         isOpen={isUserModalOpen}
         user={selectedUser}
-        isSaving={saveUserMutation.isPending}
+        isSaving={isSavingUser}
         onClose={() => setIsUserModalOpen(false)}
         onSave={async (payload) => {
-          await saveUserMutation.mutateAsync(payload)
+          if (selectedUser) {
+            await updateUserMutation.mutateAsync({ id: selectedUser.id, payload })
+            toast.success('用户信息已更新')
+          } else {
+            await createUserMutation.mutateAsync(payload)
+            toast.success('创建新管理员成功')
+          }
+          setIsUserModalOpen(false)
         }}
       />
 
       <RoleFormModal
         isOpen={isRoleModalOpen}
         role={selectedRole}
-        isSaving={saveRoleMutation.isPending}
+        isSaving={isSavingRole}
         onClose={() => setIsRoleModalOpen(false)}
         onSave={async (payload) => {
-          await saveRoleMutation.mutateAsync(payload)
+          if (selectedRole) {
+            await updateRoleMutation.mutateAsync({ id: selectedRole.id, payload })
+            toast.success('角色基本信息已修改')
+          } else {
+            await createRoleMutation.mutateAsync(payload)
+            toast.success('成功创建新角色')
+          }
+          setIsRoleModalOpen(false)
         }}
       />
 
@@ -292,7 +214,10 @@ export default function UsersPage() {
         isSaving={assignRolesMutation.isPending}
         onClose={() => setIsAssignRoleOpen(false)}
         onSave={async (roleIds) => {
-          await assignRolesMutation.mutateAsync(roleIds)
+          if (!selectedUser) return
+          await assignRolesMutation.mutateAsync({ userId: selectedUser.id, roleIds })
+          toast.success('角色分配已成功更新')
+          setIsAssignRoleOpen(false)
         }}
       />
 
@@ -303,7 +228,10 @@ export default function UsersPage() {
         isSaving={assignPermissionsMutation.isPending}
         onClose={() => setIsAssignPermOpen(false)}
         onSave={async (permIds) => {
-          await assignPermissionsMutation.mutateAsync(permIds)
+          if (!selectedRole) return
+          await assignPermissionsMutation.mutateAsync({ roleId: selectedRole.id, permissionIds: permIds })
+          toast.success('角色权限配置已生效')
+          setIsAssignPermOpen(false)
         }}
       />
 

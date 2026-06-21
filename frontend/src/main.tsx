@@ -8,7 +8,11 @@ import App from './App.tsx'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: false,
+      retry: (failureCount, error) => {
+        // 仅对 5xx 服务端错误重试 1 次，其余不重试
+        const status = (error as any)?.response?.status
+        return status >= 500 && failureCount < 1
+      },
       refetchOnWindowFocus: false,
     },
   },

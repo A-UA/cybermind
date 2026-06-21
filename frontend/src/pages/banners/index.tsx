@@ -1,20 +1,18 @@
 import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import apiClient from '@/lib/api'
+import { toast } from 'sonner'
 import type { IBanner } from '@/types/banner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Plus, Trash2, Edit, RefreshCw, Eye, ExternalLink, SlidersHorizontal } from 'lucide-react'
-import { toast } from 'sonner'
 import BannerForm from './components/BannerForm'
 import AppTable from '@/components/common/AppTable'
 import type { AppTableColumn } from '@/components/common/AppTable'
 import AppTime from '@/components/common/AppTime'
 import { useConfirmStore } from '@/stores/useConfirmStore'
+import { useBannerList, useDeleteBanner } from '@/queries/useBannerQuery'
 
 export default function BannersPage() {
-  const queryClient = useQueryClient()
   const { showConfirm } = useConfirmStore()
-  
+
   // 分页与筛选状态
   const [page, setPage] = useState(1)
   const [pageSize] = useState(10)
@@ -24,36 +22,20 @@ export default function BannersPage() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [selectedBanner, setSelectedBanner] = useState<IBanner | null>(null)
 
-  // 获取 Banner 列表
-  const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['banners', page, isActiveFilter],
-    queryFn: async () => {
-      const params: any = { page, page_size: pageSize }
-      if (isActiveFilter !== 'all') {
-        params.is_active = isActiveFilter === 'active'
-      }
-      const res = await apiClient.get('/banners', { params })
-      return res.data.data
-    }
+  // ==================== 1. API 数据拉取 ====================
+
+  const { data, isLoading, isFetching, refetch } = useBannerList({
+    page,
+    page_size: pageSize,
+    is_active: isActiveFilter === 'all' ? undefined : isActiveFilter === 'active',
   })
 
   const banners: IBanner[] = data?.items || []
   const total = data?.total || 0
 
-  // 删除 Banner Mutation
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiClient.delete(`/banners/${id}`)
-    },
-    onSuccess: () => {
-      toast.success('Banner 数据已成功从云端下架')
-      queryClient.invalidateQueries({ queryKey: ['banners'] })
-    },
-    onError: (err: any) => {
-      const msg = err.response?.data?.message || '操作失败'
-      toast.error(msg)
-    }
-  })
+  // ==================== 2. API Mutations ====================
+
+  const deleteMutation = useDeleteBanner()
 
   const handleDelete = (id: number) => {
     showConfirm({
@@ -61,6 +43,7 @@ export default function BannersPage() {
       message: '确认要删除此 Banner 吗？删除后前台页面将无法继续渲染该项。',
       onConfirm: async () => {
         await deleteMutation.mutateAsync(id)
+        toast.success('Banner 数据已成功从云端下架')
       }
     })
   }
@@ -238,7 +221,7 @@ export default function BannersPage() {
 
           <button
             onClick={handleCreateClick}
-            className="px-4 py-2 bg-primary text-primary-foreground border-2 border-border font-heading font-bold flex items-center space-x-1.5 transition-all border-2 border-border pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
+            className="px-4 py-2 bg-primary text-primary-foreground border-2 border-border font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
           >
             <Plus className="h-4 w-4" />
             <span>新建 Banner</span>

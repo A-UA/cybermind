@@ -32,20 +32,22 @@ export function AppVideoUploader({
     setProgress(0)
 
     try {
-      // 1. 尝试在本地前端提取视频元数据中的视频时长
-      let fileDuration = 0
+      // 1. 先提取视频时长，完成后再上传
       try {
-        const videoElement = document.createElement('video')
-        videoElement.src = URL.createObjectURL(file)
-        videoElement.onloadedmetadata = () => {
-          fileDuration = Math.round(videoElement.duration)
-          if (onDurationChange) {
-            onDurationChange(fileDuration)
+        const duration = await new Promise<number>((resolve) => {
+          const videoElement = document.createElement('video')
+          videoElement.preload = 'metadata'
+          videoElement.onloadedmetadata = () => {
+            URL.revokeObjectURL(videoElement.src)
+            resolve(Math.round(videoElement.duration))
           }
-          // 释放本地 Blob 资源
-          URL.revokeObjectURL(videoElement.src)
+          videoElement.onerror = () => resolve(0)
+          videoElement.src = URL.createObjectURL(file)
+        })
+        if (duration > 0 && onDurationChange) {
+          onDurationChange(duration)
         }
-      } catch (err) {
+      } catch {
         // 时长抓取失败不应影响文件本身的上传流程
       }
 
