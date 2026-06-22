@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import VideoList from './components/VideoList'
 import VideoForm from './components/VideoForm'
 import VideoPlayerModal from './components/VideoPlayerModal'
-import type { IOperationVideo } from './types'
+import type { IOperationVideo } from '@/types/video'
 import { useConfirmStore } from '@/stores/useConfirmStore'
 import {
   useVideoList,
@@ -103,7 +103,7 @@ export default function VideosPage() {
       onCancel={() => setView('list')}
       onSave={(payload) => {
         saveVideoMutation.mutate(
-          { id: editingVideo?.id, payload },
+          { id: editingVideo?.id, payload: payload as Partial<IOperationVideo> },
           {
             onSuccess: () => {
               toast.success(view === 'edit' ? '操作视频已成功修改' : '成功创建新操作视频')

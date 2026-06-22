@@ -42,7 +42,8 @@ export default function NewsPage() {
   const articles: INewsArticle[] = data?.items || []
   const total = data?.total || 0
 
-  const { data: stats } = useNewsStats()
+  const { data: statsData } = useNewsStats()
+  const stats = statsData ?? undefined
 
   // ==================== 2. API Mutations ====================
 
@@ -116,7 +117,7 @@ export default function NewsPage() {
       onSave={(payload) => {
         if (view === 'edit' && editingArticle) {
           updateMutation.mutate(
-            { id: editingArticle.id, payload },
+            { id: editingArticle.id, payload: payload as Partial<INewsArticle> },
             {
               onSuccess: () => {
                 toast.success('文章内容更新成功')
@@ -126,7 +127,7 @@ export default function NewsPage() {
             }
           )
         } else {
-          createMutation.mutate(payload, {
+          createMutation.mutate(payload as Partial<INewsArticle>, {
             onSuccess: () => {
               toast.success('新闻文章创建成功')
               setView('list')

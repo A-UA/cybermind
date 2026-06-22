@@ -32,7 +32,7 @@ export default function AppRichEditor({ value, onChange }: AppRichEditorProps) {
   // 仅在编辑器非聚焦状态下同步，避免光标跳到末尾
   useEffect(() => {
     if (editor && !editor.isFocused && value !== editor.getHTML()) {
-      editor.commands.setContent(value, false)
+      editor.commands.setContent(value, { emitUpdate: false })
     }
   }, [value, editor])
 

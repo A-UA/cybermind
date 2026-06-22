@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from sqlalchemy import Column, event
+from sqlalchemy import event
 from sqlmodel import Field, SQLModel
 from pydantic import field_serializer
 
@@ -13,13 +13,16 @@ from app.core.time import utc_now
 class TimestampMixin(SQLModel):
     """所有业务表继承此 Mixin，自动获得 created_at / updated_at 字段"""
 
+    # 注意：使用 sa_type 而非 sa_column，避免 Column 对象在多个表之间共享
     created_at: datetime = Field(
-        sa_column=Column(UTCDateTime, nullable=False),
+        sa_type=UTCDateTime,
+        nullable=False,
         default_factory=utc_now,
         description="创建时间 (UTC)",
     )
     updated_at: datetime = Field(
-        sa_column=Column(UTCDateTime, nullable=False),
+        sa_type=UTCDateTime,
+        nullable=False,
         default_factory=utc_now,
         description="更新时间 (UTC)",
     )

@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import HelpCategoryList from './components/HelpCategoryList'
 import HelpQuestionList from './components/HelpQuestionList'
 import HelpQuestionForm from './components/HelpQuestionForm'
-import type { IHelpCategory, IHelpQuestion } from './types'
+import type { IHelpQuestion } from './types'
 import { useConfirmStore } from '@/stores/useConfirmStore'
 import {
   useHelpCategories,

@@ -1,11 +1,11 @@
 export interface INewsArticle {
   id: number
   title: string
-  summary?: string
+  summary: string | null
   content: string
-  cover_image?: string
-  category?: string
-  tags?: string
+  cover_image: string | null
+  category: string | null
+  tags: string | null
   status: string
   view_count: number
   is_top: boolean

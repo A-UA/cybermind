@@ -1,5 +1,5 @@
 /** Axios 实例 — 统一请求拦截/响应拦截/Token 刷新 */
-import axios, { type AxiosRequestConfig } from 'axios'
+import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1/admin'

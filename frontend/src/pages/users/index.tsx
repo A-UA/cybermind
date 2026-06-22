@@ -47,8 +47,10 @@ export default function UsersPage() {
     keyword: userSearch.trim() || undefined,
   })
 
-  const { data: roles = [], isLoading: isRolesLoading, refetch: refetchRoles } = useRoleList()
-  const { data: permissions = [] } = usePermissionList()
+  const { data: rolesData, isLoading: isRolesLoading, refetch: refetchRoles } = useRoleList()
+  const roles = rolesData ?? []
+  const { data: permissionsData } = usePermissionList()
+  const permissions = permissionsData ?? []
 
   const usersList = usersData?.items || []
   const userTotal = usersData?.total || 0
@@ -180,10 +182,10 @@ export default function UsersPage() {
         onClose={() => setIsUserModalOpen(false)}
         onSave={async (payload) => {
           if (selectedUser) {
-            await updateUserMutation.mutateAsync({ id: selectedUser.id, payload })
+            await updateUserMutation.mutateAsync({ id: selectedUser.id, payload: payload as Partial<IUser> & { password?: string } })
             toast.success('用户信息已更新')
           } else {
-            await createUserMutation.mutateAsync(payload)
+            await createUserMutation.mutateAsync(payload as Partial<IUser> & { password?: string })
             toast.success('创建新管理员成功')
           }
           setIsUserModalOpen(false)
@@ -197,10 +199,10 @@ export default function UsersPage() {
         onClose={() => setIsRoleModalOpen(false)}
         onSave={async (payload) => {
           if (selectedRole) {
-            await updateRoleMutation.mutateAsync({ id: selectedRole.id, payload })
+            await updateRoleMutation.mutateAsync({ id: selectedRole.id, payload: payload as Partial<IRole> })
             toast.success('角色基本信息已修改')
           } else {
-            await createRoleMutation.mutateAsync(payload)
+            await createRoleMutation.mutateAsync(payload as Partial<IRole>)
             toast.success('成功创建新角色')
           }
           setIsRoleModalOpen(false)
