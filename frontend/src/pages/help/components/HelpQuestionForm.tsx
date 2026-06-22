@@ -5,6 +5,7 @@ import { ArrowLeft, Save, RefreshCw } from 'lucide-react';
 import AppFormItem from '@/components/common/AppFormItem';
 import AppRichEditor from '@/components/common/AppRichEditor';
 import AppCheckbox from '@/components/common/AppCheckbox';
+import { isRichTextEmpty } from '@/lib/richText';
 import type { IHelpQuestion, IHelpCategory } from '../types';
 
 interface HelpQuestionFormProps {
@@ -71,7 +72,7 @@ export default function HelpQuestionForm({
       setQuestionError('');
     }
 
-    if (!answerContent.trim()) {
+    if (isRichTextEmpty(answerContent)) {
       setAnswerError('答案回复内容不能为空');
       hasError = true;
     } else {
@@ -158,8 +159,9 @@ export default function HelpQuestionForm({
                 value={answerContent}
                 onChange={val => {
                   setAnswerContent(val);
-                  if (val.trim()) setAnswerError('');
+                  if (!isRichTextEmpty(val)) setAnswerError('');
                 }}
+                placeholder="在此撰写常见问题的详细解答..."
               />
             </AppFormItem>
           </div>

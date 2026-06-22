@@ -7,6 +7,7 @@ import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppRichEditor from '@/components/common/AppRichEditor'
 import AppCheckbox from '@/components/common/AppCheckbox'
+import { isRichTextEmpty } from '@/lib/richText'
 import type { INewsArticle } from '../types'
 
 interface NewsFormProps {
@@ -88,7 +89,7 @@ export default function NewsForm({
       setTitleError('')
     }
 
-    if (!content.trim()) {
+    if (isRichTextEmpty(content)) {
       setContentError('文章正文内容不能为空')
       hasError = true
     } else {
@@ -172,8 +173,9 @@ export default function NewsForm({
                 value={content} 
                 onChange={(val) => {
                   setContent(val)
-                  if (val.trim()) setContentError('')
+                  if (!isRichTextEmpty(val)) setContentError('')
                 }} 
+                placeholder="在此优雅地撰写文章富文本内容..."
               />
             </AppFormItem>
           </div>
