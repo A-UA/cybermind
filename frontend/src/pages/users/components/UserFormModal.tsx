@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import AppFormItem from '@/components/common/AppFormItem'
+import AppInput from '@/components/common/AppInput'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
 import AppCheckbox from '@/components/common/AppCheckbox'
@@ -74,7 +75,13 @@ export default function UserFormModal({
 
     if (hasError) return
 
-    const payload: any = {
+    const payload: {
+      nickname: string | null
+      email: string | null
+      is_active: boolean
+      password?: string
+      username?: string
+    } = {
       nickname: nicknameVal.trim() || null,
       email: emailVal.trim() || null,
       is_active: isActiveVal
@@ -102,7 +109,7 @@ export default function UserFormModal({
       <form onSubmit={handleSubmit} className="p-6 bg-background space-y-4 font-semibold text-xs text-foreground">
         {/* 用户名 */}
         <AppFormItem label="账户名 / USERNAME (创建后不可改)" required={!user} error={usernameError}>
-          <input
+          <AppInput
             type="text"
             required={!user}
             disabled={!!user}
@@ -112,7 +119,6 @@ export default function UserFormModal({
               setUsernameVal(e.target.value)
               if (e.target.value.trim()) setUsernameError('')
             }}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none font-bold text-xs disabled:opacity-60"
           />
         </AppFormItem>
 
@@ -122,7 +128,7 @@ export default function UserFormModal({
           required={!user} 
           error={passwordError}
         >
-          <input
+          <AppInput
             type="password"
             required={!user}
             placeholder={user ? '不修改请留空...' : '输入至少8位密码...'}
@@ -131,29 +137,26 @@ export default function UserFormModal({
               setPasswordVal(e.target.value)
               if (e.target.value.length >= 8 || user) setPasswordError('')
             }}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none font-mono text-xs"
           />
         </AppFormItem>
 
         {/* 昵称 */}
         <AppFormItem label="昵称 / DISPLAY NICKNAME">
-          <input
+          <AppInput
             type="text"
             placeholder="输入昵称..."
             value={nicknameVal}
             onChange={(e) => setNicknameVal(e.target.value)}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none text-xs"
           />
         </AppFormItem>
 
         {/* 邮箱 */}
         <AppFormItem label="电子邮箱 / EMAIL">
-          <input
+          <AppInput
             type="email"
             placeholder="例如 info@example.com"
             value={emailVal}
             onChange={(e) => setEmailVal(e.target.value)}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none text-xs"
           />
         </AppFormItem>
 

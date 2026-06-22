@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AppFormItem from '@/components/common/AppFormItem'
+import AppInput from '@/components/common/AppInput'
+import AppTextarea from '@/components/common/AppTextarea'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
 import type { IRole } from '../types'
@@ -64,7 +66,11 @@ export default function RoleFormModal({
 
     if (hasError) return
 
-    const payload: any = {
+    const payload: {
+      name: string
+      description: string | null
+      code?: string
+    } = {
       name: roleNameVal.trim(),
       description: roleDescVal.trim() || null
     }
@@ -87,7 +93,7 @@ export default function RoleFormModal({
       <form onSubmit={handleSubmit} className="p-6 bg-background space-y-4 font-semibold text-xs text-foreground">
         {/* 角色名称 */}
         <AppFormItem label="角色中文名称 / NAME" required error={nameError}>
-          <input
+          <AppInput
             type="text"
             placeholder="例如：内容管理员..."
             value={roleNameVal}
@@ -95,13 +101,12 @@ export default function RoleFormModal({
               setRoleNameVal(e.target.value)
               if (e.target.value.trim()) setNameError('')
             }}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none font-bold text-xs"
           />
         </AppFormItem>
 
         {/* 角色标识/代码 */}
         <AppFormItem label="角色标识代码 / CODE (创建后不可改)" required={!role} error={codeError}>
-          <input
+          <AppInput
             type="text"
             required={!role}
             disabled={!!role}
@@ -111,18 +116,16 @@ export default function RoleFormModal({
               setRoleCodeVal(e.target.value)
               if (e.target.value.trim()) setCodeError('')
             }}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none font-mono text-xs disabled:opacity-60"
           />
         </AppFormItem>
 
         {/* 角色描述 */}
         <AppFormItem label="角色职责描述 / DESCRIPTION">
-          <textarea
+          <AppTextarea
             rows={3}
             placeholder="请输入对该角色权限范围的解释..."
             value={roleDescVal}
             onChange={(e) => setRoleDescVal(e.target.value)}
-            className="w-full px-3 py-2 bg-background border-2 border-border rounded-lg outline-none text-xs"
           />
         </AppFormItem>
 

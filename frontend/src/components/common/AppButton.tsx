@@ -6,6 +6,15 @@ import { type ButtonHTMLAttributes, type ReactNode } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+/** 按钮尺寸样式对照 */
+const SIZE_MAP = {
+  sm: 'px-3 py-1.5 text-[10px]',
+  default: 'px-5 py-2 text-xs',
+  lg: 'px-8 py-3 text-xs',
+  icon: 'h-9 w-9 p-0',
+  iconSm: 'h-7 w-7 p-0',
+} as const
+
 /** 按钮变体样式对照 */
 const VARIANT_MAP = {
   primary:
@@ -18,6 +27,10 @@ const VARIANT_MAP = {
     'bg-accent text-foreground border-2 border-border pop-shadow-sm pop-press',
   ghost:
     'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground border-2 border-border',
+  success:
+    'bg-emerald-400 text-black border-2 border-border pop-shadow-sm pop-press',
+  warning:
+    'bg-amber-400 text-black border-2 border-border pop-shadow-sm pop-press',
 } as const
 
 interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -27,6 +40,8 @@ interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   loadingText?: string
   /** 按钮变体 */
   variant?: keyof typeof VARIANT_MAP
+  /** 按钮尺寸 */
+  size?: keyof typeof SIZE_MAP
   /** 按钮左侧图标插槽 */
   icon?: ReactNode
 }
@@ -35,6 +50,7 @@ export default function AppButton({
   loading = false,
   loadingText,
   variant = 'primary',
+  size = 'default',
   icon,
   children,
   className,
@@ -45,7 +61,8 @@ export default function AppButton({
     <button
       disabled={disabled || loading}
       className={cn(
-        'px-5 py-2 font-heading font-bold text-xs rounded-lg cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-1.5',
+        'font-heading font-bold rounded-lg cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-1.5',
+        SIZE_MAP[size],
         VARIANT_MAP[variant],
         className,
       )}

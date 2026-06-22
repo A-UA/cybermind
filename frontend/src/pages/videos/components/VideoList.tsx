@@ -1,5 +1,6 @@
 import { Plus, Trash2, Edit, RefreshCw, Eye, Film, Clock, Play } from 'lucide-react'
 import AppGuard from '@/components/common/AppGuard'
+import AppSelect from '@/components/common/AppSelect'
 import type { IOperationVideo } from '../types'
 import { formatDuration } from '@/lib/utils'
 
@@ -53,18 +54,16 @@ export default function VideoList({
 
         <div className="flex flex-wrap items-center gap-3 text-xs">
           {/* 分类筛选 */}
-          <select
-            value={selectedCategory}
-            onChange={(e) => onSelectedCategoryChange(e.target.value)}
-            className="px-3 py-2 bg-background border-2 border-border text-foreground text-xs rounded-lg outline-none font-bold cursor-pointer"
-          >
-            <option value="">全部视频分类</option>
-            {uniqueCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <AppSelect
+            width="md"
+            value={selectedCategory || 'all'}
+            onValueChange={(val) => onSelectedCategoryChange(val === 'all' || val === null ? '' : val)}
+            placeholder="全部视频分类"
+            options={[
+              { value: 'all', label: '全部视频分类' },
+              ...uniqueCategories.map((category) => ({ value: category, label: category })),
+            ]}
+          />
 
           {/* 搜索 */}
           <input

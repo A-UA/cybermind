@@ -1,4 +1,5 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import AppSelect from '@/components/common/AppSelect'
+import AppStatusBadge from '@/components/common/AppStatusBadge'
 import { Plus, Trash2, Edit, RefreshCw, Eye, Star, BookOpen } from 'lucide-react'
 import AppTable from '@/components/common/AppTable'
 import type { AppTableColumn } from '@/components/common/AppTable'
@@ -98,13 +99,15 @@ const getColumns = (
     key: 'status',
     width: '90px',
     className: 'text-center',
-    render: (row) => row.status === 'published' ? (
-      <span className="px-2.5 py-0.5 border-2 border-border bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 text-[10px] font-bold rounded-lg pop-shadow-sm select-none">已发布</span>
-    ) : row.status === 'archived' ? (
-      <span className="px-2.5 py-0.5 border-2 border-border bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-400 text-[10px] font-bold rounded-lg pop-shadow-sm select-none">已归档</span>
-    ) : (
-      <span className="px-2.5 py-0.5 border-2 border-border bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-400 text-[10px] font-bold rounded-lg pop-shadow-sm select-none">草稿</span>
-    )
+    render: (row) => {
+      const statusMap = {
+        published: { label: '已发布', tone: 'success' as const },
+        archived: { label: '已归档', tone: 'muted' as const },
+        draft: { label: '草稿', tone: 'warning' as const },
+      }
+      const status = statusMap[row.status as keyof typeof statusMap] || statusMap.draft
+      return <AppStatusBadge tone={status.tone}>{status.label}</AppStatusBadge>
+    }
   },
   {
     title: '发布日期',
@@ -164,32 +167,34 @@ export default function NewsList({
 
           <div className="flex items-center space-x-1.5">
             <span className="font-semibold text-muted-foreground">分类:</span>
-            <Select value={categoryFilter} onValueChange={(val) => onCategoryFilterChange(val || 'all')}>
-              <SelectTrigger className="w-28 h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-semibold">
-                <SelectValue placeholder="显示全部" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
-                <SelectItem value="all">全部分类</SelectItem>
-                <SelectItem value="行业动态">行业动态</SelectItem>
-                <SelectItem value="企业新闻">企业新闻</SelectItem>
-                <SelectItem value="产品公告">产品公告</SelectItem>
-              </SelectContent>
-            </Select>
+            <AppSelect
+              width="sm"
+              value={categoryFilter}
+              onValueChange={(val) => onCategoryFilterChange(val || 'all')}
+              placeholder="显示全部"
+              options={[
+                { value: 'all', label: '全部分类' },
+                { value: '行业动态', label: '行业动态' },
+                { value: '企业新闻', label: '企业新闻' },
+                { value: '产品公告', label: '产品公告' },
+              ]}
+            />
           </div>
 
           <div className="flex items-center space-x-1.5">
             <span className="font-semibold text-muted-foreground">状态:</span>
-            <Select value={statusFilter} onValueChange={(val) => onStatusFilterChange(val || 'all')}>
-              <SelectTrigger className="w-28 h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-semibold">
-                <SelectValue placeholder="全部" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
-                <SelectItem value="all">全部状态</SelectItem>
-                <SelectItem value="draft">草稿</SelectItem>
-                <SelectItem value="published">已发布</SelectItem>
-                <SelectItem value="archived">已归档</SelectItem>
-              </SelectContent>
-            </Select>
+            <AppSelect
+              width="sm"
+              value={statusFilter}
+              onValueChange={(val) => onStatusFilterChange(val || 'all')}
+              placeholder="全部"
+              options={[
+                { value: 'all', label: '全部状态' },
+                { value: 'draft', label: '草稿' },
+                { value: 'published', label: '已发布' },
+                { value: 'archived', label: '已归档' },
+              ]}
+            />
           </div>
 
           <button onClick={onRefetch} className="p-2 border-2 border-border bg-background text-foreground hover:bg-accent transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer" title="刷新数据">

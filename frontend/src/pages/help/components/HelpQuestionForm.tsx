@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import AppSelect from '@/components/common/AppSelect';
+import AppInput from '@/components/common/AppInput';
 import { ArrowLeft, Save, RefreshCw } from 'lucide-react';
 import AppFormItem from '@/components/common/AppFormItem';
 import AppRichEditor from '@/components/common/AppRichEditor';
@@ -142,7 +137,7 @@ export default function HelpQuestionForm({
               required
               error={questionError}
             >
-              <input
+              <AppInput
                 type="text"
                 placeholder="请输入常见问题内容，例如：如何找回登录密码？"
                 value={questionText}
@@ -150,7 +145,6 @@ export default function HelpQuestionForm({
                   setQuestionText(e.target.value);
                   if (e.target.value.trim()) setQuestionError('');
                 }}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-bold"
               />
             </AppFormItem>
 
@@ -178,25 +172,16 @@ export default function HelpQuestionForm({
 
             {/* 所属分类 */}
             <AppFormItem label="所属常见问题分类 / BELONGS TO" required>
-              <Select
-                items={categories.map(c => ({
-                  value: String(c.id),
-                  label: c.name,
-                }))}
+              <AppSelect
+                width="full"
                 value={String(categoryId)}
-                onValueChange={val => setCategoryId(val ? Number(val) : '')}
-              >
-                <SelectTrigger className="w-full h-10 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-bold">
-                  <SelectValue placeholder="选择所属分类" />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
-                  {categories.map(c => (
-                    <SelectItem key={c.id} value={String(c.id)}>
-                      {c.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onValueChange={(val) => setCategoryId(val ? Number(val) : '')}
+                placeholder="选择所属分类"
+                options={categories.map((category) => ({
+                  value: String(category.id),
+                  label: category.name,
+                }))}
+              />
             </AppFormItem>
 
             {/* 排序序号 */}

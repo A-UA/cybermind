@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import AppSelect from '@/components/common/AppSelect'
+import AppInput from '@/components/common/AppInput'
+import AppTextarea from '@/components/common/AppTextarea'
 import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
@@ -143,7 +145,7 @@ export default function NewsForm({
           <div className="lg:col-span-2 space-y-6">
             {/* 文章标题 */}
             <AppFormItem label="文章标题 / ARTICLE TITLE" required error={titleError}>
-              <input
+              <AppInput
                 type="text"
                 placeholder="请输入文章核心标题..."
                 value={title}
@@ -151,18 +153,16 @@ export default function NewsForm({
                   setTitle(e.target.value)
                   if (e.target.value.trim()) setTitleError('')
                 }}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-bold"
               />
             </AppFormItem>
 
             {/* 摘要说明 */}
             <AppFormItem label="文章摘要 / SUMMARY (可选)" description="简明扼要地概括文章主旨...">
-              <textarea
+              <AppTextarea
                 placeholder="在此录入摘要描述..."
                 value={summary}
                 onChange={(e) => setSummary(e.target.value)}
                 rows={2}
-                className="w-full px-4 py-2.5 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold resize-none"
               />
             </AppFormItem>
 
@@ -186,16 +186,17 @@ export default function NewsForm({
 
             {/* 文章分类 */}
             <AppFormItem label="文章分类 / CATEGORY">
-              <Select value={category} onValueChange={(val) => setCategory(val || '行业动态')}>
-                <SelectTrigger className="w-full h-10 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-bold">
-                  <SelectValue placeholder="选择分类" />
-                </SelectTrigger>
-                <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
-                  <SelectItem value="行业动态">行业动态</SelectItem>
-                  <SelectItem value="企业新闻">企业新闻</SelectItem>
-                  <SelectItem value="产品公告">产品公告</SelectItem>
-                </SelectContent>
-              </Select>
+              <AppSelect
+                width="full"
+                value={category}
+                onValueChange={(val) => setCategory(val || '行业动态')}
+                placeholder="选择分类"
+                options={[
+                  { value: '行业动态', label: '行业动态' },
+                  { value: '企业新闻', label: '企业新闻' },
+                  { value: '产品公告', label: '产品公告' },
+                ]}
+              />
             </AppFormItem>
 
             {/* 封面图 */}

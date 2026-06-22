@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
+import AppInput from '@/components/common/AppInput'
+import AppTextarea from '@/components/common/AppTextarea'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppVideoUploader from '@/components/business/AppVideoUploader'
 import AppCheckbox from '@/components/common/AppCheckbox'
@@ -144,7 +146,7 @@ export default function VideoForm({
 
             {/* 视频标题 */}
             <AppFormItem label="视频标题 / VIDEO TITLE" required error={titleError}>
-              <input
+              <AppInput
                 type="text"
                 placeholder="请输入视频标题，以便前台用户精准搜索..."
                 value={title}
@@ -152,18 +154,17 @@ export default function VideoForm({
                   setTitle(e.target.value)
                   if (e.target.value.trim()) setTitleError('')
                 }}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-bold"
               />
             </AppFormItem>
 
             {/* 描述信息 */}
             <AppFormItem label="视频描述 / DESCRIPTION (可选)" description="简要介绍该操作视频的主要教学指导内容...">
-              <textarea
+              <AppTextarea
                 placeholder="在此输入详细的视频说明或操作步骤..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={5}
-                className="w-full px-4 py-2.5 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold resize-y"
+                resize="vertical"
               />
             </AppFormItem>
           </div>
@@ -176,12 +177,11 @@ export default function VideoForm({
 
             {/* 分类 */}
             <AppFormItem label="视频分类 / CATEGORY" description="例如: 基础入门, 高级进阶, 后台配置">
-              <input
+              <AppInput
                 type="text"
                 placeholder="请输入视频类别名称"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3 py-2.5 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
               />
             </AppFormItem>
 
@@ -192,22 +192,20 @@ export default function VideoForm({
 
             {/* 时长秒数 (自动提取后亦可手动微调) */}
             <AppFormItem label="视频时长 (秒) / DURATION (SEC)" description="上传视频时系统会自动提取，亦可手动填修">
-              <input
+              <AppInput
                 type="number"
                 placeholder="自动计算时长"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value === '' ? '' : Number(e.target.value))}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
               />
             </AppFormItem>
 
             {/* 排序序号 */}
             <AppFormItem label="排序序号 / SORT ORDER">
-              <input
+              <AppInput
                 type="number"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
               />
             </AppFormItem>
 

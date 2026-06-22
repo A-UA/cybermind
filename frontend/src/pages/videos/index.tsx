@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { getApiErrorMessage } from '@/lib/api'
 
 import VideoList from './components/VideoList'
 import VideoForm from './components/VideoForm'
@@ -109,7 +110,7 @@ export default function VideosPage() {
               toast.success(view === 'edit' ? '操作视频已成功修改' : '成功创建新操作视频')
               setView('list')
             },
-            onError: (err: any) => toast.error(err.response?.data?.message || '操作失败'),
+            onError: (err: unknown) => toast.error(getApiErrorMessage(err, '操作失败')),
           }
         )
       }}

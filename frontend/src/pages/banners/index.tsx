@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { IBanner } from '@/types/banner'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import AppSelect from '@/components/common/AppSelect'
+import AppStatusBadge from '@/components/common/AppStatusBadge'
 import { Plus, Trash2, Edit, RefreshCw, Eye, ExternalLink, SlidersHorizontal } from 'lucide-react'
 import BannerForm from './components/BannerForm'
 import AppTable from '@/components/common/AppTable'
@@ -131,12 +132,9 @@ export default function BannersPage() {
       width: '110px',
       className: 'text-center',
       render: (row) => (
-        <div className="flex items-center justify-center space-x-2">
-          <span className={`w-2.5 h-2.5 rounded-full inline-block border-2 border-border ${row.is_active ? 'bg-emerald-400' : 'bg-muted-foreground/35'}`} />
-          <span className={`text-[10px] font-bold ${row.is_active ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground/60'}`}>
-            {row.is_active ? '分发中' : '已下线'}
-          </span>
-        </div>
+        <AppStatusBadge tone={row.is_active ? 'success' : 'muted'} dot>
+          {row.is_active ? '分发中' : '已下线'}
+        </AppStatusBadge>
       )
     },
     {
@@ -193,22 +191,20 @@ export default function BannersPage() {
           {/* 状态过滤 */}
           <div className="flex items-center space-x-2">
             <span className="font-semibold text-muted-foreground">过滤:</span>
-            <Select
+            <AppSelect
+              width="sm"
               value={isActiveFilter}
               onValueChange={(val) => {
                 setIsActiveFilter(val || 'all')
                 setPage(1)
               }}
-            >
-              <SelectTrigger className="w-28 h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-semibold">
-                <SelectValue placeholder="全部状态" />
-              </SelectTrigger>
-              <SelectContent className="bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold">
-                <SelectItem value="all">显示全部</SelectItem>
-                <SelectItem value="active">已启用</SelectItem>
-                <SelectItem value="inactive">已下线</SelectItem>
-              </SelectContent>
-            </Select>
+              placeholder="全部状态"
+              options={[
+                { value: 'all', label: '显示全部' },
+                { value: 'active', label: '已启用' },
+                { value: 'inactive', label: '已下线' },
+              ]}
+            />
           </div>
 
           <button
