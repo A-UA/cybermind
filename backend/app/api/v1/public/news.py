@@ -45,6 +45,35 @@ async def list_public_news(
     )
 
 
+@router.get("/top", response_model=ApiResponse[list[NewsResponse]], summary="获取热门新闻")
+async def get_top_news(
+    limit: int = Query(5, ge=1, le=20),
+    session: Session = Depends(get_session),
+):
+    """获取浏览量最高的热门新闻（仅已发布，不分页）"""
+    articles = news_service.get_public_top_news(session, limit)
+    items = [
+        NewsResponse(
+            id=a.id,
+            title=a.title,
+            summary=a.summary,
+            content=a.content,
+            cover_image=a.cover_image,
+            category=a.category,
+            tags=a.tags,
+            status=a.status,
+            view_count=a.view_count,
+            is_top=a.is_top,
+            published_at=a.published_at,
+            created_by=a.created_by,
+            created_at=a.created_at,
+            updated_at=a.updated_at,
+        )
+        for a in articles
+    ]
+    return ApiResponse(data=items)
+
+
 @router.get("/{id}", response_model=ApiResponse[NewsResponse], summary="获取公开新闻详情")
 async def get_public_news_detail(id: int, session: Session = Depends(get_session)):
     """获取公开新闻详情（浏览量 +1）"""

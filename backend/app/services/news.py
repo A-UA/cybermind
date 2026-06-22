@@ -152,6 +152,17 @@ def get_public_news_list(
     return items, total
 
 
+def get_public_top_news(session: Session, limit: int = 5) -> List[NewsArticle]:
+    """获取公开热门新闻列表（仅已发布，按浏览量降序）"""
+    query = (
+        select(NewsArticle)
+        .where(NewsArticle.status == "published")
+        .order_by(NewsArticle.view_count.desc())
+        .limit(limit)
+    )
+    return list(session.exec(query).all())
+
+
 def get_public_news_detail(session: Session, id: int) -> NewsArticle:
     """获取公开新闻详情（必须是已发布状态，浏览量 +1）"""
     article = get_news_by_id(session, id, auto_increment_view=True)
