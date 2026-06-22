@@ -48,10 +48,14 @@ export interface RichEditorToolbarItemConfig {
   icon: ComponentType<{ className?: string }>
   title: string
   isActive?: (editor: RichEditorInstance) => boolean
-  run: (editor: RichEditorInstance) => void
+  run: (editor: RichEditorInstance, context: RichEditorToolbarContext) => void
 }
 
 export interface RichEditorResolvedConfig {
   features: RichEditorFeature[]
   toolbar: RichEditorToolbarGroup[]
+}
+
+export interface RichEditorToolbarContext {
+  selectImageFile?: () => void
 }

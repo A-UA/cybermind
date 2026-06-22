@@ -118,7 +118,12 @@ export const richEditorToolbarItems: Record<RichEditorToolbarItem, RichEditorToo
     feature: 'image',
     icon: ImageIcon,
     title: '图片',
-    run: (editor) => {
+    run: (editor, context) => {
+      if (context.selectImageFile) {
+        context.selectImageFile()
+        return
+      }
+
       const src = window.prompt('请输入图片地址')
 
       if (!src?.trim()) return

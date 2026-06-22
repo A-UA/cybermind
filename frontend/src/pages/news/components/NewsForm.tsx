@@ -8,6 +8,9 @@ import AppImageUploader from '@/components/business/AppImageUploader'
 import AppRichEditor from '@/components/common/AppRichEditor'
 import AppCheckbox from '@/components/common/AppCheckbox'
 import { isRichTextEmpty } from '@/lib/richText'
+import { getApiErrorMessage } from '@/lib/api'
+import { uploadRichTextImage } from '@/lib/richTextUpload'
+import { toast } from 'sonner'
 import type { INewsArticle } from '../types'
 
 interface NewsFormProps {
@@ -176,6 +179,8 @@ export default function NewsForm({
                   if (!isRichTextEmpty(val)) setContentError('')
                 }} 
                 preset="article"
+                uploadImage={uploadRichTextImage}
+                onUploadError={(err) => toast.error(getApiErrorMessage(err, '图片上传失败'))}
                 placeholder="在此优雅地撰写文章富文本内容..."
               />
             </AppFormItem>

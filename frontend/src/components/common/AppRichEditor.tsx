@@ -1,4 +1,4 @@
-import { useEffect, useMemo, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 
 import { createRichEditorExtensions } from './richEditor/extensions'
@@ -8,6 +8,7 @@ import type {
   RichEditorFeature,
   RichEditorPreset,
   RichEditorToolbarGroup,
+  RichEditorToolbarItem,
 } from './richEditor/types'
 
 interface MenuButtonProps {
@@ -25,6 +26,8 @@ interface AppRichEditorProps {
   features?: RichEditorFeature[]
   disabledFeatures?: RichEditorFeature[]
   toolbar?: RichEditorToolbarGroup[]
+  uploadImage?: (file: File) => Promise<string>
+  onUploadError?: (error: unknown) => void
 }
 
 function MenuButton({ onClick, isActive = false, title, children }: MenuButtonProps) {
@@ -52,7 +55,11 @@ export default function AppRichEditor({
   features,
   disabledFeatures,
   toolbar,
+  uploadImage,
+  onUploadError,
 }: AppRichEditorProps) {
+  const imageInputRef = useRef<HTMLInputElement>(null)
+  const [uploadingItem, setUploadingItem] = useState<RichEditorToolbarItem | null>(null)
   const resolvedConfig = useMemo(
     () => resolveRichEditorConfig({ preset, features, disabledFeatures, toolbar }),
     [disabledFeatures, features, preset, toolbar],
@@ -89,18 +96,42 @@ export default function AppRichEditor({
     }
   }, [value, editor])
 
+  const handleImageFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+
+    if (!file || !editor || !uploadImage) return
+
+    try {
+      setUploadingItem('image')
+      const src = await uploadImage(file)
+      editor.chain().focus().setImage({ src }).run()
+    } catch (error) {
+      onUploadError?.(error)
+    } finally {
+      setUploadingItem(null)
+    }
+  }
+
   if (!editor) {
     return null
   }
 
   return (
     <div className="border-2 border-border rounded-xl bg-card overflow-hidden pop-shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageFileChange}
+      />
       {/* 按钮控制条栏 */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-accent/30 border-b-2 border-border">
         {resolvedConfig.toolbar.map((group, groupIndex) => {
           const visibleItems = group
-            .map((item) => richEditorToolbarItems[item])
-            .filter((item) => enabledFeatures.has(item.feature))
+            .map((item) => ({ key: item, config: richEditorToolbarItems[item] }))
+            .filter((item) => enabledFeatures.has(item.config.feature))
 
           if (visibleItems.length === 0) return null
 
@@ -109,17 +140,24 @@ export default function AppRichEditor({
               {groupIndex > 0 && (
                 <div className="w-[2px] h-6 bg-border mx-1 self-center" />
               )}
-              {visibleItems.map((item) => {
-                const Icon = item.icon
+              {visibleItems.map(({ key, config }) => {
+                const Icon = config.icon
+                const isUploading = uploadingItem === key
 
                 return (
                   <MenuButton
-                    key={item.title}
-                    onClick={() => item.run(editor)}
-                    isActive={item.isActive?.(editor) ?? false}
-                    title={item.title}
+                    key={config.title}
+                    onClick={() =>
+                      config.run(editor, {
+                        selectImageFile: uploadImage
+                          ? () => imageInputRef.current?.click()
+                          : undefined,
+                      })
+                    }
+                    isActive={config.isActive?.(editor) ?? false}
+                    title={isUploading ? '图片上传中' : config.title}
                   >
-                    <Icon className="h-4 w-4" />
+                    <Icon className={`h-4 w-4 ${isUploading ? 'animate-spin' : ''}`} />
                   </MenuButton>
                 )
               })}
