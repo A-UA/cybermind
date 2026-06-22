@@ -34,7 +34,7 @@ export default function NewsForm({
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [coverImage, setCoverImage] = useState('')
-  const [category, setCategory] = useState('行业动态')
+  const [category, setCategory] = useState('industry')
   const [tagsInput, setTagsInput] = useState('')
   const [isTop, setIsTop] = useState(false)
   const [content, setContent] = useState('')
@@ -49,7 +49,7 @@ export default function NewsForm({
       setTitle(article.title || '')
       setSummary(article.summary || '')
       setCoverImage(article.cover_image || '')
-      setCategory(article.category || '行业动态')
+      setCategory(article.category || 'industry')
       setContent(article.content || '')
       setIsTop(article.is_top || false)
       
@@ -68,7 +68,7 @@ export default function NewsForm({
       setTitle('')
       setSummary('')
       setCoverImage('')
-      setCategory('行业动态')
+      setCategory('industry')
       setTagsInput('')
       setIsTop(false)
       setContent('')
@@ -189,12 +189,12 @@ export default function NewsForm({
               <AppSelect
                 width="full"
                 value={category}
-                onValueChange={(val) => setCategory(val || '行业动态')}
+                onValueChange={(val) => setCategory(val || 'industry')}
                 placeholder="选择分类"
                 options={[
-                  { value: '行业动态', label: '行业动态' },
-                  { value: '企业新闻', label: '企业新闻' },
-                  { value: '产品公告', label: '产品公告' },
+                  { value: 'industry', label: '行业动态' },
+                  { value: 'company', label: '企业新闻' },
+                  { value: 'product', label: '产品公告' },
                 ]}
               />
             </AppFormItem>

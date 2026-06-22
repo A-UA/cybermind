@@ -31,6 +31,13 @@ interface NewsListProps {
   onToggleStatus: (id: number, currentStatus: string) => void
 }
 
+const categoryOptions = [
+  { value: 'all', label: '全部分类' },
+  { value: 'industry', label: '行业动态' },
+  { value: 'company', label: '企业新闻' },
+  { value: 'product', label: '产品公告' },
+]
+
 // 紧凑型定义 Table Columns 节约空余行数
 const getColumns = (
   onToggleTop: (id: number, currentVal: boolean) => void,
@@ -85,7 +92,7 @@ const getColumns = (
     title: '分类',
     key: 'category',
     width: '110px',
-    render: (row) => <span className="px-2 py-0.5 border-2 border-border bg-background text-[10px] font-bold rounded-lg pop-shadow-sm select-none">{row.category || '未分类'}</span>
+    render: (row) => <span className="px-2 py-0.5 border-2 border-border bg-background text-[10px] font-bold rounded-lg pop-shadow-sm select-none">{categoryOptions.find((o) => o.value === row.category)?.label || '未分类'}</span>
   },
   {
     title: '浏览量',
@@ -172,12 +179,7 @@ export default function NewsList({
               value={categoryFilter}
               onValueChange={(val) => onCategoryFilterChange(val || 'all')}
               placeholder="显示全部"
-              options={[
-                { value: 'all', label: '全部分类' },
-                { value: '行业动态', label: '行业动态' },
-                { value: '企业新闻', label: '企业新闻' },
-                { value: '产品公告', label: '产品公告' },
-              ]}
+              options={categoryOptions}
             />
           </div>
 
