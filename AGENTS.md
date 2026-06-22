@@ -39,7 +39,7 @@
 | 类型系统 | TypeScript | 严格模式 |
 | 构建工具 | Vite | 最新稳定版 |
 | CSS 框架 | Tailwind CSS | **4.x** |
-| UI 组件库 | shadcn/ui | 最新版 |
+| UI 组件库 | shadcn/ui（Base UI） | 最新版 |
 | 状态管理 | Zustand | — |
 | 请求层 | Axios + TanStack Query (React Query) | — |
 | 富文本编辑器 | TipTap (ProseMirror) | — |
