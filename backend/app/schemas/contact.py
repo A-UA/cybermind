@@ -1,7 +1,8 @@
 """联系我们 Pydantic 模式校验"""
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import EmailStr, Field
+from app.schemas.common import BaseModel
 
 
 class ContactSubmitRequest(BaseModel):

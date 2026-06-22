@@ -1,6 +1,7 @@
 """认证相关请求/响应模式"""
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.schemas.common import BaseModel
 
 
 class LoginRequest(BaseModel):

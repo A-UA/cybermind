@@ -1,7 +1,8 @@
 """操作视频 Pydantic 架构模型"""
-from pydantic import BaseModel, Field
+from pydantic import Field
 from datetime import datetime
 from typing import Optional
+from app.schemas.common import BaseModel
 
 
 class VideoResponse(BaseModel):

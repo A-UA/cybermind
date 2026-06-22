@@ -1,7 +1,8 @@
 """Banner 请求与响应 Schema 定义"""
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.schemas.common import BaseModel
 
 
 class BannerCreate(BaseModel):

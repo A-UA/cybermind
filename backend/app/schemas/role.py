@@ -1,7 +1,8 @@
 """角色与权限请求/响应模式"""
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.schemas.common import BaseModel
 
 
 class RoleCreate(BaseModel):

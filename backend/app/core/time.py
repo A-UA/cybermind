@@ -6,6 +6,15 @@ from datetime import datetime, timedelta, timezone
 SHANGHAI_TZ = timezone(timedelta(hours=8))
 
 
+def get_local_tz() -> timezone:
+    """获取当前服务器/宿主机的本地时区
+
+    通过系统时间动态获取，无需硬编码。
+    Docker 容器中通过设置 TZ 环境变量或挂载 /etc/localtime 来控制。
+    """
+    return datetime.now().astimezone().tzinfo  # type: ignore[return-value]
+
+
 def utc_now() -> datetime:
     """获取当前 UTC 时间（aware datetime）"""
     return datetime.now(timezone.utc)
@@ -14,6 +23,11 @@ def utc_now() -> datetime:
 def shanghai_now() -> datetime:
     """获取当前上海时间（aware datetime）"""
     return datetime.now(SHANGHAI_TZ)
+
+
+def local_now() -> datetime:
+    """获取当前服务器本地时间（aware datetime）"""
+    return datetime.now(get_local_tz())
 
 
 def shanghai_today_start() -> datetime:

@@ -1,5 +1,6 @@
 """数据埋点 Pydantic 校验模式"""
-from pydantic import BaseModel, Field
+from pydantic import Field
+from app.schemas.common import BaseModel
 
 
 class TrackingEventRequest(BaseModel):

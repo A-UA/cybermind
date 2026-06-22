@@ -7,7 +7,7 @@ from sqlmodel import Field, SQLModel
 from pydantic import field_serializer
 
 from app.core.db_types import UTCDateTime
-from app.core.time import utc_now
+from app.core.time import utc_now, get_local_tz
 
 
 class TimestampMixin(SQLModel):
@@ -30,7 +30,9 @@ class TimestampMixin(SQLModel):
     @field_serializer("*")
     def serialize_datetime(self, value):
         if isinstance(value, datetime):
-            return value.strftime("%Y-%m-%d %H:%M:%S")
+            # 统一转为服务器本地时区后格式化
+            local_value = value.astimezone(get_local_tz())
+            return local_value.strftime("%Y-%m-%d %H:%M:%S")
         return value
 
 
