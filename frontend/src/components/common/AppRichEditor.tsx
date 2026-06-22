@@ -1,8 +1,14 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useMemo, type ReactNode } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import Placeholder from '@tiptap/extension-placeholder'
-import { Bold, Italic, Strikethrough, Heading1, Heading2, List, ListOrdered, Quote, Undo, Redo } from 'lucide-react'
+
+import { createRichEditorExtensions } from './richEditor/extensions'
+import { resolveRichEditorConfig } from './richEditor/presets'
+import { richEditorToolbarItems } from './richEditor/toolbarItems'
+import type {
+  RichEditorFeature,
+  RichEditorPreset,
+  RichEditorToolbarGroup,
+} from './richEditor/types'
 
 interface MenuButtonProps {
   onClick: () => void
@@ -15,6 +21,10 @@ interface AppRichEditorProps {
   value: string
   onChange: (value: string, meta: { isEmpty: boolean }) => void
   placeholder?: string
+  preset?: RichEditorPreset
+  features?: RichEditorFeature[]
+  disabledFeatures?: RichEditorFeature[]
+  toolbar?: RichEditorToolbarGroup[]
 }
 
 function MenuButton({ onClick, isActive = false, title, children }: MenuButtonProps) {
@@ -38,16 +48,27 @@ export default function AppRichEditor({
   value,
   onChange,
   placeholder = '在此输入富文本内容...',
+  preset,
+  features,
+  disabledFeatures,
+  toolbar,
 }: AppRichEditorProps) {
+  const resolvedConfig = useMemo(
+    () => resolveRichEditorConfig({ preset, features, disabledFeatures, toolbar }),
+    [disabledFeatures, features, preset, toolbar],
+  )
+  const enabledFeatures = useMemo(() => new Set(resolvedConfig.features), [resolvedConfig.features])
+  const extensions = useMemo(
+    () => createRichEditorExtensions({ features: resolvedConfig.features, placeholder }),
+    [placeholder, resolvedConfig.features],
+  )
+  const editorConfigKey = useMemo(
+    () => JSON.stringify({ features: resolvedConfig.features, placeholder }),
+    [placeholder, resolvedConfig.features],
+  )
+
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Placeholder.configure({
-        placeholder,
-        emptyNodeClass:
-          'is-editor-empty before:content-[attr(data-placeholder)] before:float-left before:h-0 before:text-muted-foreground before:pointer-events-none',
-      }),
-    ],
+    extensions,
     content: value,
     editorProps: {
       attributes: {
@@ -58,7 +79,7 @@ export default function AppRichEditor({
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML(), { isEmpty: editor.isEmpty })
     },
-  })
+  }, [editorConfigKey])
 
   // 当外部 value 发生改变且不同于当前 editor 的 HTML 时，进行同步回填
   // 父级切换编辑对象或重置表单时，聚焦状态下也必须更新，避免旧内容写回新表单。
@@ -76,89 +97,35 @@ export default function AppRichEditor({
     <div className="border-2 border-border rounded-xl bg-card overflow-hidden pop-shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
       {/* 按钮控制条栏 */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-accent/30 border-b-2 border-border">
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          isActive={editor.isActive('bold')}
-          title="加粗"
-        >
-          <Bold className="h-4 w-4" />
-        </MenuButton>
+        {resolvedConfig.toolbar.map((group, groupIndex) => {
+          const visibleItems = group
+            .map((item) => richEditorToolbarItems[item])
+            .filter((item) => enabledFeatures.has(item.feature))
 
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          isActive={editor.isActive('italic')}
-          title="斜体"
-        >
-          <Italic className="h-4 w-4" />
-        </MenuButton>
+          if (visibleItems.length === 0) return null
 
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          isActive={editor.isActive('strike')}
-          title="删除线"
-        >
-          <Strikethrough className="h-4 w-4" />
-        </MenuButton>
+          return (
+            <div key={groupIndex} className="flex items-center gap-2">
+              {groupIndex > 0 && (
+                <div className="w-[2px] h-6 bg-border mx-1 self-center" />
+              )}
+              {visibleItems.map((item) => {
+                const Icon = item.icon
 
-        <div className="w-[2px] h-6 bg-border mx-1 self-center" />
-
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          isActive={editor.isActive('heading', { level: 1 })}
-          title="一级标题"
-        >
-          <Heading1 className="h-4 w-4" />
-        </MenuButton>
-
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          isActive={editor.isActive('heading', { level: 2 })}
-          title="二级标题"
-        >
-          <Heading2 className="h-4 w-4" />
-        </MenuButton>
-
-        <div className="w-[2px] h-6 bg-border mx-1 self-center" />
-
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          isActive={editor.isActive('bulletList')}
-          title="无序列表"
-        >
-          <List className="h-4 w-4" />
-        </MenuButton>
-
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          isActive={editor.isActive('orderedList')}
-          title="有序列表"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </MenuButton>
-
-        <MenuButton
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          isActive={editor.isActive('blockquote')}
-          title="引用区块"
-        >
-          <Quote className="h-4 w-4" />
-        </MenuButton>
-
-        <div className="w-[2px] h-6 bg-border mx-1 self-center ml-auto" />
-
-        <MenuButton
-          onClick={() => editor.chain().focus().undo().run()}
-          title="撤销"
-        >
-          <Undo className="h-4 w-4" />
-        </MenuButton>
-
-        <MenuButton
-          onClick={() => editor.chain().focus().redo().run()}
-          title="重做"
-        >
-          <Redo className="h-4 w-4" />
-        </MenuButton>
+                return (
+                  <MenuButton
+                    key={item.title}
+                    onClick={() => item.run(editor)}
+                    isActive={item.isActive?.(editor) ?? false}
+                    title={item.title}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </MenuButton>
+                )
+              })}
+            </div>
+          )
+        })}
       </div>
 
       {/* 富文本编辑区 */}

@@ -34,6 +34,43 @@ describe('AppRichEditor', () => {
     expect(await screen.findByText('新内容')).toBeTruthy()
     expect(screen.queryByText('旧内容')).toBeNull()
   })
+
+  it('renders toolbar from explicit groups', async () => {
+    const { container } = render(
+      <AppRichEditor
+        value="<p>内容</p>"
+        onChange={() => undefined}
+        features={['bold', 'blockquote']}
+        toolbar={[['bold'], ['blockquote']]}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('[contenteditable="true"]')).toBeTruthy()
+    })
+
+    expect(container.querySelector('[title="加粗"]')).toBeTruthy()
+    expect(container.querySelector('[title="引用区块"]')).toBeTruthy()
+    expect(container.querySelector('[title="斜体"]')).toBeNull()
+  })
+
+  it('hides toolbar items whose feature is disabled', async () => {
+    const { container } = render(
+      <AppRichEditor
+        value="<p>内容</p>"
+        onChange={() => undefined}
+        features={['bold']}
+        toolbar={[['bold', 'link']]}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(container.querySelector('[contenteditable="true"]')).toBeTruthy()
+    })
+
+    expect(container.querySelector('[title="加粗"]')).toBeTruthy()
+    expect(container.querySelector('[title="链接"]')).toBeNull()
+  })
 })
 
 describe('isRichTextEmpty', () => {

@@ -175,6 +175,7 @@ export default function NewsForm({
                   setContent(val)
                   if (!isRichTextEmpty(val)) setContentError('')
                 }} 
+                preset="article"
                 placeholder="在此优雅地撰写文章富文本内容..."
               />
             </AppFormItem>

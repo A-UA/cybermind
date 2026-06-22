@@ -161,6 +161,7 @@ export default function HelpQuestionForm({
                   setAnswerContent(val);
                   if (!isRichTextEmpty(val)) setAnswerError('');
                 }}
+                preset="basic"
                 placeholder="在此撰写常见问题的详细解答..."
               />
             </AppFormItem>
