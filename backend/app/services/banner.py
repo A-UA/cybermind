@@ -1,11 +1,12 @@
 """Banner 业务逻辑层"""
-from typing import Optional
-from sqlmodel import Session, select, func, col
-from app.core.time import utc_now
 
+from typing import Optional
+
+from sqlmodel import Session, col, func, select
+
+from app.core.exceptions import NotFoundException
 from app.models.banner import Banner
 from app.schemas.banner import BannerCreate, BannerUpdate
-from app.core.exceptions import NotFoundException
 
 
 def get_banner_list(
@@ -25,8 +26,10 @@ def get_banner_list(
     total = session.exec(count_statement).one()
 
     # 排序：sort_order 升序，created_at 降序
-    statement = statement.order_by(col(Banner.sort_order).asc(), col(Banner.created_at).desc())
-    
+    statement = statement.order_by(
+        col(Banner.sort_order).asc(), col(Banner.created_at).desc()
+    )
+
     # 分页
     statement = statement.offset((page - 1) * page_size).limit(page_size)
     banners = session.exec(statement).all()
@@ -51,8 +54,7 @@ def create_banner(session: Session, banner_in: BannerCreate, creator_id: int) ->
         sort_order=banner_in.sort_order,
         is_active=banner_in.is_active,
         created_by=creator_id,
-        created_at=utc_now(),
-        updated_at=utc_now(),
+        # created_at/updated_at 由 TimestampMixin 的 default_factory 自动填充
     )
     session.add(banner)
     session.commit()
@@ -68,8 +70,7 @@ def update_banner(session: Session, banner_id: int, banner_in: BannerUpdate) -> 
     for key, value in update_data.items():
         setattr(banner, key, value)
 
-    banner.updated_at = utc_now()
-    
+    # updated_at 由 TimestampMixin 的 before_update 事件自动设置
     session.add(banner)
     session.commit()
     session.refresh(banner)
