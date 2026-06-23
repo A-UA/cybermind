@@ -6,11 +6,11 @@ WORKDIR /app
 # Enable corepack to get pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# Copy package config, lockfile and npmrc
-COPY package.json ./
+# Copy package config, lockfile
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN pnpm install
+RUN pnpm install --frozen-lockfile
 
 # Copy source code and build
 COPY . .
