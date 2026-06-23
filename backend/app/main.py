@@ -6,9 +6,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
-from app.core.exceptions import AppException, app_exception_handler
+from app.core.exceptions import AppException
 from app.core.seed import seed_database
 from app.core.validation_exception import validation_exception_handler
+from app.core.app_exception import app_exception_handler
 from app.api.router import api_router
 
 
