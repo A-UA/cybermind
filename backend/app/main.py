@@ -1,12 +1,14 @@
 """FastAPI 应用入口 — 仅负责初始化，禁止放业务逻辑"""
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
-from app.core.exceptions import AppException
+from app.core.exceptions import AppException, app_exception_handler
 from app.core.seed import seed_database
+from app.core.validation_exception import validation_exception_handler
 from app.api.router import api_router
 
 
@@ -52,16 +54,8 @@ def create_app() -> FastAPI:
         app.mount("/uploads", StaticFiles(directory=str(uploads_dir)), name="uploads")
 
     # 统一异常处理
-    @app.exception_handler(AppException)
-    async def app_exception_handler(request: Request, exc: AppException):
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={
-                "code": exc.code,
-                "message": exc.message,
-                "data": None
-            }
-        )
+    app.add_exception_handler(AppException, app_exception_handler)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)
 
     return app
 

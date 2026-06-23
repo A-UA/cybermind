@@ -1,5 +1,6 @@
 """统一异常定义"""
-from fastapi import HTTPException, status
+from fastapi import HTTPException, Request, status
+from fastapi.responses import JSONResponse
 
 
 class AppException(HTTPException):
@@ -32,3 +33,26 @@ class BadRequestException(AppException):
     """请求参数错误异常"""
     def __init__(self, message: str = "请求参数错误"):
         super().__init__(code=400, message=message, status_code=status.HTTP_400_BAD_REQUEST)
+
+
+class ValidationException(AppException):
+    """参数校验异常"""
+    def __init__(self, message: str = "参数校验失败"):
+        super().__init__(code=422, message=message, status_code=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+
+async def app_exception_handler(request: Request, exc: Exception):
+    """统一处理业务异常"""
+    if not isinstance(exc, AppException):
+        return JSONResponse(
+            status_code=500,
+            content={"code": 500, "message": "服务器内部错误", "data": None},
+        )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "code": exc.code,
+            "message": exc.message,
+            "data": None,
+        },
+    )
