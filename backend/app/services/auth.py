@@ -2,7 +2,7 @@
 from sqlmodel import Session, select
 from app.models.user import SysUser
 from app.core.security import verify_password, hash_password, create_access_token, create_refresh_token
-from app.core.exceptions import UnauthorizedException, BadRequestException
+from app.core.exceptions import BadRequestException
 
 # 简单的内存黑名单（生产环境建议用 Redis）
 _refresh_token_blacklist: set[str] = set()
@@ -13,11 +13,11 @@ def authenticate_user(session: Session, username: str, password: str) -> SysUser
     statement = select(SysUser).where(SysUser.username == username)
     user = session.exec(statement).first()
     if not user:
-        raise UnauthorizedException("用户名或密码错误")
+        raise BadRequestException("用户名或密码错误")
     if not user.is_active:
-        raise UnauthorizedException("账号已被禁用")
+        raise BadRequestException("账号已被禁用")
     if not verify_password(password, user.hashed_password):
-        raise UnauthorizedException("用户名或密码错误")
+        raise BadRequestException("用户名或密码错误")
     return user
 
 

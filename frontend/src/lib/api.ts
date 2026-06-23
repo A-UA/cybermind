@@ -1,7 +1,7 @@
 /** Axios 实例 — 统一请求拦截/响应拦截/Token 刷新 */
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-
+import { toast } from "sonner"
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1/admin'
 
 // 扩展 AxiosRequestConfig 类型，添加 _retry 标记
@@ -62,6 +62,7 @@ function onTokenRefreshFailed(error: unknown) {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
+    toast.error(getApiErrorMessage(error, '请求失败，请稍后重试'))
     const originalRequest = error.config
 
     // 非 401 错误或刷新请求本身失败，直接抛出

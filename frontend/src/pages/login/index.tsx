@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 import apiClient from '@/lib/api'
-import { ShieldAlert, ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -11,12 +11,10 @@ export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
     setLoading(true)
 
     try {
@@ -33,8 +31,6 @@ export default function LoginPage() {
 
       // 3. 跳转到主页
       navigate('/', { replace: true })
-    } catch (err: any) {
-      setError(err.response?.data?.message || '身份验证未通过，请检查操作员凭证')
     } finally {
       setLoading(false)
     }
@@ -60,15 +56,6 @@ export default function LoginPage() {
             Pop Content Workspace // 管理控制台
           </p>
         </div>
-
-        {error && (
-          <div className="p-3 mb-6 text-xs text-destructive border-2 border-destructive bg-destructive/5 rounded-lg flex items-start space-x-2 animate-shake font-semibold">
-            <ShieldAlert className="h-4 w-4 flex-shrink-0 mt-0.5" />
-            <div>
-              <span>系统提示:</span> {error}
-            </div>
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 操作员账号 */}
