@@ -43,7 +43,7 @@ export function AppTable<T>({
   return (
     <div className="space-y-5 font-sans text-xs">
       {/* 表格容器 - 新野兽派实体硬阴影 */}
-      <div className="border-2 border-border bg-card pop-shadow rounded-xl overflow-hidden">
+      <div className="border-2 border-border bg-card pop-shadow rounded-xl overflow-x-auto">
         {isLoading ? (
           /* 骨架屏 Loading */
           <div className="h-64 flex flex-col justify-center items-center space-y-3 bg-card">
@@ -92,7 +92,7 @@ export function AppTable<T>({
 
       {/* 分页器 - Neo-Brutalist 物理按压翻页组件 */}
       {!isLoading && onPageChange && totalPages > 1 && (
-        <div className="flex items-center justify-between bg-card border-2 border-border pop-shadow p-4 rounded-xl text-xs font-semibold">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border-2 border-border pop-shadow p-4 rounded-xl text-xs font-semibold">
           <span className="text-muted-foreground select-none">
             第 <strong className="text-foreground">{page}</strong> 页 / 共 <strong className="text-foreground">{totalPages}</strong> 页（共 {total} 条记录）
           </span>

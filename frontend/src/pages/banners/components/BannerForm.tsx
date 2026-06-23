@@ -135,7 +135,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             />
           </AppFormItem>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* 排序序号 */}
             <AppFormItem label="排序序号 / SORT ORDER">
               <input

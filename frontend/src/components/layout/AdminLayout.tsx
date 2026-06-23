@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 import apiClient from '@/lib/api'
@@ -13,7 +13,9 @@ import {
   Users,
   LogOut,
   User,
-  Compass
+  Compass,
+  Menu,
+  X
 } from 'lucide-react'
 
 // 定义菜单项
@@ -39,6 +41,23 @@ export default function AdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, logout, hasPermission } = useAuthStore()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  // 路由变化时关闭侧边栏（移动端）
+  useEffect(() => {
+    setIsSidebarOpen(false)
+  }, [location.pathname])
+
+  // 窗口大小变化时，如果切换到桌面端则自动关闭侧边栏状态
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(false)
+      }
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const handleLogout = async () => {
     try {
@@ -58,8 +77,20 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen bg-background pop-brutal-bg text-foreground font-sans overflow-hidden">
+      {/* 移动端遮罩层 */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+      
       {/* 侧边栏 */}
-      <aside className="w-60 border-r-2 border-border bg-sidebar flex flex-col flex-shrink-0 relative z-20">
+      <aside className={`
+        fixed inset-y-0 left-0 z-40 w-60 border-r-2 border-border bg-sidebar flex flex-col flex-shrink-0 transform transition-transform duration-300 ease-in-out
+        lg:static lg:transform-none lg:z-20
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         
         {/* 顶部 Logo - 醒目实体波普风 */}
         <div className="h-16 flex items-center px-6 justify-between border-b-2 border-border">
@@ -125,11 +156,20 @@ export default function AdminLayout() {
       {/* 右侧主内容区 */}
       <div className="flex-1 flex flex-col overflow-hidden relative z-10">
         {/* 顶部工具栏 - 纸面切割感 */}
-        <header className="h-16 border-b-2 border-border bg-card flex items-center justify-between px-8 flex-shrink-0">
+        <header className="h-16 border-b-2 border-border bg-card flex items-center justify-between px-4 sm:px-8 flex-shrink-0">
           <div className="flex items-center space-x-2.5 text-xs font-semibold text-foreground">
-            <Compass className="h-4 w-4 text-primary" />
-            <span className="text-muted-foreground">主控面板</span>
-            <span className="text-muted-foreground/50">/</span>
+            {/* 移动端汉堡菜单按钮 */}
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 border-2 border-border bg-background hover:bg-accent text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer lg:hidden"
+              title="打开菜单"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+            
+            <Compass className="h-4 w-4 text-primary hidden sm:block" />
+            <span className="text-muted-foreground hidden sm:block">主控面板</span>
+            <span className="text-muted-foreground/50 hidden sm:block">/</span>
             <span className="text-foreground">
               {filteredMenu.find(item => item.path === location.pathname)?.name || '概览'}
             </span>
@@ -137,15 +177,16 @@ export default function AdminLayout() {
           
           <div className="flex items-center">
             {/* 状态徽章贴纸 */}
-            <div className="flex items-center space-x-2 bg-emerald-500/10 border-2 border-border text-emerald-700 dark:text-emerald-400 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider pop-shadow-sm select-none">
+            <div className="flex items-center space-x-2 bg-emerald-500/10 border-2 border-border text-emerald-700 dark:text-emerald-400 px-2 sm:px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider pop-shadow-sm select-none">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block border border-border"></span>
-              <span>核心服务正常 // ONLINE</span>
+              <span className="hidden sm:inline">核心服务正常 // ONLINE</span>
+              <span className="sm:hidden">正常</span>
             </div>
           </div>
         </header>
 
         {/* 内容主体 */}
-        <main className="flex-1 overflow-y-auto p-8 bg-background/20">
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-background/20">
           <div className="max-w-7xl mx-auto h-full">
             <Outlet />
           </div>
