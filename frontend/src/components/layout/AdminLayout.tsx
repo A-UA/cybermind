@@ -15,7 +15,6 @@ import {
   User,
   Compass,
   Menu,
-  X
 } from 'lucide-react'
 
 // 定义菜单项
@@ -27,7 +26,7 @@ interface MenuItem {
 }
 
 const MENU_ITEMS: MenuItem[] = [
-  { name: '工作看板', path: '/', icon: LayoutDashboard }, 
+  { name: '工作看板', path: '/', icon: LayoutDashboard },
   { name: 'Banner 管理', path: '/banners', icon: Image, permission: 'banner:read' },
   { name: '新闻资讯', path: '/news', icon: FileText, permission: 'news:read' },
   { name: '帮助中心', path: '/help', icon: HelpCircle, permission: 'help:read' },
@@ -79,19 +78,19 @@ export default function AdminLayout() {
     <div className="flex h-screen bg-background pop-brutal-bg text-foreground font-sans overflow-hidden">
       {/* 移动端遮罩层 */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
-      
+
       {/* 侧边栏 */}
       <aside className={`
         fixed inset-y-0 left-0 z-40 w-60 border-r-2 border-border bg-sidebar flex flex-col flex-shrink-0 transform transition-transform duration-300 ease-in-out
         lg:static lg:transform-none lg:z-20
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        
+
         {/* 顶部 Logo - 醒目实体波普风 */}
         <div className="h-16 flex items-center px-6 justify-between border-b-2 border-border">
           <Link to="/" className="text-2xl font-heading font-bold tracking-tight text-foreground flex items-center space-x-2.5 select-none">
@@ -107,7 +106,7 @@ export default function AdminLayout() {
           {filteredMenu.map((item) => {
             const Icon = item.icon
             const isActive = location.pathname === item.path
-            
+
             return (
               <Link
                 key={item.path}
@@ -166,7 +165,7 @@ export default function AdminLayout() {
             >
               <Menu className="h-4 w-4" />
             </button>
-            
+
             <Compass className="h-4 w-4 text-primary hidden sm:block" />
             <span className="text-muted-foreground hidden sm:block">主控面板</span>
             <span className="text-muted-foreground/50 hidden sm:block">/</span>
@@ -174,7 +173,7 @@ export default function AdminLayout() {
               {filteredMenu.find(item => item.path === location.pathname)?.name || '概览'}
             </span>
           </div>
-          
+
           <div className="flex items-center">
             {/* 状态徽章贴纸 */}
             <div className="flex items-center space-x-2 bg-emerald-500/10 border-2 border-border text-emerald-700 dark:text-emerald-400 px-2 sm:px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider pop-shadow-sm select-none">
