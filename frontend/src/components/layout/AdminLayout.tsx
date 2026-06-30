@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate, useLocation } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 import apiClient from '@/lib/api'
-import AppDarkModeToggle from '@/components/business/AppDarkModeToggle'
+import AppThemeSettings from '@/components/business/AppThemeSettings'
 import {
   LayoutDashboard,
   Image,
@@ -176,9 +176,9 @@ export default function AdminLayout() {
           </div>
 
           <div className="flex items-center">
-            {/* 暗亮模式切换组件 */}
+            {/* 暗亮模式与主题切换组件 */}
             <div className="mr-3">
-              <AppDarkModeToggle />
+              <AppThemeSettings />
             </div>
 
             {/* 状态徽章贴纸 */}

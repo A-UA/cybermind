@@ -55,7 +55,7 @@
     --radius-2xl: 24px;
 }
 
-:root {
+:root, :root[data-theme="cyberpop"] {
     --background: oklch(0.99 0.005 85); /* 温暖奶油黄 */
     --foreground: oklch(0.15 0.01 240);  /* 炭黑 */
     --card: oklch(1 0 0);                /* 纯白 */
@@ -90,7 +90,7 @@
     --sidebar-ring: oklch(0.65 0.2 330);
 }
 
-.dark {
+.dark, .dark[data-theme="cyberpop"] {
     --background: oklch(0.12 0.02 250);  /* 深海蓝黑 */
     --foreground: oklch(0.98 0 0);       /* 纯白 */
     --card: oklch(0.18 0.02 250);        /* 石板灰 */
@@ -122,6 +122,144 @@
     --sidebar-accent-foreground: oklch(0.98 0 0);
     --sidebar-border: oklch(0.75 0.1 230);
     --sidebar-ring: oklch(0.88 0.2 95);
+}
+
+:root[data-theme="cyberpunk"] {
+    --background: oklch(0.96 0.015 285); /* 极浅淡雅紫 */
+    --foreground: oklch(0.12 0.03 280);  /* 墨紫 */
+    --card: oklch(1 0 0);                /* 纯白 */
+    --card-foreground: oklch(0.12 0.03 280);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.12 0.03 280);
+    --primary: oklch(0.62 0.22 340);      /* 霓虹莓红 */
+    --primary-foreground: oklch(1 0 0);
+    --secondary: oklch(0.93 0.02 285);
+    --secondary-foreground: oklch(0.2 0.03 280);
+    --muted: oklch(0.92 0.01 285);
+    --muted-foreground: oklch(0.4 0.02 280);
+    --accent: oklch(0.92 0.03 330);      /* 浅粉拼色 */
+    --accent-foreground: oklch(0.12 0.03 280);
+    --destructive: oklch(0.58 0.22 25);
+    --border: oklch(0.12 0.03 280);      /* 墨紫粗边框 */
+    --input: oklch(0.12 0.03 280);
+    --ring: oklch(0.62 0.22 340);
+    --chart-1: oklch(0.62 0.22 340);
+    --chart-2: oklch(0.75 0.18 180);
+    --chart-3: oklch(0.82 0.18 100);
+    --chart-4: oklch(0.58 0.22 25);
+    --chart-5: oklch(0.5 0.02 280);
+    --radius: 8px;
+    --sidebar: oklch(1 0 0);
+    --sidebar-foreground: oklch(0.12 0.03 280);
+    --sidebar-primary: oklch(0.62 0.22 340);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.93 0.02 285);
+    --sidebar-accent-foreground: oklch(0.12 0.03 280);
+    --sidebar-border: oklch(0.12 0.03 280);
+    --sidebar-ring: oklch(0.62 0.22 340);
+}
+
+.dark[data-theme="cyberpunk"] {
+    --background: oklch(0.12 0.03 280);  /* 深邃霓虹紫 */
+    --foreground: oklch(0.98 0.01 280);  /* 冰紫白 */
+    --card: oklch(0.16 0.04 280);        /* 黑紫卡片 */
+    --card-foreground: oklch(0.98 0.01 280);
+    --popover: oklch(0.16 0.04 280);
+    --popover-foreground: oklch(0.98 0.01 280);
+    --primary: oklch(0.84 0.22 170);     /* 霓虹天青 */
+    --primary-foreground: oklch(0.05 0.01 270);
+    --secondary: oklch(0.19 0.03 280);
+    --secondary-foreground: oklch(0.98 0.01 280);
+    --muted: oklch(0.18 0.03 280);
+    --muted-foreground: oklch(0.7 0.02 280);
+    --accent: oklch(0.2 0.04 280);
+    --accent-foreground: oklch(0.98 0.01 280);
+    --destructive: oklch(0.55 0.18 20);
+    --border: oklch(0.7 0.24 335);       /* 荧光桃红描边（红青撞色） */
+    --input: oklch(0.16 0.04 280);
+    --ring: oklch(0.84 0.22 170);
+    --chart-1: oklch(0.84 0.22 170);
+    --chart-2: oklch(0.7 0.24 335);
+    --chart-3: oklch(0.8 0.2 90);
+    --chart-4: oklch(0.6 0.18 20);
+    --chart-5: oklch(0.5 0.02 280);
+    --sidebar: oklch(0.13 0.03 280);
+    --sidebar-foreground: oklch(0.95 0.01 280);
+    --sidebar-primary: oklch(0.84 0.22 170);
+    --sidebar-primary-foreground: oklch(0.05 0.01 270);
+    --sidebar-accent: oklch(0.19 0.03 280);
+    --sidebar-accent-foreground: oklch(0.98 0.01 280);
+    --sidebar-border: oklch(0.7 0.24 335);
+    --sidebar-ring: oklch(0.84 0.22 170);
+}
+
+:root[data-theme="mint"] {
+    --background: oklch(0.965 0.015 140); /* 雅致暖灰绿 */
+    --foreground: oklch(0.15 0.02 150);  /* 深邃灰绿 */
+    --card: oklch(0.99 0.005 140);       /* 软蛋壳白 */
+    --card-foreground: oklch(0.15 0.02 150);
+    --popover: oklch(0.99 0.005 140);
+    --popover-foreground: oklch(0.15 0.02 150);
+    --primary: oklch(0.48 0.12 155);     /* 森林苍绿 */
+    --primary-foreground: oklch(1 0 0);
+    --secondary: oklch(0.93 0.01 140);
+    --secondary-foreground: oklch(0.2 0.02 150);
+    --muted: oklch(0.92 0.01 140);
+    --muted-foreground: oklch(0.38 0.02 150);
+    --accent: oklch(0.92 0.025 135);     /* 浅草绿拼色 */
+    --accent-foreground: oklch(0.15 0.02 150);
+    --destructive: oklch(0.58 0.22 25);
+    --border: oklch(0.15 0.02 150);      /* 深灰绿描边 */
+    --input: oklch(0.15 0.02 150);
+    --ring: oklch(0.48 0.12 155);
+    --chart-1: oklch(0.48 0.12 155);
+    --chart-2: oklch(0.65 0.12 200);
+    --chart-3: oklch(0.72 0.12 100);
+    --chart-4: oklch(0.58 0.22 25);
+    --chart-5: oklch(0.5 0.02 150);
+    --radius: 8px;
+    --sidebar: oklch(0.99 0.005 140);
+    --sidebar-foreground: oklch(0.15 0.02 150);
+    --sidebar-primary: oklch(0.48 0.12 155);
+    --sidebar-primary-foreground: oklch(1 0 0);
+    --sidebar-accent: oklch(0.93 0.01 140);
+    --sidebar-accent-foreground: oklch(0.15 0.02 150);
+    --sidebar-border: oklch(0.15 0.02 150);
+    --sidebar-ring: oklch(0.48 0.12 155);
+}
+
+.dark[data-theme="mint"] {
+    --background: oklch(0.14 0.02 150);  /* 暗冷杉木绿 */
+    --foreground: oklch(0.95 0.01 150);  /* 开司米淡绿 */
+    --card: oklch(0.18 0.02 150);        /* 杉木绿卡片 */
+    --card-foreground: oklch(0.95 0.01 150);
+    --popover: oklch(0.18 0.02 150);
+    --popover-foreground: oklch(0.95 0.01 150);
+    --primary: oklch(0.82 0.12 145);     /* 荧光开心果绿 */
+    --primary-foreground: oklch(0.08 0.02 170);
+    --secondary: oklch(0.18 0.02 150);
+    --secondary-foreground: oklch(0.95 0.01 150);
+    --muted: oklch(0.16 0.02 150);
+    --muted-foreground: oklch(0.7 0.01 150);
+    --accent: oklch(0.2 0.02 150);
+    --accent-foreground: oklch(0.95 0.01 150);
+    --destructive: oklch(0.55 0.18 20);
+    --border: oklch(0.45 0.06 150);      /* 杉木绿深描边 */
+    --input: oklch(0.18 0.02 150);
+    --ring: oklch(0.82 0.12 145);
+    --chart-1: oklch(0.82 0.12 145);
+    --chart-2: oklch(0.6 0.15 200);
+    --chart-3: oklch(0.7 0.15 100);
+    --chart-4: oklch(0.6 0.18 20);
+    --chart-5: oklch(0.5 0.02 150);
+    --sidebar: oklch(0.13 0.02 150);
+    --sidebar-foreground: oklch(0.92 0.01 150);
+    --sidebar-primary: oklch(0.82 0.12 145);
+    --sidebar-primary-foreground: oklch(0.08 0.02 170);
+    --sidebar-accent: oklch(0.18 0.02 150);
+    --sidebar-accent-foreground: oklch(0.95 0.01 150);
+    --sidebar-border: oklch(0.45 0.06 150);
+    --sidebar-ring: oklch(0.82 0.12 145);
 }
 
 @layer base {
