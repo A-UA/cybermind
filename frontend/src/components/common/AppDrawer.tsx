@@ -9,13 +9,13 @@ import {
 } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 
-// 定义统一的抽屉宽度规范
+// 定义统一的抽屉宽度规范，通过匹配 Radix/Shadcn 的 side 属性修饰符确保 tailwind-merge 生效
 const SIZE_MAP = {
-  sm: 'sm:max-w-sm',
-  md: 'sm:max-w-md',
-  lg: 'sm:max-w-lg',
-  xl: 'sm:max-w-xl',
-  full: 'sm:max-w-4xl',
+  sm: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
+  md: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-md data-[side=right]:sm:max-w-md',
+  lg: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-lg data-[side=right]:sm:max-w-lg',
+  xl: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-xl data-[side=right]:sm:max-w-xl',
+  full: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-4xl data-[side=right]:sm:max-w-4xl',
 } as const
 
 interface AppDrawerProps {
