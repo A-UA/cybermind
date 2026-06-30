@@ -57,11 +57,10 @@ export default function AssignRoleModal({
       onClose={onClose}
       title={`角色授权: ${user.username}`}
       size="sm"
-      sticker="AUTHORIZE"
     >
-      <div className="p-6 bg-background space-y-4 text-xs font-sans text-foreground">
-        <p className="text-[10px] text-muted-foreground font-bold tracking-wider uppercase select-none">
-          勾选分配角色 / ATTACH_ROLES
+      <div className="p-6 bg-card space-y-4 text-[13px] font-sans text-foreground">
+        <p className="text-[12px] text-muted-foreground font-medium select-none">
+          勾选分配角色
         </p>
 
         <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -80,7 +79,7 @@ export default function AssignRoleModal({
         </div>
 
         {/* 底部按钮 */}
-        <div className="flex justify-end space-x-2.5 pt-4 border-t-2 border-border">
+        <div className="flex justify-end gap-2.5 pt-5 border-t border-border">
           <AppButton
             type="button"
             variant="secondary"

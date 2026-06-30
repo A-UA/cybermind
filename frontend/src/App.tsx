@@ -4,7 +4,7 @@ import AdminLayout from '@/components/layout/AdminLayout'
 import { AppProtectedRoute } from '@/components/business/AppProtectedRoute'
 import AppConfirm from '@/components/common/AppConfirm'
 import AppErrorBoundary from '@/components/common/AppErrorBoundary'
-import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 
 // 路由懒加载
 const LoginPage = lazy(() => import('@/pages/login'))
@@ -21,29 +21,29 @@ const UsersPage = lazy(() => import('@/pages/users'))
 function PageLoading() {
   return (
     <div className="flex flex-col justify-center items-center h-64 space-y-3">
-      <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-      <span className="text-xs text-muted-foreground font-semibold">正在加载模块...</span>
+      <RefreshCw className="h-6 w-6 text-primary animate-spin" strokeWidth={1.75} />
+      <span className="text-[13px] text-muted-foreground">正在加载模块...</span>
     </div>
   )
 }
 
-// 403 页面 (高亮波普警告风格)
+// 403 页面
 function ForbiddenPage() {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center pop-brutal-bg px-4">
-      <div className="p-10 bg-card border-2 border-border max-w-md w-full text-center rounded-xl pop-shadow-lg">
-        <div className="w-16 h-16 bg-destructive/10 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-6 pop-shadow-sm">
-          <AlertTriangle className="h-7 w-7 text-destructive animate-pulse" />
-        </div>
-        <h1 className="text-8xl font-heading font-black text-destructive tracking-tighter select-all">403</h1>
-        <p className="text-sm tracking-widest uppercase font-bold text-foreground mt-6 border-b-2 border-border pb-3">
-          访问请求被拒绝 // ACCESS RESTRICTED
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4">
+      <div className="p-10 bg-card max-w-md w-full text-center rounded-2xl elevation-4 animate-scale-in">
+        <h1 className="text-7xl font-heading text-destructive tracking-tight select-all">403</h1>
+        <p className="text-sm font-semibold text-foreground mt-6 pb-3 border-b border-border">
+          访问请求被拒绝
         </p>
-        <p className="text-xs text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto font-semibold">
-          您的安全凭证中未包含此控制模块所需的权限令牌。请联系系统管理员获取授权。
+        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
+          您的账号未获得此页面的访问权限。请联系系统管理员获取授权。
         </p>
-        <Link to="/" className="mt-8 inline-block w-full py-2.5 px-6 rounded-lg bg-primary text-primary-foreground border-2 border-border font-heading font-bold text-xs tracking-wider uppercase pop-shadow-sm pop-press">
-          返回控制台首页 BACK TO INDEX
+        <Link
+          to="/"
+          className="mt-8 inline-block w-full py-2.5 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/90 elevation-1 transition-all"
+        >
+          返回首页
         </Link>
       </div>
     </div>
@@ -53,17 +53,20 @@ function ForbiddenPage() {
 // 404 页面
 function NotFoundPage() {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center pop-brutal-bg px-4">
-      <div className="p-10 bg-card border-2 border-border max-w-md w-full text-center rounded-xl pop-shadow-lg">
-        <h1 className="text-8xl font-heading font-black text-primary tracking-tighter select-all">404</h1>
-        <p className="text-sm tracking-widest uppercase font-bold text-foreground mt-6 border-b-2 border-border pb-3">
-          链路寻找失败 // PAGE NOT FOUND
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4">
+      <div className="p-10 bg-card max-w-md w-full text-center rounded-2xl elevation-4 animate-scale-in">
+        <h1 className="text-7xl font-heading text-primary tracking-tight select-all">404</h1>
+        <p className="text-sm font-semibold text-foreground mt-6 pb-3 border-b border-border">
+          页面不存在
         </p>
-        <p className="text-xs text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto font-semibold">
-          请求的通信链路（页面 URL）不存在。请检查拼写，或点击下方按钮返回系统首页。
+        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
+          请求的页面地址不存在。请检查 URL 拼写，或点击下方按钮返回首页。
         </p>
-        <Link to="/" className="mt-8 inline-block w-full py-2.5 px-6 rounded-lg bg-primary text-primary-foreground border-2 border-border font-heading font-bold text-xs tracking-wider uppercase pop-shadow-sm pop-press">
-          返回控制台首页 BACK TO INDEX
+        <Link
+          to="/"
+          className="mt-8 inline-block w-full py-2.5 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/90 elevation-1 transition-all"
+        >
+          返回首页
         </Link>
       </div>
     </div>

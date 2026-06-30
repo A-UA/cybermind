@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
+import { Save } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppInput from '@/components/common/AppInput'
 import AppTextarea from '@/components/common/AppTextarea'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppVideoUploader from '@/components/business/AppVideoUploader'
 import AppCheckbox from '@/components/common/AppCheckbox'
+import AppButton from '@/components/common/AppButton'
+import { AppFormHeader, AppFormCard, AppFormMetaPanel } from '@/components/common/AppFormShell'
 import type { IOperationVideo } from '../types'
 
 interface VideoFormProps {
@@ -104,48 +106,32 @@ export default function VideoForm({
   return (
     <div className="space-y-6 text-foreground font-sans text-xs">
       {/* 顶部控制头卡纸 */}
-      <div className="flex items-center justify-between bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300">
-        <div className="flex items-center space-x-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="p-2 border-2 border-border bg-background hover:bg-accent text-foreground rounded-lg pop-shadow-sm pop-press cursor-pointer flex items-center justify-center"
-            title="返回视频画廊"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <div>
-            <h2 className="text-sm font-heading font-bold tracking-wider text-foreground uppercase">
-              {video ? '编辑操作视频 / EDIT VIDEO' : '录入操作视频 / UPLOAD VIDEO'}
-            </h2>
-            <p className="text-[10px] text-muted-foreground font-semibold mt-0.5">请上传视频文件、封面图并填写视频属性元数据</p>
-          </div>
-        </div>
+      <AppFormHeader
+        title={video ? '编辑操作视频' : '上传操作视频'}
+        description="请上传视频文件、封面图并填写视频属性元数据"
+        backTitle="返回视频列表"
+        onBack={onCancel}
+      />
 
-        <div className="px-2.5 py-1 text-[9px] font-heading font-bold border-2 border-border bg-accent text-foreground rounded-lg pop-shadow-sm rotate-[3.5deg] hidden sm:inline-block">
-          VIDEO MODIFIER
-        </div>
-      </div>
-
-      {/* 实体硬板表单卡片 */}
-      <form onSubmit={handleSubmit} className="bg-card border-2 border-border rounded-xl p-8 pop-shadow space-y-6">
+      {/* 表单卡片 */}
+      <AppFormCard onSubmit={handleSubmit} className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 左侧大块 */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Left Block */}
+          <div className="lg:col-span-2 space-y-5">
             {/* 视频文件直传 */}
-            <AppFormItem label="上传操作视频文件 / UPLOAD VIDEO FILE" required error={videoError}>
-              <AppVideoUploader 
-                value={videoUrl} 
+            <AppFormItem label="上传操作视频文件" required error={videoError}>
+              <AppVideoUploader
+                value={videoUrl}
                 onChange={(url) => {
                   setVideoUrl(url)
                   if (url.trim()) setVideoError('')
-                }} 
-                onDurationChange={setDuration} 
+                }}
+                onDurationChange={setDuration}
               />
             </AppFormItem>
 
             {/* 视频标题 */}
-            <AppFormItem label="视频标题 / VIDEO TITLE" required error={titleError}>
+            <AppFormItem label="视频标题" required error={titleError}>
               <AppInput
                 type="text"
                 placeholder="请输入视频标题，以便前台用户精准搜索..."
@@ -158,7 +144,7 @@ export default function VideoForm({
             </AppFormItem>
 
             {/* 描述信息 */}
-            <AppFormItem label="视频描述 / DESCRIPTION (可选)" description="简要介绍该操作视频的主要教学指导内容...">
+            <AppFormItem label="视频描述 (可选)" description="简要介绍该操作视频的主要教学指导内容...">
               <AppTextarea
                 placeholder="在此输入详细的视频说明或操作步骤..."
                 value={description}
@@ -169,80 +155,75 @@ export default function VideoForm({
             </AppFormItem>
           </div>
 
-          {/* 右侧窄块 */}
-          <div className="space-y-6 bg-accent/20 border-2 border-border p-6 rounded-xl pop-shadow-sm h-fit">
-            <h3 className="text-xs font-heading font-bold text-foreground border-b-2 border-border pb-3 uppercase tracking-wider select-none">
-              分发与分类配置 / METADATA
-            </h3>
+          {/* Right Block */}
+          <div className="space-y-5">
+            <AppFormMetaPanel title="分发与分类配置">
+              {/* 分类 */}
+              <AppFormItem label="视频分类" description="例如: 基础入门, 高级进阶, 后台配置">
+                <AppInput
+                  type="text"
+                  placeholder="请输入视频类别名称"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                />
+              </AppFormItem>
 
-            {/* 分类 */}
-            <AppFormItem label="视频分类 / CATEGORY" description="例如: 基础入门, 高级进阶, 后台配置">
-              <AppInput
-                type="text"
-                placeholder="请输入视频类别名称"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </AppFormItem>
+              {/* 封面图 */}
+              <AppFormItem label="视频封面图">
+                <AppImageUploader value={coverImage} onChange={setCoverImage} />
+              </AppFormItem>
 
-            {/* 封面图 */}
-            <AppFormItem label="视频封面图 / COVER IMAGE">
-              <AppImageUploader value={coverImage} onChange={setCoverImage} />
-            </AppFormItem>
+              {/* 时长秒数 */}
+              <AppFormItem label="视频时长 (秒)" description="上传视频时系统会自动提取，亦可手动填修">
+                <AppInput
+                  type="number"
+                  placeholder="自动计算时长"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value === '' ? '' : Number(e.target.value))}
+                  className="font-mono font-medium"
+                />
+              </AppFormItem>
 
-            {/* 时长秒数 (自动提取后亦可手动微调) */}
-            <AppFormItem label="视频时长 (秒) / DURATION (SEC)" description="上传视频时系统会自动提取，亦可手动填修">
-              <AppInput
-                type="number"
-                placeholder="自动计算时长"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value === '' ? '' : Number(e.target.value))}
-              />
-            </AppFormItem>
+              {/* 排序序号 */}
+              <AppFormItem label="排序序号">
+                <AppInput
+                  type="number"
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
+                  className="font-mono font-medium"
+                />
+              </AppFormItem>
 
-            {/* 排序序号 */}
-            <AppFormItem label="排序序号 / SORT ORDER">
-              <AppInput
-                type="number"
-                value={sortOrder}
-                onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
-              />
-            </AppFormItem>
-
-            {/* 发布状态 */}
-            <div className="space-y-2 pt-2 border-t border-border/40">
-              <AppCheckbox
-                checked={isActive}
-                onCheckedChange={setIsActive}
-                label="启用并发布此操作视频 (ACTIVE)"
-              />
-            </div>
+              {/* 发布状态 */}
+              <div className="pt-3 border-t border-border">
+                <AppCheckbox
+                  checked={isActive}
+                  onCheckedChange={setIsActive}
+                  label="启用并发布此操作视频"
+                />
+              </div>
+            </AppFormMetaPanel>
           </div>
         </div>
 
-        {/* 提交/取消 按钮 */}
-        <div className="flex justify-end space-x-3 border-t-2 border-border pt-6 mt-6">
-          <button
+        {/* Submit Buttons */}
+        <div className="flex justify-end gap-2.5 border-t border-border pt-5 mt-6">
+          <AppButton
             type="button"
+            variant="secondary"
             onClick={onCancel}
-            className="px-5 py-2.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
           >
-            取消 CANCEL
-          </button>
-          <button
+            取消
+          </AppButton>
+          <AppButton
             type="submit"
-            disabled={isSaving}
-            className="px-8 py-2.5 bg-primary text-primary-foreground border-2 border-border font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
+            loading={isSaving}
+            icon={<Save className="h-4 w-4" strokeWidth={1.75} />}
           >
-            {isSaving ? (
-              <RefreshCw className="h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4" />
-            )}
-            <span>确认保存 SUBMIT</span>
-          </button>
+            确认保存
+          </AppButton>
         </div>
-      </form>
+      </AppFormCard>
     </div>
   )
 }

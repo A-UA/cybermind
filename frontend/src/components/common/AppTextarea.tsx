@@ -10,7 +10,7 @@ const AppTextarea = forwardRef<HTMLTextAreaElement, AppTextareaProps>(
     <textarea
       ref={ref}
       className={cn(
-        'w-full px-4 py-2.5 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold placeholder-muted-foreground/60',
+        'w-full px-4 py-2.5 bg-background border border-border rounded-xl text-foreground outline-none text-[13px] placeholder-muted-foreground/60 transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10',
         resize === 'none' ? 'resize-none' : 'resize-y',
         className,
       )}

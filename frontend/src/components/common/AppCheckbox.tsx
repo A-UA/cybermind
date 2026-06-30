@@ -1,6 +1,6 @@
 /**
- * AppCheckbox — 全站统一波普新野兽派复选框组件
- * 基于 shadcn/ui Checkbox (Base UI 原语) 封装，统一标签、副标题、按压动效。
+ * AppCheckbox — 全站统一复选框组件
+ * Atelier 风格：细边框 + 柔和过渡
  */
 import { type ReactNode } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -11,7 +11,7 @@ interface AppCheckboxProps {
   checked: boolean
   /** 选中状态变更回调（布尔值，非 DOM 事件） */
   onCheckedChange: (checked: boolean) => void
-  /** 主标签文本（支持 ReactNode 以实现条件着色） */
+  /** 主标签文本 */
   label?: ReactNode
   /** 副标题（如角色 code、权限 code） */
   description?: string
@@ -40,7 +40,7 @@ export default function AppCheckbox({
         onCheckedChange={onCheckedChange}
         disabled={disabled}
         className={cn(
-          'border-2 border-border rounded-md data-checked:border-border data-checked:bg-primary data-checked:text-primary-foreground',
+          'border border-border rounded-md data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
           size === 'sm' && 'size-3.5',
           className,
         )}
@@ -53,8 +53,7 @@ export default function AppCheckbox({
     return (
       <label
         className={cn(
-          'flex items-start space-x-2.5 px-3 py-2 border-2 border-border rounded-lg bg-background cursor-pointer select-none transition-all duration-200 cubic-bezier(0.16, 1, 0.3, 1)',
-          
+          'flex items-start space-x-2.5 px-3 py-2.5 border border-border rounded-xl bg-background cursor-pointer select-none transition-all duration-200 hover:bg-accent/50',
           disabled && 'opacity-50 cursor-not-allowed',
           className,
         )}
@@ -64,15 +63,15 @@ export default function AppCheckbox({
           onCheckedChange={onCheckedChange}
           disabled={disabled}
           className={cn(
-            'mt-0.5 border-2 border-border flex-shrink-0 data-checked:border-border data-checked:bg-primary data-checked:text-primary-foreground',
+            'mt-0.5 border border-border flex-shrink-0 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
             size === 'sm' && 'size-3.5',
           )}
         />
         <div className="min-w-0">
           {label && (
-            <p className="font-bold text-foreground text-xs">{label}</p>
+            <p className="font-medium text-foreground text-[13px]">{label}</p>
           )}
-          <p className="text-[10px] text-muted-foreground font-mono leading-tight">
+          <p className="text-[11px] text-muted-foreground font-mono leading-tight mt-0.5">
             {description}
           </p>
         </div>
@@ -84,7 +83,7 @@ export default function AppCheckbox({
   return (
     <label
       className={cn(
-        'flex items-center space-x-2.5 cursor-pointer select-none transition-all duration-200 cubic-bezier(0.16, 1, 0.3, 1)',
+        'flex items-center space-x-2.5 cursor-pointer select-none transition-all duration-200',
         disabled && 'opacity-50 cursor-not-allowed',
         className,
       )}
@@ -94,12 +93,12 @@ export default function AppCheckbox({
         onCheckedChange={onCheckedChange}
         disabled={disabled}
         className={cn(
-          'border-2 border-border data-checked:border-border data-checked:bg-primary data-checked:text-primary-foreground',
+          'border border-border data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
           size === 'sm' && 'size-3.5',
         )}
       />
       {label && (
-        <span className="text-xs font-bold text-foreground">{label}</span>
+        <span className="text-[13px] font-medium text-foreground">{label}</span>
       )}
     </label>
   )

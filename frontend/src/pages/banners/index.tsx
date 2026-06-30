@@ -3,11 +3,13 @@ import { toast } from 'sonner'
 import type { IBanner } from '@/types/banner'
 import AppSelect from '@/components/common/AppSelect'
 import AppStatusBadge from '@/components/common/AppStatusBadge'
+import AppButton from '@/components/common/AppButton'
 import { Plus, Trash2, Edit, RefreshCw, Eye, ExternalLink, SlidersHorizontal } from 'lucide-react'
 import BannerForm from './components/BannerForm'
 import AppTable from '@/components/common/AppTable'
 import type { AppTableColumn } from '@/components/common/AppTable'
 import AppTime from '@/components/common/AppTime'
+import AppToolbar from '@/components/common/AppToolbar'
 import { useConfirmStore } from '@/stores/useConfirmStore'
 import { useBannerList, useDeleteBanner } from '@/queries/useBannerQuery'
 
@@ -66,7 +68,7 @@ export default function BannersPage() {
       key: 'id',
       width: '60px',
       render: (row) => (
-        <span className="font-bold text-muted-foreground/80 font-mono">
+        <span className="font-mono text-muted-foreground">
           #{row.id}
         </span>
       )
@@ -76,19 +78,19 @@ export default function BannersPage() {
       key: 'image_url',
       width: '100px',
       render: (row) => (
-        <div className="w-16 h-10 border-2 border-border bg-background rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
+        <div className="w-16 h-10 border border-border bg-card rounded-xl overflow-hidden flex items-center justify-center p-0.5 group relative">
           <img
             src={row.image_url}
             alt={row.title}
-            className="max-w-full max-h-full object-contain rounded-md transition-transform group-hover:scale-105"
+            className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-200 group-hover:scale-105"
           />
           <a
             href={row.image_url}
             target="_blank"
             rel="noreferrer"
-            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-md"
+            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg"
           >
-            <Eye className="h-3.5 w-3.5 text-white" />
+            <Eye className="h-3.5 w-3.5 text-white" strokeWidth={1.75} />
           </a>
         </div>
       )
@@ -97,7 +99,7 @@ export default function BannersPage() {
       title: '标题',
       key: 'title',
       render: (row) => (
-        <span className="font-bold text-foreground truncate block max-w-xs">
+        <span className="font-medium text-foreground truncate block max-w-xs">
           {row.title}
         </span>
       )
@@ -110,10 +112,10 @@ export default function BannersPage() {
           href={row.link_url}
           target="_blank"
           rel="noreferrer"
-          className="hover:text-primary inline-flex items-center space-x-1 text-muted-foreground text-[11px] font-semibold"
+          className="text-muted-foreground hover:text-primary inline-flex items-center gap-1 text-[11px] font-mono transition-colors"
         >
           <span className="truncate max-w-[120px]">{row.link_url}</span>
-          <ExternalLink className="h-3 w-3 flex-shrink-0" />
+          <ExternalLink className="h-3 w-3 flex-shrink-0" strokeWidth={1.5} />
         </a>
       ) : (
         <span className="text-muted-foreground/40 font-mono">--</span>
@@ -123,7 +125,7 @@ export default function BannersPage() {
       title: '排序',
       key: 'sort_order',
       width: '80px',
-      className: 'text-center font-bold text-muted-foreground font-mono',
+      className: 'text-center font-mono text-muted-foreground',
       render: (row) => row.sort_order
     },
     {
@@ -142,7 +144,7 @@ export default function BannersPage() {
       key: 'updated_at',
       width: '150px',
       render: (row) => (
-        <div className="text-muted-foreground font-semibold text-[11px] font-mono">
+        <div className="text-muted-foreground font-mono text-[11px]">
           <AppTime value={row.updated_at} format="YYYY-MM-DD HH:mm" />
         </div>
       )
@@ -153,77 +155,81 @@ export default function BannersPage() {
       width: '110px',
       className: 'text-center',
       render: (row) => (
-        <div className="flex items-center justify-center space-x-2">
-          <button
+        <div className="flex items-center justify-center gap-1.5">
+          <AppButton
             onClick={() => handleEditClick(row)}
-            className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
+            size="iconSm"
+            variant="secondary"
             title="编辑"
           >
-            <Edit className="h-3.5 w-3.5" />
-          </button>
-          <button
+            <Edit className="h-3.5 w-3.5" strokeWidth={1.75} />
+          </AppButton>
+          <AppButton
             onClick={() => handleDelete(row.id)}
-            className="p-1.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-destructive transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
+            size="iconSm"
+            variant="ghost"
+            className="hover:text-destructive hover:bg-destructive/10"
             title="删除"
           >
-            <Trash2 className="h-3.5 w-3.5" />
-          </button>
+            <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
+          </AppButton>
         </div>
       )
     }
   ]
 
+  // 工具栏过滤器
+  const toolbarFilters = (
+    <div className="flex items-center gap-2">
+      <span className="text-muted-foreground text-[12px]">状态过滤:</span>
+      <AppSelect
+        width="sm"
+        value={isActiveFilter}
+        onValueChange={(val) => {
+          setIsActiveFilter(val || 'all')
+          setPage(1)
+        }}
+        placeholder="全部状态"
+        options={[
+          { value: 'all', label: '显示全部' },
+          { value: 'active', label: '已启用' },
+          { value: 'inactive', label: '已下线' },
+        ]}
+      />
+    </div>
+  )
+
+  // 工具栏动作
+  const toolbarActions = (
+    <div className="flex items-center gap-2">
+      <AppButton
+        onClick={() => refetch()}
+        size="icon"
+        variant="secondary"
+        title="刷新数据"
+      >
+        <RefreshCw className="h-4 w-4" strokeWidth={1.75} />
+      </AppButton>
+
+      <AppButton
+        onClick={handleCreateClick}
+        icon={<Plus className="h-4 w-4" strokeWidth={1.75} />}
+      >
+        新建 Banner
+      </AppButton>
+    </div>
+  )
+
   return (
     <div className="space-y-6 text-foreground font-sans text-xs">
       {/* 顶部操作过滤条 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300">
-        <div className="flex items-center space-x-2.5">
-          <SlidersHorizontal className="h-4 w-4 text-primary" />
-          <h2 className="text-sm font-heading font-bold tracking-wider text-foreground uppercase">
-            Banner 数据分发控制
-          </h2>
-          {(isLoading || isFetching) && (
-            <RefreshCw className="h-3.5 w-3.5 text-primary animate-spin" />
-          )}
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 text-xs">
-          {/* 状态过滤 */}
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-muted-foreground">过滤:</span>
-            <AppSelect
-              width="sm"
-              value={isActiveFilter}
-              onValueChange={(val) => {
-                setIsActiveFilter(val || 'all')
-                setPage(1)
-              }}
-              placeholder="全部状态"
-              options={[
-                { value: 'all', label: '显示全部' },
-                { value: 'active', label: '已启用' },
-                { value: 'inactive', label: '已下线' },
-              ]}
-            />
-          </div>
-
-          <button
-            onClick={() => refetch()}
-            className="p-2 border-2 border-border bg-background text-foreground hover:bg-accent transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
-            title="刷新数据"
-          >
-            <RefreshCw className="h-4 w-4" />
-          </button>
-
-          <button
-            onClick={handleCreateClick}
-            className="px-4 py-2 bg-primary text-primary-foreground border-2 border-border font-heading font-bold flex items-center space-x-1.5 transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
-          >
-            <Plus className="h-4 w-4" />
-            <span>新建 Banner</span>
-          </button>
-        </div>
-      </div>
+      <AppToolbar
+        icon={<SlidersHorizontal className="h-5 w-5 text-primary" strokeWidth={1.75} />}
+        title="Banner 数据分发控制"
+        loading={isLoading || isFetching}
+        filters={toolbarFilters}
+        actions={toolbarActions}
+      />
 
       {/* 数据列表面板 */}
       <AppTable

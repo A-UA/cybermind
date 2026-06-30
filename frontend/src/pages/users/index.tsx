@@ -10,6 +10,8 @@ import AssignRoleModal from './components/AssignRoleModal'
 import AssignPermModal from './components/AssignPermModal'
 import type { IUser, IRole } from './types'
 import { useConfirmStore } from '@/stores/useConfirmStore'
+import AppToolbar from '@/components/common/AppToolbar'
+import AppTabs from '@/components/common/AppTabs'
 import {
   useUserList,
   useRoleList,
@@ -73,41 +75,21 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-6 text-foreground font-sans">
-
       {/* 顶部控制栏 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl text-xs">
-        <div className="flex items-center space-x-2.5">
-          <ShieldAlert className="h-5 w-5 text-primary" />
-          <div>
-            <h2 className="text-sm font-heading font-bold tracking-wider uppercase">
-              管理员与 RBAC 权限配置中心
-            </h2>
-            <p className="text-[10px] text-muted-foreground font-semibold mt-0.5 font-mono">
-              SYSTEM_ADMIN_RBAC_CONTROL_UNIT
-            </p>
-          </div>
-        </div>
-
-        {/* 撞色选项卡按钮组 */}
-        <div className="flex bg-accent/40 border-2 border-border p-1 rounded-lg max-w-fit font-heading font-bold">
-          <button
-            onClick={() => setActiveTab('users')}
-            className={`px-4 py-1.5 rounded-md transition-all cursor-pointer ${
-              activeTab === 'users' ? 'bg-primary text-primary-foreground pop-shadow-sm border border-border scale-[1.02]' : 'text-foreground hover:bg-accent/40'
-            }`}
-          >
-            管理员管理
-          </button>
-          <button
-            onClick={() => setActiveTab('roles')}
-            className={`px-4 py-1.5 rounded-md transition-all cursor-pointer ${
-              activeTab === 'roles' ? 'bg-primary text-primary-foreground pop-shadow-sm border border-border scale-[1.02]' : 'text-foreground hover:bg-accent/40'
-            }`}
-          >
-            角色与权限
-          </button>
-        </div>
-      </div>
+      <AppToolbar
+        icon={<ShieldAlert className="h-5 w-5 text-primary" strokeWidth={1.75} />}
+        title="管理员与 RBAC 权限配置中心"
+        actions={
+          <AppTabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            options={[
+              { value: 'users', label: '管理员管理' },
+              { value: 'roles', label: '角色与权限' },
+            ]}
+          />
+        }
+      />
 
       {/* 选项卡内容区 */}
       {activeTab === 'users' ? (
@@ -135,7 +117,7 @@ export default function UsersPage() {
               message: `确认要禁用管理员 ${username} 吗？`,
               onConfirm: async () => {
                 await deleteUserMutation.mutateAsync(id)
-                toast.success('管理员已被成功禁用(软删除)')
+                toast.success('管理员已被成功禁用')
               }
             })
           }}

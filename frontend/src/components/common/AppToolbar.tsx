@@ -24,28 +24,28 @@ export default function AppToolbar({
   return (
     <div
       className={cn(
-        'flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300 text-xs',
+        'flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 bg-card rounded-2xl elevation-1 p-5 transition-all duration-200 text-[13px]',
         className,
       )}
     >
       <div className="flex items-center space-x-2.5 min-w-0">
         {icon}
         <div className="min-w-0">
-          <h2 className="text-sm font-heading font-bold tracking-wider text-foreground uppercase truncate">
+          <h2 className="text-base font-heading text-foreground truncate">
             {title}
           </h2>
           {subtitle && (
-            <p className="text-[10px] text-muted-foreground font-semibold mt-0.5">
+            <p className="text-[12px] text-muted-foreground mt-0.5">
               {subtitle}
             </p>
           )}
         </div>
         {loading && (
-          <RefreshCw className="h-3.5 w-3.5 text-primary animate-spin flex-shrink-0" />
+          <RefreshCw className="h-3.5 w-3.5 text-primary animate-spin flex-shrink-0" strokeWidth={1.75} />
         )}
       </div>
       {(filters || actions) && (
-        <div className="flex flex-wrap items-center gap-3 text-xs">
+        <div className="flex flex-wrap items-center gap-3 text-[13px]">
           {filters}
           {actions}
         </div>

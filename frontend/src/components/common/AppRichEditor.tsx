@@ -36,10 +36,10 @@ function MenuButton({ onClick, isActive = false, title, children }: MenuButtonPr
       type="button"
       onClick={onClick}
       title={title}
-      className={`p-2 border-2 border-border rounded-lg transition-all pop-shadow-sm select-none cursor-pointer ${
+      className={`p-2 border border-border rounded-lg transition-all select-none cursor-pointer flex items-center justify-center ${
         isActive
-          ? 'bg-primary text-primary-foreground -translate-x-[1px] -translate-y-[1px]'
-          : 'bg-background text-foreground hover:bg-accent hover:translate-x-[0.5px] hover:translate-y-[0.5px]'
+          ? 'bg-primary/10 text-primary border-primary/20'
+          : 'bg-card text-foreground hover:bg-accent'
       }`}
     >
       {children}
@@ -89,7 +89,6 @@ export default function AppRichEditor({
   }, [editorConfigKey])
 
   // 当外部 value 发生改变且不同于当前 editor 的 HTML 时，进行同步回填
-  // 父级切换编辑对象或重置表单时，聚焦状态下也必须更新，避免旧内容写回新表单。
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
       editor.commands.setContent(value, { emitUpdate: false })
@@ -118,7 +117,7 @@ export default function AppRichEditor({
   }
 
   return (
-    <div className="border-2 border-border rounded-xl bg-card overflow-hidden pop-shadow-sm focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+    <div className="border border-border rounded-2xl bg-card overflow-hidden focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary/50 transition-all">
       <input
         ref={imageInputRef}
         type="file"
@@ -127,7 +126,7 @@ export default function AppRichEditor({
         onChange={handleImageFileChange}
       />
       {/* 按钮控制条栏 */}
-      <div className="flex flex-wrap items-center gap-2 p-3 bg-accent/30 border-b-2 border-border">
+      <div className="flex flex-wrap items-center gap-2 p-2.5 bg-muted/30 border-b border-border">
         {resolvedConfig.toolbar.map((group, groupIndex) => {
           const visibleItems = group
             .map((item) => ({ key: item, config: richEditorToolbarItems[item] }))
@@ -138,7 +137,7 @@ export default function AppRichEditor({
           return (
             <div key={groupIndex} className="flex items-center gap-2">
               {groupIndex > 0 && (
-                <div className="w-[2px] h-6 bg-border mx-1 self-center" />
+                <div className="w-[1px] h-5 bg-border mx-1 self-center" />
               )}
               {visibleItems.map(({ key, config }) => {
                 const Icon = config.icon

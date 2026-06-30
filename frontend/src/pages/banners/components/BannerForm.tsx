@@ -8,6 +8,7 @@ import AppImageUploader from '@/components/business/AppImageUploader'
 import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
 import AppCheckbox from '@/components/common/AppCheckbox'
+import AppInput from '@/components/common/AppInput'
 
 interface BannerFormProps {
   isOpen: boolean
@@ -25,7 +26,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
   const [linkUrl, setLinkUrl] = useState('')
   const [sortOrder, setSortOrder] = useState<number>(0)
   const [isActive, setIsActive] = useState(true)
-  
+
   const [errorMsg, setErrorMsg] = useState('')
 
   // 监听 banner 变化以初始化表单
@@ -90,33 +91,31 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
     <AppModal
       isOpen={isOpen}
       onClose={onClose}
-      title={isEdit ? '编辑 BANNER' : '新建 BANNER'}
+      title={isEdit ? '编辑 Banner' : '新建 Banner'}
       size="lg"
-      sticker="FORM PANEL"
     >
       <div className="p-6 font-sans text-foreground">
         {errorMsg && (
-          <div className="p-3 mb-6 text-xs text-destructive border-2 border-destructive bg-destructive/5 rounded-lg flex items-center space-x-2 animate-shake font-semibold">
+          <div className="p-3 mb-6 text-xs text-destructive border border-destructive/20 bg-destructive/5 rounded-xl flex items-center space-x-2 animate-shake font-semibold">
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-5 text-[13px]">
           {/* 标题 */}
-          <AppFormItem label="Banner 标题 / TITLE" required>
-            <input
+          <AppFormItem label="Banner 标题" required>
+            <AppInput
               type="text"
               required
               placeholder="请输入标题"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
           </AppFormItem>
 
           {/* 图片上传 */}
-          <AppFormItem label="展示图片 / COVER IMAGE" required>
+          <AppFormItem label="展示图片" required>
             <AppImageUploader
               value={imageUrl}
               onChange={setImageUrl}
@@ -125,36 +124,35 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
           </AppFormItem>
 
           {/* 跳转链接 */}
-          <AppFormItem label="跳转链接 / TARGET LINK">
-            <input
+          <AppFormItem label="跳转链接">
+            <AppInput
               type="text"
               placeholder="请输入点击跳转的 URL（选填）"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
-              className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground placeholder-muted-foreground outline-none text-xs font-semibold"
             />
           </AppFormItem>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* 排序序号 */}
-            <AppFormItem label="排序序号 / SORT ORDER">
-              <input
+            <AppFormItem label="排序序号">
+              <AppInput
                 type="number"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(parseInt(e.target.value) || 0)}
-                className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-bold font-mono"
+                className="font-mono font-medium"
               />
             </AppFormItem>
 
             {/* 启用状态 */}
-            <AppFormItem label="分发状态 / DISPATCH STATUS">
-              <div className="flex items-center h-11 pl-1">
+            <AppFormItem label="分发状态">
+              <div className="flex items-center h-10 pl-1">
                 <AppCheckbox
                   checked={isActive}
                   onCheckedChange={setIsActive}
                   label={
-                    <span className={isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}>
-                      {isActive ? '分发启用 (ACTIVE)' : '下线搁置 (INACTIVE)'}
+                    <span className={isActive ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-muted-foreground'}>
+                      {isActive ? '分发启用' : '下线搁置'}
                     </span>
                   }
                 />
@@ -162,19 +160,19 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
             </AppFormItem>
           </div>
 
-          <div className="border-t-2 border-border pt-6 mt-6 flex justify-end space-x-2.5">
+          <div className="border-t border-border pt-5 mt-6 flex justify-end gap-2.5">
             <AppButton
               type="button"
               variant="secondary"
               onClick={onClose}
             >
-              取消 CANCEL
+              取消
             </AppButton>
             <AppButton
               type="submit"
               loading={submitMutation.isPending}
             >
-              确认保存 CONFIRM
+              确认保存
             </AppButton>
           </div>
         </form>

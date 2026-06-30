@@ -9,6 +9,8 @@ interface AppInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
   ({ leftIcon, rightIcon, className, inputClassName, ...props }, ref) => {
+    const inputStyles = 'w-full px-4 py-2.5 bg-background border border-border rounded-xl text-foreground outline-none text-[13px] placeholder-muted-foreground/60 transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10'
+
     if (leftIcon || rightIcon) {
       return (
         <div className={cn('relative flex items-center', className)}>
@@ -16,7 +18,7 @@ const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
           <input
             ref={ref}
             className={cn(
-              'w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold placeholder-muted-foreground/60',
+              inputStyles,
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               inputClassName,
@@ -31,11 +33,7 @@ const AppInput = forwardRef<HTMLInputElement, AppInputProps>(
     return (
       <input
         ref={ref}
-        className={cn(
-          'w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/20 transition-all rounded-lg text-foreground outline-none text-xs font-semibold placeholder-muted-foreground/60',
-          className,
-          inputClassName,
-        )}
+        className={cn(inputStyles, className, inputClassName)}
         {...props}
       />
     )

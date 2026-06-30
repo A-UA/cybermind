@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react'
 import AppSelect from '@/components/common/AppSelect'
 import AppInput from '@/components/common/AppInput'
 import AppTextarea from '@/components/common/AppTextarea'
-import { ArrowLeft, Save, RefreshCw } from 'lucide-react'
+import AppButton from '@/components/common/AppButton'
+import { Save } from 'lucide-react'
 import AppFormItem from '@/components/common/AppFormItem'
 import AppImageUploader from '@/components/business/AppImageUploader'
 import AppRichEditor from '@/components/common/AppRichEditor'
 import AppCheckbox from '@/components/common/AppCheckbox'
+import { AppFormHeader, AppFormCard, AppFormMetaPanel } from '@/components/common/AppFormShell'
 import { isRichTextEmpty } from '@/lib/richText'
 import { getApiErrorMessage } from '@/lib/api'
 import { uploadRichTextImage } from '@/lib/richTextUpload'
@@ -56,7 +58,7 @@ export default function NewsForm({
       setCategory(article.category || 'industry')
       setContent(article.content || '')
       setIsTop(article.is_top || false)
-      
+
       if (article.tags) {
         try {
           const tagsArr = JSON.parse(article.tags)
@@ -119,36 +121,20 @@ export default function NewsForm({
   return (
     <div className="space-y-6 text-foreground font-sans">
       {/* 顶部标题横幅 */}
-      <div className="flex items-center justify-between bg-card border-2 border-border pop-shadow p-5 rounded-xl transition-all duration-300">
-        <div className="flex items-center space-x-3">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="p-2 border-2 border-border bg-background hover:bg-accent text-foreground rounded-lg pop-shadow-sm pop-press cursor-pointer flex items-center justify-center"
-            title="返回文章列表"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <div>
-            <h2 className="text-sm font-heading font-bold tracking-wider text-foreground uppercase">
-              {article ? '编辑文章内容 / EDIT POST' : '撰写新文章 / WRITE POST'}
-            </h2>
-            <p className="text-[10px] text-muted-foreground font-semibold mt-0.5">请录入文章基础信息与富文本编辑内容</p>
-          </div>
-        </div>
-
-        <div className="px-2.5 py-1 text-[9px] font-heading font-bold border-2 border-border bg-accent text-foreground rounded-lg pop-shadow-sm rotate-[3deg] hidden sm:inline-block">
-          EDITOR MODE
-        </div>
-      </div>
+      <AppFormHeader
+        title={article ? '编辑文章内容' : '撰写新文章'}
+        description="请录入文章基础信息与富文本编辑内容"
+        backTitle="返回文章列表"
+        onBack={onCancel}
+      />
 
       {/* 实体卡片表单 */}
-      <form onSubmit={handleSubmit} className="bg-card border-2 border-border rounded-xl p-8 pop-shadow space-y-6 text-xs">
+      <AppFormCard onSubmit={handleSubmit} className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* 左侧大块：标题和富文本正文 (两列宽) */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* 左侧大块：标题和富文本正文 */}
+          <div className="lg:col-span-2 space-y-5">
             {/* 文章标题 */}
-            <AppFormItem label="文章标题 / ARTICLE TITLE" required error={titleError}>
+            <AppFormItem label="文章标题" required error={titleError}>
               <AppInput
                 type="text"
                 placeholder="请输入文章核心标题..."
@@ -161,7 +147,7 @@ export default function NewsForm({
             </AppFormItem>
 
             {/* 摘要说明 */}
-            <AppFormItem label="文章摘要 / SUMMARY (可选)" description="简明扼要地概括文章主旨...">
+            <AppFormItem label="文章摘要 (可选)" description="简明扼要地概括文章主旨...">
               <AppTextarea
                 placeholder="在此录入摘要描述..."
                 value={summary}
@@ -171,95 +157,87 @@ export default function NewsForm({
             </AppFormItem>
 
             {/* 富文本编辑器 */}
-            <AppFormItem label="文章富文本正文 / EDITORIAL CONTENT" required error={contentError}>
-              <AppRichEditor 
-                value={content} 
+            <AppFormItem label="文章富文本正文" required error={contentError}>
+              <AppRichEditor
+                value={content}
                 onChange={(val) => {
                   setContent(val)
                   if (!isRichTextEmpty(val)) setContentError('')
-                }} 
+                }}
                 preset="article"
                 uploadImage={uploadRichTextImage}
                 onUploadError={(err) => toast.error(getApiErrorMessage(err, '图片上传失败'))}
-                placeholder="在此优雅地撰写文章富文本内容..."
+                placeholder="在此撰写文章内容..."
               />
             </AppFormItem>
           </div>
 
           {/* 右侧元数据 */}
-          <div className="space-y-6 bg-accent/20 border-2 border-border p-6 rounded-xl pop-shadow-sm h-fit">
-            <h3 className="text-xs font-heading font-bold text-foreground border-b-2 border-border pb-3 uppercase tracking-wider select-none">
-              属性与分发元数据 / METADATA
-            </h3>
+          <div className="space-y-5">
+            <AppFormMetaPanel title="属性与分发元数据">
+              {/* 文章分类 */}
+              <AppFormItem label="文章分类">
+                <AppSelect
+                  width="full"
+                  value={category}
+                  onValueChange={(val) => setCategory(val || 'industry')}
+                  placeholder="选择分类"
+                  options={[
+                    { value: 'industry', label: '行业动态' },
+                    { value: 'company', label: '企业新闻' },
+                    { value: 'product', label: '产品公告' },
+                  ]}
+                />
+              </AppFormItem>
 
-            {/* 文章分类 */}
-            <AppFormItem label="文章分类 / CATEGORY">
-              <AppSelect
-                width="full"
-                value={category}
-                onValueChange={(val) => setCategory(val || 'industry')}
-                placeholder="选择分类"
-                options={[
-                  { value: 'industry', label: '行业动态' },
-                  { value: 'company', label: '企业新闻' },
-                  { value: 'product', label: '产品公告' },
-                ]}
-              />
-            </AppFormItem>
+              {/* 封面图 */}
+              <AppFormItem label="文章封面图">
+                <AppImageUploader value={coverImage} onChange={setCoverImage} />
+              </AppFormItem>
 
-            {/* 封面图 */}
-            <AppFormItem label="文章封面图 / COVER IMAGE">
-              <AppImageUploader value={coverImage} onChange={setCoverImage} />
-            </AppFormItem>
+              {/* 标签 */}
+              <AppFormItem
+                label="文章标签"
+                description="标签用英文逗号分隔, 如: 科技, AI, 官网"
+              >
+                <AppInput
+                  type="text"
+                  placeholder="科技, AI, 官网"
+                  value={tagsInput}
+                  onChange={(e) => setTagsInput(e.target.value)}
+                />
+              </AppFormItem>
 
-            {/* 标签 */}
-            <AppFormItem 
-              label="文章标签 / TAGS" 
-              description="标签用英文逗号分隔, 如: 科技, AI, 官网"
-            >
-              <input
-                type="text"
-                placeholder="科技, AI, 官网"
-                value={tagsInput}
-                onChange={(e) => setTagsInput(e.target.value)}
-                className="w-full px-3 py-2.5 bg-background border-2 border-border focus:bg-accent/40 transition-all rounded-lg text-foreground outline-none text-xs font-semibold"
-              />
-            </AppFormItem>
-
-            {/* 置顶属性 */}
-            <div className="space-y-2 pt-2 border-t border-border/40">
-              <AppCheckbox
-                checked={isTop}
-                onCheckedChange={setIsTop}
-                label="设置此文章置顶 (STICK TO TOP)"
-              />
-            </div>
+              {/* 置顶属性 */}
+              <div className="pt-3 border-t border-border">
+                <AppCheckbox
+                  checked={isTop}
+                  onCheckedChange={setIsTop}
+                  label="设置此文章置顶"
+                />
+              </div>
+            </AppFormMetaPanel>
           </div>
         </div>
 
         {/* 提交/取消 按钮栏 */}
-        <div className="flex justify-end space-x-3 border-t-2 border-border pt-6 mt-6">
-          <button
+        <div className="flex justify-end gap-2.5 border-t border-border pt-5 mt-6">
+          <AppButton
             type="button"
+            variant="secondary"
             onClick={onCancel}
-            className="px-5 py-2.5 border-2 border-border bg-background hover:bg-accent text-muted-foreground hover:text-foreground font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer"
           >
-            取消 CANCEL
-          </button>
-          <button
+            取消
+          </AppButton>
+          <AppButton
             type="submit"
-            disabled={isSaving}
-            className="px-8 py-2.5 bg-primary text-primary-foreground border-2 border-border font-heading font-bold transition-all pop-shadow-sm pop-press rounded-lg cursor-pointer disabled:opacity-50 flex items-center space-x-1.5"
+            loading={isSaving}
+            icon={<Save className="h-4 w-4" strokeWidth={1.75} />}
           >
-            {isSaving ? (
-              <RefreshCw className="h-4 w-4 animate-spin" />
-            ) : (
-              <Save className="h-4 w-4" />
-            )}
-            <span>确认保存 SUBMIT</span>
-          </button>
+            确认保存
+          </AppButton>
         </div>
-      </form>
+      </AppFormCard>
     </div>
   )
 }

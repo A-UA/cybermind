@@ -23,39 +23,40 @@ export default function TrendChart({ data }: TrendChartProps) {
           <XAxis
             dataKey="date"
             tick={{ fill: 'currentColor', fontSize: 10 }}
-            axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
-            tickLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
+            axisLine={{ stroke: 'var(--border)', strokeWidth: 1 }}
+            tickLine={{ stroke: 'var(--border)', strokeWidth: 1 }}
           />
           <YAxis
             tick={{ fill: 'currentColor', fontSize: 10 }}
-            axisLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
-            tickLine={{ stroke: 'var(--border)', strokeWidth: 2 }}
+            axisLine={{ stroke: 'var(--border)', strokeWidth: 1 }}
+            tickLine={{ stroke: 'var(--border)', strokeWidth: 1 }}
           />
           <Tooltip
             contentStyle={{
               backgroundColor: 'var(--card)',
               borderColor: 'var(--border)',
-              borderWidth: 2,
-              borderRadius: 8,
-              fontSize: 11,
+              borderWidth: 1,
+              borderRadius: 12,
+              fontSize: 12,
+              boxShadow: 'var(--shadow-md)',
             }}
           />
-          <Legend wrapperStyle={{ fontSize: 10, paddingTop: 10 }} />
+          <Legend wrapperStyle={{ fontSize: 12, paddingTop: 10 }} />
           <Line
             type="monotone"
             dataKey="pv"
             name="全站总浏览量 (PV)"
-            stroke="#3b82f6"
-            strokeWidth={3}
-            activeDot={{ r: 6, strokeWidth: 2, stroke: 'var(--border)' }}
+            stroke="var(--chart-1)"
+            strokeWidth={2.5}
+            activeDot={{ r: 5, strokeWidth: 1.5, stroke: 'var(--card)' }}
           />
           <Line
             type="monotone"
             dataKey="uv"
             name="独立IP数 (UV)"
-            stroke="#10b981"
-            strokeWidth={3}
-            activeDot={{ r: 6, strokeWidth: 2, stroke: 'var(--border)' }}
+            stroke="var(--chart-2)"
+            strokeWidth={2.5}
+            activeDot={{ r: 5, strokeWidth: 1.5, stroke: 'var(--card)' }}
           />
         </LineChart>
       </ResponsiveContainer>

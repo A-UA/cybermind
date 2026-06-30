@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table'
-import { RefreshCw, Inbox } from 'lucide-react'
+import { RefreshCw, Inbox, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export interface AppTableColumn<T> {
   title: string                                             // 表头标题
@@ -41,31 +41,33 @@ export function AppTable<T>({
   const totalPages = Math.ceil(total / pageSize)
 
   return (
-    <div className="space-y-5 font-sans text-xs">
-      {/* 表格容器 - 新野兽派实体硬阴影 */}
-      <div className="border-2 border-border bg-card pop-shadow rounded-xl overflow-x-auto">
+    <div className="space-y-4 font-sans text-[13px]">
+      {/* 表格容器 */}
+      <div className="bg-card rounded-xl elevation-2 overflow-x-auto">
         {isLoading ? (
-          /* 骨架屏 Loading */
-          <div className="h-64 flex flex-col justify-center items-center space-y-3 bg-card">
-            <RefreshCw className="h-8 w-8 text-primary animate-spin" />
-            <span className="text-xs text-muted-foreground font-semibold">正在同步云端数据资源...</span>
+          /* 加载中 */
+          <div className="h-64 flex flex-col justify-center items-center space-y-3">
+            <RefreshCw className="h-6 w-6 text-primary animate-spin" strokeWidth={1.75} />
+            <span className="text-[13px] text-muted-foreground">正在加载数据...</span>
           </div>
         ) : data.length === 0 ? (
-          /* 无数据 Empty */
-          <div className="h-64 flex flex-col justify-center items-center text-center space-y-3 bg-card">
-            <Inbox className="h-8 w-8 text-muted-foreground/60" />
-            <span className="text-xs text-muted-foreground font-semibold">{emptyText}</span>
+          /* 无数据 */
+          <div className="h-64 flex flex-col justify-center items-center text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
+              <Inbox className="h-5 w-5 text-muted-foreground/60" strokeWidth={1.5} />
+            </div>
+            <span className="text-[13px] text-muted-foreground">{emptyText}</span>
           </div>
         ) : (
-          /* 真实数据 Table */
-          <Table className="text-xs">
-            <TableHeader className="bg-accent border-b-2 border-border">
-              <TableRow className="border-b-2 border-border hover:bg-transparent">
+          /* 数据表格 */
+          <Table className="text-[13px]">
+            <TableHeader>
+              <TableRow className="border-b border-border hover:bg-transparent">
                 {columns.map((col) => (
                   <TableHead
                     key={col.key}
                     style={{ width: col.width }}
-                    className={`font-bold text-foreground select-none ${col.className || ''}`}
+                    className={`text-[11px] font-semibold text-muted-foreground uppercase tracking-wider select-none py-3 ${col.className || ''}`}
                   >
                     {col.title}
                   </TableHead>
@@ -76,10 +78,10 @@ export function AppTable<T>({
               {data.map((row, rowIndex) => (
                 <TableRow
                   key={(row as any)?.id ?? rowIndex}
-                  className="border-b-2 border-border last:border-b-0 hover:bg-secondary/40"
+                  className="border-b border-border/60 last:border-b-0 hover:bg-accent/50 transition-colors"
                 >
                   {columns.map((col) => (
-                    <TableCell key={col.key} className={col.className}>
+                    <TableCell key={col.key} className={`py-3 ${col.className || ''}`}>
                       {col.render ? col.render(row, rowIndex) : (row as any)[col.key]}
                     </TableCell>
                   ))}
@@ -90,27 +92,29 @@ export function AppTable<T>({
         )}
       </div>
 
-      {/* 分页器 - Neo-Brutalist 物理按压翻页组件 */}
+      {/* 分页器 */}
       {!isLoading && onPageChange && totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-card border-2 border-border pop-shadow p-4 rounded-xl text-xs font-semibold">
-          <span className="text-muted-foreground select-none">
-            第 <strong className="text-foreground">{page}</strong> 页 / 共 <strong className="text-foreground">{totalPages}</strong> 页（共 {total} 条记录）
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-1 text-[13px]">
+          <span className="text-muted-foreground">
+            第 <strong className="text-foreground font-semibold">{page}</strong> 页 / 共 <strong className="text-foreground font-semibold">{totalPages}</strong> 页（{total} 条记录）
           </span>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1.5">
             <button
               onClick={() => onPageChange(Math.max(1, page - 1))}
               disabled={page === 1}
-              className="px-3 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground rounded-lg pop-shadow-xs pop-press disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none"
+              className="px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-accent text-foreground transition-all disabled:opacity-40 disabled:pointer-events-none cursor-pointer flex items-center gap-1 text-[12px] font-medium"
             >
-              上一页 PREV
+              <ChevronLeft className="h-3.5 w-3.5" strokeWidth={1.75} />
+              上一页
             </button>
             <button
               onClick={() => onPageChange(Math.min(totalPages, page + 1))}
               disabled={page === totalPages}
-              className="px-3 py-1.5 border-2 border-border bg-background hover:bg-accent text-foreground rounded-lg pop-shadow-xs pop-press disabled:opacity-50 disabled:pointer-events-none cursor-pointer select-none"
+              className="px-3 py-1.5 rounded-lg border border-border bg-card hover:bg-accent text-foreground transition-all disabled:opacity-40 disabled:pointer-events-none cursor-pointer flex items-center gap-1 text-[12px] font-medium"
             >
-              下一页 NEXT
+              下一页
+              <ChevronRight className="h-3.5 w-3.5" strokeWidth={1.75} />
             </button>
           </div>
         </div>

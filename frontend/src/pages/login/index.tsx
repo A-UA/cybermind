@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useAuthStore } from '@/stores/auth'
 import apiClient from '@/lib/api'
-import { ArrowRight, Eye, EyeOff } from 'lucide-react'
+import { ArrowRight, Eye, EyeOff, RefreshCw } from 'lucide-react'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -37,80 +37,87 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-background pop-brutal-bg font-sans overflow-hidden px-4">
-      {/* 极富冲击力的新野兽派实体拼贴卡片 */}
-      <div className="relative w-full max-w-md p-8 bg-card border-2 border-border pop-shadow rounded-xl transition-all duration-300">
-        
-        {/* 彩色装饰角标贴纸 */}
-        <div className="absolute -top-3 -left-3 px-3 py-1 bg-primary text-primary-foreground text-[10px] font-heading font-bold uppercase tracking-wider border-2 border-border rounded-lg pop-shadow-sm rotate-[-3deg]">
-          OPERATOR PORTAL
-        </div>
-
-        {/* 标题 */}
-        <div className="text-center mb-8 mt-2">
-          <h1 className="text-5xl font-heading font-bold tracking-tight text-foreground select-none">
-            Cybermind
-          </h1>
-          <div className="h-1.5 w-24 bg-primary border-t border-b border-border mx-auto my-3" />
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold">
-            Pop Content Workspace // 管理控制台
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* 操作员账号 */}
-          <div className="space-y-2">
-            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-              操作员账号 / USERNAME
-            </label>
-            <input
-              type="text"
-              required
-              placeholder="请输入登录账号"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all text-xs rounded-lg text-foreground placeholder-muted-foreground outline-none font-medium"
-            />
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-background bg-noise font-sans overflow-hidden px-4">
+      {/* 登录卡片 */}
+      <div className="relative w-full max-w-sm animate-scale-in">
+        <div className="bg-card rounded-2xl elevation-4 p-8 sm:p-10">
+          {/* Logo & 标题 */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-heading text-foreground tracking-tight">
+              Cybermind
+            </h1>
+            <div className="h-[2px] w-12 bg-primary mx-auto my-3 rounded-full" />
+            <p className="text-[12px] text-muted-foreground">
+              内容管理控制台
+            </p>
           </div>
 
-          {/* 访问密码 */}
-          <div className="space-y-2">
-            <label className="text-xs font-heading font-bold text-foreground uppercase tracking-wider block">
-              安全访问密钥 / PASSCODE
-            </label>
-            <div className="relative flex items-center">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* 账号 */}
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-medium text-foreground block">
+                登录账号
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
+                type="text"
                 required
-                placeholder="请输入访问密钥"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-4 pr-10 py-3 bg-background border-2 border-border focus:bg-accent/40 transition-all text-xs rounded-lg text-foreground placeholder-muted-foreground outline-none font-medium"
+                placeholder="请输入账号"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="username"
+                className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </button>
             </div>
+
+            {/* 密码 */}
+            <div className="space-y-1.5">
+              <label className="text-[13px] font-medium text-foreground block">
+                登录密码
+              </label>
+              <div className="relative flex items-center">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  placeholder="请输入密码"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="current-password"
+                  className="w-full pl-4 pr-10 py-2.5 bg-background border border-border rounded-xl text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" strokeWidth={1.75} /> : <Eye className="h-4 w-4" strokeWidth={1.75} />}
+                </button>
+              </div>
+            </div>
+
+            {/* 登录按钮 */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-2.5 mt-2 bg-primary text-primary-foreground font-semibold text-[13px] rounded-xl elevation-1 hover:elevation-2 hover-lift flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none transition-all"
+            >
+              {loading ? (
+                <>
+                  <RefreshCw className="h-4 w-4 animate-spin" strokeWidth={1.75} />
+                  <span>登录中...</span>
+                </>
+              ) : (
+                <>
+                  <span>登录</span>
+                  <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* 底部版权 */}
+          <div className="mt-8 text-center text-[11px] text-muted-foreground">
+            Cybermind Studio © {new Date().getFullYear()}
           </div>
-
-          {/* 物理下沉登录按钮 */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3.5 mt-4 bg-primary text-primary-foreground font-heading font-bold text-xs tracking-wider rounded-lg border-2 border-border pop-shadow-sm pop-press flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
-          >
-            <span>{loading ? '正在建立安全会话...' : '进入工作空间 ENTER'}</span>
-            {!loading && <ArrowRight className="h-4 w-4" />}
-          </button>
-        </form>
-
-        {/* 底部版权 */}
-        <div className="mt-8 text-center text-[10px] text-muted-foreground font-semibold tracking-wider font-mono">
-          CYBERMIND STUDIO © 2026 // ALL RIGHTS RESERVED
         </div>
       </div>
     </div>

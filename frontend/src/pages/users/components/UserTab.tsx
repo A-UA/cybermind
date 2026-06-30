@@ -1,7 +1,11 @@
-import { Plus, Trash2, Edit, RefreshCw, Search, Users, UserCheck, UserX } from 'lucide-react'
+import { Plus, Trash2, Edit, RefreshCw, Search } from 'lucide-react'
 import AppTable from '@/components/common/AppTable'
 import type { AppTableColumn } from '@/components/common/AppTable'
 import AppGuard from '@/components/common/AppGuard'
+import AppButton from '@/components/common/AppButton'
+import AppInput from '@/components/common/AppInput'
+import AppToolbar from '@/components/common/AppToolbar'
+import AppStatusBadge from '@/components/common/AppStatusBadge'
 import type { IUser } from '../types'
 
 interface UserTabProps {
@@ -11,12 +15,12 @@ interface UserTabProps {
   pageSize: number
   onPageChange: (page: number) => void
   isLoading: boolean
-  
+
   // 搜索
   searchQuery: string
   onSearchQueryChange: (val: string) => void
   onRefetch: () => void
-  
+
   // 操作
   onCreateUser: () => void
   onEditUser: (user: IUser) => void
@@ -47,7 +51,7 @@ export default function UserTab({
       key: 'id',
       width: '70px',
       render: (row) => (
-        <span className="font-bold text-muted-foreground/80 font-mono">
+        <span className="font-mono text-muted-foreground">
           #{row.id}
         </span>
       )
@@ -56,7 +60,7 @@ export default function UserTab({
       title: '账户/用户名',
       key: 'username',
       render: (row) => (
-        <span className="font-bold text-foreground font-mono">
+        <span className="font-mono text-foreground font-medium">
           {row.username}
         </span>
       )
@@ -65,16 +69,16 @@ export default function UserTab({
       title: '昵称',
       key: 'nickname',
       render: (row) => (
-        <span className="font-semibold text-foreground">
+        <span className="text-foreground">
           {row.nickname || '-'}
         </span>
       )
     },
     {
-      title: '绑定的邮箱',
+      title: '邮箱',
       key: 'email',
       render: (row) => (
-        <span className="font-mono text-muted-foreground font-semibold select-all">
+        <span className="font-mono text-muted-foreground select-all">
           {row.email || '-'}
         </span>
       )
@@ -86,17 +90,17 @@ export default function UserTab({
       render: (row) => (
         <div className="flex flex-wrap gap-1">
           {row.roles.length === 0 ? (
-            <span className="text-[9px] text-muted-foreground/50 font-bold">无角色</span>
+            <span className="text-[11px] text-muted-foreground/50">无角色</span>
           ) : (
             row.roles.map((rCode) => (
               <span
                 key={rCode}
-                className={`px-2 py-0.5 border border-border text-[9px] font-bold rounded shadow-sm select-none ${
+                className={`px-2 py-0.5 text-[11px] font-medium rounded-full select-none ${
                   rCode === 'super_admin'
-                    ? 'bg-amber-300 text-black'
+                    ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400'
                     : rCode === 'content_admin'
-                    ? 'bg-blue-300 text-black'
-                    : 'bg-emerald-300 text-black'
+                    ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'
+                    : 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400'
                 }`}
               >
                 {rCode}
@@ -112,19 +116,9 @@ export default function UserTab({
       width: '100px',
       className: 'text-center',
       render: (row) => (
-        <div className="flex items-center justify-center space-x-1.5 select-none">
-          {row.is_active ? (
-            <>
-              <UserCheck className="h-3.5 w-3.5 text-emerald-500" />
-              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">活动中</span>
-            </>
-          ) : (
-            <>
-              <UserX className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="text-[10px] font-bold text-muted-foreground/60">禁用</span>
-            </>
-          )}
-        </div>
+        <AppStatusBadge tone={row.is_active ? 'success' : 'muted'} dot>
+          {row.is_active ? '活动中' : '已禁用'}
+        </AppStatusBadge>
       )
     },
     {
@@ -133,32 +127,36 @@ export default function UserTab({
       width: '180px',
       className: 'text-center',
       render: (row) => (
-        <div className="flex items-center justify-center space-x-1.5">
+        <div className="flex items-center justify-center gap-1.5">
           <AppGuard permission="user:update">
-            <button
+            <AppButton
               onClick={() => onAssignRole(row)}
-              className="px-2 py-1 bg-[#F5EEF8] border border-border text-black font-bold text-[10px] hover:bg-accent rounded-md cursor-pointer pop-shadow-xs"
+              size="sm"
+              variant="accent"
               title="修改角色分配"
             >
               授权角色
-            </button>
-            <button
+            </AppButton>
+            <AppButton
               onClick={() => onEditUser(row)}
-              className="p-1 border border-border bg-background hover:bg-accent rounded-md cursor-pointer text-muted-foreground hover:text-foreground"
+              size="iconSm"
+              variant="secondary"
               title="编辑信息"
             >
-              <Edit className="h-3.5 w-3.5" />
-            </button>
+              <Edit className="h-3.5 w-3.5" strokeWidth={1.75} />
+            </AppButton>
           </AppGuard>
-          
+
           <AppGuard permission="user:delete">
-            <button
+            <AppButton
               onClick={() => onDeleteUser(row.id, row.username)}
-              className="p-1 border border-border bg-background hover:bg-destructive hover:text-destructive-foreground rounded-md cursor-pointer text-muted-foreground"
+              size="iconSm"
+              variant="ghost"
+              className="hover:text-destructive hover:bg-destructive/10"
               title="禁用管理员"
             >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
+              <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} />
+            </AppButton>
           </AppGuard>
         </div>
       )
@@ -168,43 +166,41 @@ export default function UserTab({
   return (
     <div className="space-y-6 text-xs text-foreground font-sans">
       {/* 操作过滤条 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-card border-2 border-border pop-shadow p-5 rounded-xl">
-        <div className="flex items-center space-x-2">
-          <Users className="h-5 w-5 text-primary" />
-          <span className="text-xs font-bold text-muted-foreground">检索到 {total} 名系统运维人员</span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 text-xs">
-          <div className="relative flex items-center">
-            <input
-              type="text"
-              placeholder="搜索用户名/昵称..."
-              value={searchQuery}
-              onChange={(e) => onSearchQueryChange(e.target.value)}
-              className="px-3.5 pl-8 py-2 h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg outline-none font-semibold w-52 placeholder-muted-foreground/60"
-            />
-            <Search className="h-3.5 w-3.5 absolute left-3 text-muted-foreground/75" />
-          </div>
-
-          <button
-            onClick={onRefetch}
-            className="p-2 border-2 border-border bg-background text-foreground hover:bg-accent pop-shadow-sm pop-press rounded-lg cursor-pointer"
-            title="刷新数据"
-          >
-            <RefreshCw className="h-4 w-4" />
-          </button>
-
-          <AppGuard permission="user:create">
-            <button
-              onClick={onCreateUser}
-              className="px-4 py-2 bg-primary text-primary-foreground border-2 border-border font-heading font-bold flex items-center space-x-1.5 pop-shadow-sm pop-press rounded-lg cursor-pointer text-xs"
+      <AppToolbar
+        icon={null}
+        title={<span className="text-[13px] text-muted-foreground font-normal">检索到 {total} 名系统运维人员</span>}
+        filters={
+          <AppInput
+            type="text"
+            placeholder="搜索用户名/昵称..."
+            value={searchQuery}
+            onChange={(e) => onSearchQueryChange(e.target.value)}
+            leftIcon={<Search className="h-4 w-4" strokeWidth={1.75} />}
+            className="w-52"
+          />
+        }
+        actions={
+          <div className="flex items-center gap-2">
+            <AppButton
+              onClick={onRefetch}
+              size="icon"
+              variant="secondary"
+              title="刷新数据"
             >
-              <Plus className="h-4 w-4" />
-              <span>新增管理员 ADD_USER</span>
-            </button>
-          </AppGuard>
-        </div>
-      </div>
+              <RefreshCw className="h-4 w-4" strokeWidth={1.75} />
+            </AppButton>
+
+            <AppGuard permission="user:create">
+              <AppButton
+                onClick={onCreateUser}
+                icon={<Plus className="h-4 w-4" strokeWidth={1.75} />}
+              >
+                新增管理员
+              </AppButton>
+            </AppGuard>
+          </div>
+        }
+      />
 
       {/* 表格 */}
       <AppTable

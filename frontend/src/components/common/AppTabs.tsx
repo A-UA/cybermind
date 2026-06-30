@@ -23,7 +23,7 @@ export default function AppTabs<T extends string>({
   return (
     <div
       className={cn(
-        'inline-flex items-center bg-background border-2 border-border rounded-xl p-1 gap-1',
+        'inline-flex items-center bg-muted/50 rounded-xl p-1 gap-0.5',
         className,
       )}
     >
@@ -33,10 +33,10 @@ export default function AppTabs<T extends string>({
           type="button"
           onClick={() => onValueChange(option.value)}
           className={cn(
-            'px-4 py-2 text-xs font-heading font-bold rounded-lg transition-all cursor-pointer flex items-center space-x-1.5',
+            'px-4 py-2 text-[13px] font-medium rounded-lg transition-all cursor-pointer flex items-center gap-1.5',
             value === option.value
-              ? 'bg-primary text-primary-foreground pop-shadow-sm'
-              : 'text-muted-foreground hover:text-foreground hover:bg-accent',
+              ? 'bg-card text-foreground elevation-1 font-semibold'
+              : 'text-muted-foreground hover:text-foreground',
           )}
         >
           {option.icon && <span className="flex-shrink-0">{option.icon}</span>}

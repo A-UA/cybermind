@@ -104,11 +104,10 @@ export default function UserFormModal({
       onClose={onClose}
       title={user ? '编辑管理员属性' : '新增管理员账户'}
       size="md"
-      sticker="ACCOUNT"
     >
-      <form onSubmit={handleSubmit} className="p-6 bg-background space-y-4 font-semibold text-xs text-foreground">
+      <form onSubmit={handleSubmit} className="p-6 bg-card space-y-4 font-sans text-[13px] text-foreground">
         {/* 用户名 */}
-        <AppFormItem label="账户名 / USERNAME (创建后不可改)" required={!user} error={usernameError}>
+        <AppFormItem label="账户名 (创建后不可更改)" required={!user} error={usernameError}>
           <AppInput
             type="text"
             required={!user}
@@ -123,9 +122,9 @@ export default function UserFormModal({
         </AppFormItem>
 
         {/* 密码 */}
-        <AppFormItem 
-          label={user ? '登录密码 / PASSWORD (留空代表不修改)' : '登录密码 / PASSWORD (最少 8 位)'} 
-          required={!user} 
+        <AppFormItem
+          label={user ? '登录密码 (留空代表不修改)' : '登录密码 (最少 8 位)'}
+          required={!user}
           error={passwordError}
         >
           <AppInput
@@ -141,7 +140,7 @@ export default function UserFormModal({
         </AppFormItem>
 
         {/* 昵称 */}
-        <AppFormItem label="昵称 / DISPLAY NICKNAME">
+        <AppFormItem label="昵称">
           <AppInput
             type="text"
             placeholder="输入昵称..."
@@ -151,7 +150,7 @@ export default function UserFormModal({
         </AppFormItem>
 
         {/* 邮箱 */}
-        <AppFormItem label="电子邮箱 / EMAIL">
+        <AppFormItem label="电子邮箱">
           <AppInput
             type="email"
             placeholder="例如 info@example.com"
@@ -161,16 +160,16 @@ export default function UserFormModal({
         </AppFormItem>
 
         {/* 启用状态 */}
-        <div className="pt-2 border-t border-border/20">
+        <div className="pt-3 border-t border-border">
           <AppCheckbox
             checked={isActiveVal}
             onCheckedChange={setIsActiveVal}
-            label="启用此管理员账号 (ACTIVE)"
+            label="启用此管理员账号"
           />
         </div>
 
         {/* 底部按钮 */}
-        <div className="flex justify-end space-x-2.5 pt-4 border-t-2 border-border">
+        <div className="flex justify-end gap-2.5 pt-5 border-t border-border">
           <AppButton
             type="button"
             variant="secondary"

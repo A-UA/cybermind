@@ -88,11 +88,10 @@ export default function RoleFormModal({
       onClose={onClose}
       title={role ? '编辑角色基本信息' : '创建新系统角色'}
       size="md"
-      sticker="ROLE"
     >
-      <form onSubmit={handleSubmit} className="p-6 bg-background space-y-4 font-semibold text-xs text-foreground">
+      <form onSubmit={handleSubmit} className="p-6 bg-card space-y-4 font-sans text-[13px] text-foreground">
         {/* 角色名称 */}
-        <AppFormItem label="角色中文名称 / NAME" required error={nameError}>
+        <AppFormItem label="角色名称" required error={nameError}>
           <AppInput
             type="text"
             placeholder="例如：内容管理员..."
@@ -105,7 +104,7 @@ export default function RoleFormModal({
         </AppFormItem>
 
         {/* 角色标识/代码 */}
-        <AppFormItem label="角色标识代码 / CODE (创建后不可改)" required={!role} error={codeError}>
+        <AppFormItem label="角色标识代码 (创建后不可更改)" required={!role} error={codeError}>
           <AppInput
             type="text"
             required={!role}
@@ -120,7 +119,7 @@ export default function RoleFormModal({
         </AppFormItem>
 
         {/* 角色描述 */}
-        <AppFormItem label="角色职责描述 / DESCRIPTION">
+        <AppFormItem label="角色职责描述">
           <AppTextarea
             rows={3}
             placeholder="请输入对该角色权限范围的解释..."
@@ -130,7 +129,7 @@ export default function RoleFormModal({
         </AppFormItem>
 
         {/* 底部按钮 */}
-        <div className="flex justify-end space-x-2.5 pt-4 border-t-2 border-border">
+        <div className="flex justify-end gap-2.5 pt-5 border-t border-border">
           <AppButton
             type="button"
             variant="secondary"

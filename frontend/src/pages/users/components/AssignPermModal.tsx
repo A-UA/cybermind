@@ -78,9 +78,8 @@ export default function AssignPermModal({
       onClose={onClose}
       title={`角色权限分配: ${role.name}`}
       size="xl"
-      sticker="PERMISSIONS"
     >
-      <div className="flex flex-col text-xs font-sans text-foreground max-h-[80vh]">
+      <div className="flex flex-col text-[13px] font-sans text-foreground max-h-[80vh]">
         {/* 分组内容区 */}
         <div className="p-6 bg-background overflow-y-auto space-y-6 flex-1 text-xs">
           {Object.keys(groupedPermissions).map((moduleName) => {
@@ -88,11 +87,11 @@ export default function AssignPermModal({
             const moduleLabel = MODULE_NAME_MAP[moduleName] || moduleName.toUpperCase()
 
             return (
-              <div key={moduleName} className="bg-accent/20 border-2 border-border p-4 rounded-xl space-y-3">
-                <h4 className="font-heading font-bold text-foreground border-b border-border/40 pb-1.5 uppercase select-none">
-                  {moduleLabel} // {moduleName.toUpperCase()}
+              <div key={moduleName} className="bg-card border border-border p-4 rounded-xl space-y-3 elevation-1">
+                <h4 className="font-semibold text-foreground border-b border-border/40 pb-2 select-none">
+                  {moduleLabel}
                 </h4>
-                
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {perms.map((p) => {
                     const isChecked = tempPermIds.includes(p.id)
@@ -114,11 +113,11 @@ export default function AssignPermModal({
         </div>
 
         {/* 底部按钮 */}
-        <div className="p-4 bg-accent border-t-4 border-border flex items-center justify-between flex-shrink-0 sticky bottom-0 z-10">
-          <span className="text-[10px] text-muted-foreground font-mono font-semibold">
-            当前已勾选 {tempPermIds.length} 项权限 / CHECKED_ITEMS
+        <div className="p-4 bg-card border-t border-border flex items-center justify-between flex-shrink-0 sticky bottom-0 z-10">
+          <span className="text-[12px] text-muted-foreground">
+            当前已勾选 {tempPermIds.length} 项权限
           </span>
-          <div className="flex space-x-2">
+          <div className="flex gap-2">
             <AppButton
               type="button"
               variant="secondary"
@@ -129,7 +128,7 @@ export default function AssignPermModal({
             <AppButton
               onClick={handleSubmit}
               loading={isSaving}
-              icon={<CheckSquare className="h-3.5 w-3.5" />}
+              icon={<CheckSquare className="h-4 w-4" strokeWidth={1.75} />}
             >
               保存更改
             </AppButton>

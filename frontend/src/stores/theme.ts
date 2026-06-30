@@ -1,52 +1,33 @@
+/**
+ * Theme Store — 简化为仅管理暗/亮模式偏好
+ * 多色方案（cyberpop / cyberpunk / mint）已移除，
+ * 明暗切换完全由 next-themes 的 class 模式接管。
+ * 该 store 保留是为了兼容可能的将来扩展（如密度偏好等）。
+ */
 import { create } from 'zustand'
 
-export type ColorTheme = 'cyberpop' | 'cyberpunk' | 'mint'
-
 interface ThemeState {
-  colorTheme: ColorTheme
-  setColorTheme: (theme: ColorTheme) => void
+  /** 侧边栏是否折叠（UI 偏好） */
+  sidebarCollapsed: boolean
+  setSidebarCollapsed: (collapsed: boolean) => void
 }
 
 export const useThemeStore = create<ThemeState>((set) => {
-  // 获取初始值
-  const getInitialTheme = (): ColorTheme => {
+  const getInitialCollapsed = (): boolean => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('cybermind-color-theme')
-      if (saved === 'cyberpop' || saved === 'cyberpunk' || saved === 'mint') {
-        return saved
-      }
+      const saved = localStorage.getItem('cybermind-sidebar-collapsed')
+      return saved === 'true'
     }
-    return 'cyberpop'
-  }
-
-  const initialTheme = getInitialTheme()
-  
-  // 在初始化时立即写入 <html>，避免首屏样式闪烁
-  if (typeof window !== 'undefined') {
-    document.documentElement.setAttribute('data-theme', initialTheme)
+    return false
   }
 
   return {
-    colorTheme: initialTheme,
-    setColorTheme: (theme) => {
+    sidebarCollapsed: getInitialCollapsed(),
+    setSidebarCollapsed: (collapsed) => {
       if (typeof window !== 'undefined') {
-        localStorage.setItem('cybermind-color-theme', theme)
-        
-        // 支持 View Transitions API，提供平滑全屏过渡
-        // @ts-ignore
-        if (document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          // @ts-ignore
-          document.startViewTransition(() => {
-            document.documentElement.setAttribute('data-theme', theme)
-            set({ colorTheme: theme })
-          })
-        } else {
-          document.documentElement.setAttribute('data-theme', theme)
-          set({ colorTheme: theme })
-        }
-      } else {
-        set({ colorTheme: theme })
+        localStorage.setItem('cybermind-sidebar-collapsed', String(collapsed))
       }
+      set({ sidebarCollapsed: collapsed })
     },
   }
 })

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 
-// 定义统一的抽屉宽度规范，通过匹配 Radix/Shadcn 的 side 属性修饰符确保 tailwind-merge 生效
+// 定义统一的抽屉宽度规范
 const SIZE_MAP = {
   sm: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-sm data-[side=right]:sm:max-w-sm',
   md: 'data-[side=left]:w-full data-[side=right]:w-full data-[side=left]:sm:max-w-md data-[side=right]:sm:max-w-md',
@@ -28,8 +28,8 @@ interface AppDrawerProps {
   side?: 'top' | 'right' | 'bottom' | 'left'
   size?: keyof typeof SIZE_MAP
   showCloseButton?: boolean
-  className?: string         // 覆盖 Header 的 className
-  contentClassName?: string  // 覆盖 SheetContent 的 className
+  className?: string
+  contentClassName?: string
 }
 
 export default function AppDrawer({
@@ -51,30 +51,29 @@ export default function AppDrawer({
         side={side}
         showCloseButton={showCloseButton}
         className={cn(
-          // gap-0 可以让页头、内容区和页脚紧密贴合，符合 neo-brutalism 的分块边框设计
-          'flex flex-col h-full border-l-4 border-border bg-card p-0 gap-0 outline-none shadow-lg',
+          'flex flex-col h-full bg-card p-0 gap-0 outline-none elevation-4 border-l border-border',
           SIZE_MAP[size],
           contentClassName,
         )}
       >
-        {/* 顶部头部：内置统一的背景色 (bg-accent/40) 与强边框分割线 */}
-        <SheetHeader className={cn('flex flex-col gap-1 border-b-2 border-border bg-accent/40 p-5 flex-shrink-0', className)}>
-          <SheetTitle className="text-sm font-heading font-bold tracking-wider uppercase text-foreground">
+        {/* 顶部头部 */}
+        <SheetHeader className={cn('flex flex-col gap-1 border-b border-border p-5 flex-shrink-0', className)}>
+          <SheetTitle className="text-base font-heading text-foreground">
             {title}
           </SheetTitle>
           {description && (
-            <SheetDescription className="text-[10px] font-semibold text-muted-foreground mt-0.5">
+            <SheetDescription className="text-[12px] text-muted-foreground mt-0.5">
               {description}
             </SheetDescription>
           )}
         </SheetHeader>
 
-        {/* 中间内容滚动区：统一的 p-6 间距与基础字号 */}
-        <div className="flex-1 overflow-y-auto p-6 text-xs">{children}</div>
+        {/* 中间内容滚动区 */}
+        <div className="flex-1 overflow-y-auto p-6 text-[13px]">{children}</div>
 
-        {/* 底部操作区：内置边框分割线与底色 */}
+        {/* 底部操作区 */}
         {footer && (
-          <SheetFooter className="mt-auto border-t-2 border-border bg-accent/20 p-4 flex-shrink-0">
+          <SheetFooter className="mt-auto border-t border-border p-4 flex-shrink-0">
             {footer}
           </SheetFooter>
         )}

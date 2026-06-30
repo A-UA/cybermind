@@ -1,5 +1,5 @@
 /**
- * AppButton — 全站统一新野兽派风格按钮
+ * AppButton — 全站统一 Atelier 风格按钮
  * 自动管理 loading 旋转动画与 disabled 遮罩行为。
  */
 import { type ButtonHTMLAttributes, type ReactNode } from 'react'
@@ -8,9 +8,9 @@ import { cn } from '@/lib/utils'
 
 /** 按钮尺寸样式对照 */
 const SIZE_MAP = {
-  sm: 'px-3 py-1.5 text-[10px]',
-  default: 'px-5 py-2 text-xs',
-  lg: 'px-8 py-3 text-xs',
+  sm: 'px-3 py-1.5 text-[11px]',
+  default: 'px-4 py-2 text-[13px]',
+  lg: 'px-6 py-2.5 text-sm',
   icon: 'h-9 w-9 p-0',
   iconSm: 'h-7 w-7 p-0',
 } as const
@@ -18,19 +18,19 @@ const SIZE_MAP = {
 /** 按钮变体样式对照 */
 const VARIANT_MAP = {
   primary:
-    'bg-primary text-primary-foreground border-2 border-border pop-shadow-sm pop-press',
+    'bg-primary text-primary-foreground hover:bg-primary/90 elevation-1 hover:elevation-2 hover-lift',
   secondary:
-    'bg-background text-foreground border-2 border-border hover:bg-accent pop-shadow-sm pop-press',
+    'bg-transparent text-foreground border border-border hover:bg-accent hover:border-border/80',
   danger:
-    'bg-destructive text-destructive-foreground border-2 border-border pop-shadow-sm pop-press',
+    'bg-destructive text-white hover:bg-destructive/90 elevation-1 hover:elevation-2 hover-lift',
   accent:
-    'bg-accent text-foreground border-2 border-border pop-shadow-sm pop-press',
+    'bg-accent text-foreground hover:bg-accent/80 border border-border',
   ghost:
-    'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground border-2 border-border',
+    'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground',
   success:
-    'bg-emerald-400 text-black border-2 border-border pop-shadow-sm pop-press',
+    'bg-emerald-500 text-white hover:bg-emerald-600 elevation-1 hover:elevation-2 hover-lift',
   warning:
-    'bg-amber-400 text-black border-2 border-border pop-shadow-sm pop-press',
+    'bg-amber-500 text-white hover:bg-amber-600 elevation-1 hover:elevation-2 hover-lift',
 } as const
 
 interface AppButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -61,7 +61,7 @@ export default function AppButton({
     <button
       disabled={disabled || loading}
       className={cn(
-        'font-heading font-bold rounded-lg cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-1.5',
+        'font-sans font-semibold rounded-xl cursor-pointer transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5',
         SIZE_MAP[size],
         VARIANT_MAP[variant],
         className,

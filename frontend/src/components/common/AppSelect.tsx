@@ -47,7 +47,7 @@ export default function AppSelect({
     <Select items={options} value={value} onValueChange={onValueChange} disabled={disabled}>
       <SelectTrigger
         className={cn(
-          'h-9 bg-background border-2 border-border text-foreground text-xs rounded-lg focus:ring-0 font-semibold',
+          'h-9 bg-background border border-border text-foreground text-[13px] rounded-xl focus:ring-2 focus:ring-primary/10 focus:border-primary/50',
           WIDTH_CLASS[width],
           className,
           triggerClassName,
@@ -57,7 +57,7 @@ export default function AppSelect({
       </SelectTrigger>
       <SelectContent
         className={cn(
-          'bg-card border-2 border-border text-foreground rounded-lg text-xs font-semibold',
+          'bg-card border border-border text-foreground rounded-xl text-[13px] elevation-3',
           contentClassName,
         )}
       >

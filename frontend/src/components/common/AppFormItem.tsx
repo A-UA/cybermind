@@ -2,8 +2,8 @@ import React from 'react'
 
 interface AppFormItemProps {
   label: string            // 输入域标签名称
-  required?: boolean       // 是否必填，若为 true 会自动追加红色星号
-  error?: string           // 表单验证错误信息，若存在则会抖动高亮显示
+  required?: boolean       // 是否必填
+  error?: string           // 表单验证错误信息
   description?: string     // 表单项的副标题/解释说明文案
   children: React.ReactNode
   className?: string
@@ -18,20 +18,18 @@ export function AppFormItem({
   className = ''
 }: AppFormItemProps) {
   return (
-    <div className={`space-y-2 text-xs text-foreground font-sans ${className}`}>
-      {/* 标题 */}
-      <label className="text-xs font-heading font-bold uppercase tracking-wider flex items-center select-none">
+    <div className={`space-y-1.5 text-[13px] text-foreground font-sans ${className}`}>
+      {/* 标签 */}
+      <label className="text-[13px] font-medium text-foreground flex items-center select-none">
         <span>{label}</span>
         {required && (
-          <span className="text-destructive font-heading font-black ml-1 text-sm leading-none">
-            *
-          </span>
+          <span className="text-destructive ml-1 text-sm leading-none">*</span>
         )}
       </label>
 
       {/* 描述信息 */}
       {description && (
-        <p className="text-[10px] text-muted-foreground font-semibold leading-relaxed">
+        <p className="text-[12px] text-muted-foreground leading-relaxed">
           {description}
         </p>
       )}
@@ -41,8 +39,7 @@ export function AppFormItem({
 
       {/* 报错详情 */}
       {error && (
-        <p className="text-[10px] text-destructive font-bold tracking-wide mt-1.5 animate-shake flex items-center space-x-1.5">
-          <span>⚠️</span>
+        <p className="text-[12px] text-destructive font-medium mt-1 flex items-center gap-1">
           <span>{error}</span>
         </p>
       )}

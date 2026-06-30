@@ -1,13 +1,13 @@
 import { Link } from 'react-router'
 import {
   TrendingUp, Eye, BookOpen, MessageSquare,
-  Clock, ArrowRight, Activity, RefreshCw,
+  Clock, ArrowRight, Activity, RefreshCw, Users, Inbox,
 } from 'lucide-react'
 import {
   useOverview, useTrend, useTopPages,
   useRecentNews, useRecentContacts,
 } from '@/queries/useStatsQuery'
-import StatCard from './components/StatCard'
+import AppStatsCard from '@/components/common/AppStatsCard'
 import TrendChart from './components/TrendChart'
 
 export default function DashboardPage() {
@@ -33,50 +33,50 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8 text-foreground font-sans pb-8">
-      {/* 顶部四个维度的实体撞色拼贴卡纸 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          title="今日 IP 访问数 // CLIENT_NET_IPS"
+      {/* 顶部统计卡片 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <AppStatsCard
+          title="今日访客"
           value={isOverviewLoading ? '...' : todayUv.toLocaleString()}
-          label="请求次数 / 24H"
-          bgColorClass="bg-[#E8F4FD] dark:bg-[#1E293B]"
-          statusColor="bg-primary"
+          label="独立 IP 数 / 24h"
+          icon={<Users className="h-5 w-5" strokeWidth={1.5} />}
+          accentColor="hsl(220, 50%, 55%)"
         />
-        <StatCard 
-          title="全站总访问量 // NET_TOTAL_VIEWS"
+        <AppStatsCard
+          title="累计访问量"
           value={isOverviewLoading ? '...' : totalPv.toLocaleString()}
-          label="累计访问量"
-          bgColorClass="bg-[#FEF9E7] dark:bg-[#1E293B]"
-          statusColor="bg-primary"
+          label="全站总浏览次数"
+          icon={<Eye className="h-5 w-5" strokeWidth={1.5} />}
+          accentColor="hsl(24, 85%, 48%)"
         />
-        <StatCard 
-          title="发布文章总数 // NEWS_ARTICLES"
+        <AppStatsCard
+          title="文章总数"
           value={isOverviewLoading ? '...' : newsCount.toString()}
-          label="篇已发布新闻"
-          bgColorClass="bg-[#F5EEF8] dark:bg-[#1E293B]"
-          statusColor="bg-purple-400"
+          label="已发布新闻"
+          icon={<BookOpen className="h-5 w-5" strokeWidth={1.5} />}
+          accentColor="hsl(160, 45%, 40%)"
         />
-        <StatCard 
-          title="待处理留言 // PENDING_FEEDBACK"
+        <AppStatsCard
+          title="待处理留言"
           value={isOverviewLoading ? '...' : pendingContactCount.toString()}
-          label="条客户建议未回复"
-          bgColorClass="bg-[#E8F8F5] dark:bg-[#1E293B]"
-          statusColor={pendingContactCount > 0 ? 'bg-red-500 animate-pulse' : 'bg-emerald-400'}
+          label="条未回复"
+          icon={<MessageSquare className="h-5 w-5" strokeWidth={1.5} />}
+          accentColor={pendingContactCount > 0 ? 'hsl(0, 65%, 50%)' : 'hsl(160, 45%, 40%)'}
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 左侧主要区域 (趋势图 + 排行榜) */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-6">
           {/* 折线趋势图 */}
-          <div className="bg-card border-2 border-border rounded-xl p-6 pop-shadow">
-            <h3 className="text-sm font-heading font-bold text-foreground flex items-center space-x-2 border-b-2 border-border pb-3 mb-4">
-              <TrendingUp className="h-4 w-4 text-primary" />
-              <span>近 7 天访问趋势流量统计 // TRAFFIC_FLOW</span>
+          <div className="bg-card rounded-2xl p-6 elevation-2">
+            <h3 className="text-base font-heading text-foreground flex items-center gap-2 pb-4 mb-4 border-b border-border">
+              <TrendingUp className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              <span>近 7 天访问趋势</span>
             </h3>
             {isTrendLoading ? (
-              <div className="h-80 flex justify-center items-center text-xs text-muted-foreground font-semibold">
-                <RefreshCw className="h-5 w-5 animate-spin mr-2" />
+              <div className="h-80 flex justify-center items-center text-[13px] text-muted-foreground gap-2">
+                <RefreshCw className="h-5 w-5 animate-spin text-primary" strokeWidth={1.75} />
                 正在加载统计数据...
               </div>
             ) : (
@@ -85,37 +85,38 @@ export default function DashboardPage() {
           </div>
 
           {/* 热门访问页面排行 */}
-          <div className="bg-card border-2 border-border rounded-xl p-6 pop-shadow">
-            <h3 className="text-sm font-heading font-bold text-foreground flex items-center space-x-2 border-b-2 border-border pb-3 mb-4">
-              <Activity className="h-4 w-4 text-primary" />
-              <span>前台热门内容排行 // TOP_PAGES</span>
+          <div className="bg-card rounded-2xl p-6 elevation-2">
+            <h3 className="text-base font-heading text-foreground flex items-center gap-2 pb-4 mb-4 border-b border-border">
+              <Activity className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              <span>热门内容排行</span>
             </h3>
             {isTopPagesLoading ? (
-              <div className="h-48 flex justify-center items-center text-xs text-muted-foreground font-semibold">
-                <RefreshCw className="h-5 w-5 animate-spin mr-2" />
-                正在分析访问日志...
+              <div className="h-48 flex justify-center items-center text-[13px] text-muted-foreground gap-2">
+                <RefreshCw className="h-5 w-5 animate-spin text-primary" strokeWidth={1.75} />
+                正在加载...
               </div>
             ) : topPages.length === 0 ? (
-              <div className="h-48 flex justify-center items-center text-xs text-muted-foreground font-semibold">
-                暂无访问事件数据
+              <div className="h-48 flex flex-col justify-center items-center text-[13px] text-muted-foreground gap-2">
+                <Inbox className="h-5 w-5 text-muted-foreground/50" strokeWidth={1.5} />
+                暂无访问数据
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {topPages.map((page, index) => (
-                  <div key={page.page_path} className="flex items-center justify-between p-3 bg-background border-2 border-border rounded-lg pop-shadow-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all">
-                    <div className="flex items-center space-x-3 min-w-0">
-                      <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold border-2 border-border ${
-                        index === 0 ? 'bg-[#FEF9E7] text-black' : index === 1 ? 'bg-[#E8F4FD] text-black' : 'bg-accent text-foreground'
+                  <div key={page.page_path} className="flex items-center justify-between py-3 px-4 bg-accent/30 rounded-xl hover:bg-accent/50 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-[11px] font-semibold ${
+                        index === 0 ? 'bg-primary/15 text-primary' : index === 1 ? 'bg-chart-2/15 text-chart-2' : 'bg-muted text-muted-foreground'
                       }`}>
                         {index + 1}
                       </span>
-                      <span className="text-xs font-mono truncate font-bold text-foreground select-all" title={page.page_path}>
+                      <span className="text-[13px] truncate text-foreground" title={page.page_path}>
                         {page.page_path}
                       </span>
                     </div>
-                    <div className="flex items-center space-x-1.5 text-xs font-bold text-muted-foreground whitespace-nowrap ml-3">
-                      <Eye className="h-3.5 w-3.5" />
-                      <span>{page.views} 次访问</span>
+                    <div className="flex items-center gap-1.5 text-[12px] text-muted-foreground whitespace-nowrap ml-3">
+                      <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
+                      <span>{page.views} 次</span>
                     </div>
                   </div>
                 ))}
@@ -125,38 +126,38 @@ export default function DashboardPage() {
         </div>
 
         {/* 右侧边栏区域 (最新消息 + 留言) */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* 最新发布文章 */}
-          <div className="bg-card border-2 border-border rounded-xl p-6 pop-shadow">
-            <h4 className="text-xs font-heading font-bold text-foreground flex items-center justify-between border-b-2 border-border pb-3 mb-4">
-              <span className="flex items-center space-x-2">
-                <BookOpen className="h-4 w-4 text-primary" />
-                <span>最新发布资讯 // EDITORIAL</span>
+          <div className="bg-card rounded-2xl p-6 elevation-2">
+            <h4 className="text-[13px] font-semibold text-foreground flex items-center justify-between pb-3 mb-4 border-b border-border">
+              <span className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-primary" strokeWidth={1.75} />
+                <span>最新资讯</span>
               </span>
-              <Link to="/news" className="text-[10px] text-primary hover:underline flex items-center space-x-1 font-bold">
-                <span>进入管理</span>
-                <ArrowRight className="h-3 w-3" />
+              <Link to="/news" className="text-[12px] text-primary hover:text-primary/80 flex items-center gap-1 font-medium transition-colors">
+                <span>查看全部</span>
+                <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
               </Link>
             </h4>
             {recentNews.length === 0 ? (
-              <div className="py-8 text-center text-xs text-muted-foreground font-semibold">暂无已发布文章</div>
+              <div className="py-8 text-center text-[13px] text-muted-foreground">暂无已发布文章</div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {recentNews.map((n) => (
-                  <div key={n.id} className="p-3 bg-background border-2 border-border rounded-lg hover:bg-accent/20 transition-colors">
+                  <div key={n.id} className="p-3 bg-accent/30 rounded-xl hover:bg-accent/50 transition-colors">
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-xs font-bold text-foreground line-clamp-1 flex-1">{n.title}</span>
-                      <span className="px-1.5 py-0.5 border border-border bg-accent text-[9px] font-bold rounded text-muted-foreground whitespace-nowrap">
+                      <span className="text-[13px] font-medium text-foreground line-clamp-1 flex-1">{n.title}</span>
+                      <span className="px-2 py-0.5 bg-muted text-[11px] font-medium rounded-full text-muted-foreground whitespace-nowrap">
                         {n.category || '未分类'}
                       </span>
                     </div>
-                    <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground font-semibold">
-                      <span className="flex items-center space-x-1">
-                        <Clock className="h-3 w-3" />
+                    <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" strokeWidth={1.5} />
                         <span>{new Date(n.created_at).toLocaleDateString()}</span>
                       </span>
-                      <span className="flex items-center space-x-1">
-                        <Eye className="h-3 w-3" />
+                      <span className="flex items-center gap-1">
+                        <Eye className="h-3 w-3" strokeWidth={1.5} />
                         <span>{n.view_count} 阅读</span>
                       </span>
                     </div>
@@ -167,37 +168,37 @@ export default function DashboardPage() {
           </div>
 
           {/* 最新留言 */}
-          <div className="bg-card border-2 border-border rounded-xl p-6 pop-shadow">
-            <h4 className="text-xs font-heading font-bold text-foreground flex items-center justify-between border-b-2 border-border pb-3 mb-4">
-              <span className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4 text-primary" />
-                <span>最新客户留言 // FEEDBACK</span>
+          <div className="bg-card rounded-2xl p-6 elevation-2">
+            <h4 className="text-[13px] font-semibold text-foreground flex items-center justify-between pb-3 mb-4 border-b border-border">
+              <span className="flex items-center gap-2">
+                <MessageSquare className="h-4 w-4 text-primary" strokeWidth={1.75} />
+                <span>最新留言</span>
               </span>
-              <Link to="/contacts" className="text-[10px] text-primary hover:underline flex items-center space-x-1 font-bold">
-                <span>处理留言</span>
-                <ArrowRight className="h-3 w-3" />
+              <Link to="/contacts" className="text-[12px] text-primary hover:text-primary/80 flex items-center gap-1 font-medium transition-colors">
+                <span>查看全部</span>
+                <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
               </Link>
             </h4>
             {recentContacts.length === 0 ? (
-              <div className="py-8 text-center text-xs text-muted-foreground font-semibold">暂无留言提交记录</div>
+              <div className="py-8 text-center text-[13px] text-muted-foreground">暂无留言</div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {recentContacts.map((c) => (
-                  <div key={c.id} className="p-3 bg-background border-2 border-border rounded-lg hover:bg-accent/20 transition-colors">
+                  <div key={c.id} className="p-3 bg-accent/30 rounded-xl hover:bg-accent/50 transition-colors">
                     <div className="flex items-start justify-between gap-2">
-                      <span className="text-xs font-bold text-foreground line-clamp-1 flex-1">{c.subject}</span>
-                      <span className={`px-1.5 py-0.5 border text-[9px] font-bold rounded whitespace-nowrap ${
-                        c.status === 'unread' 
-                          ? 'bg-red-500/10 text-red-600 border-red-500/20' 
-                          : c.status === 'replied' 
-                          ? 'bg-green-500/10 text-green-600 border-green-500/20'
-                          : 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
+                      <span className="text-[13px] font-medium text-foreground line-clamp-1 flex-1">{c.subject}</span>
+                      <span className={`px-2 py-0.5 text-[11px] font-medium rounded-full whitespace-nowrap ${
+                        c.status === 'unread'
+                          ? 'bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400'
+                          : c.status === 'replied'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'
+                          : 'bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400'
                       }`}>
                         {c.status === 'unread' ? '未读' : c.status === 'read' ? '已读' : '已回复'}
                       </span>
                     </div>
-                    <p className="text-[10px] text-muted-foreground mt-1.5 line-clamp-1 font-medium italic">"{c.message}"</p>
-                    <div className="mt-2 flex items-center justify-between text-[10px] text-muted-foreground font-semibold">
+                    <p className="text-[12px] text-muted-foreground mt-1.5 line-clamp-1 italic">"{c.message}"</p>
+                    <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
                       <span>访客: {c.name}</span>
                       <span>{new Date(c.created_at).toLocaleDateString()}</span>
                     </div>
