@@ -4,7 +4,7 @@ FROM python:3.12-slim AS development
 WORKDIR /app
 
 # 安装 uv
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.11.23 /uv /usr/local/bin/uv
 
 # 🌟 核心：在这里加入清华源环境变量，这样接下来的 uv sync 就会走国内源
 ENV UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
@@ -26,7 +26,7 @@ FROM python:3.12-slim AS production
 
 WORKDIR /app
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.11.23 /uv /usr/local/bin/uv
 
 # 🌟 核心：生产阶段也同样需要加上源环境变量
 ENV UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
