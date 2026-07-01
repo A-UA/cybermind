@@ -161,59 +161,59 @@ export default function ContactList({
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
 
         {/* 左侧：分类状态过滤器栏 */}
-        <div className="xl:col-span-1 bg-card rounded-2xl p-5 elevation-1 space-y-4">
+        <div className="xl:col-span-1 bg-card rounded-lg border border-border p-4.5 shadow-sm space-y-4 font-sans">
           <h3 className="text-[13px] font-semibold text-foreground flex items-center gap-2 border-b border-border pb-3 select-none">
-            <Inbox className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            <Inbox className="h-4 w-4 text-primary" strokeWidth={1.5} />
             <span>收件箱分类</span>
           </h3>
 
-          <div className="flex flex-col gap-1 text-[13px]">
+          <div className="flex flex-col gap-1.5 text-[13px]">
             <button
               onClick={() => onStatusFilterChange('')}
-              className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between cursor-pointer ${
                 statusFilter === ''
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
             >
               <span>全部收件箱</span>
-              <span className="font-mono bg-accent text-[11px] px-2 py-0.5 rounded-full">{totalCount}</span>
+              <span className="font-mono bg-accent text-[11px] px-1.5 py-0.5 rounded">{totalCount}</span>
             </button>
 
             <button
               onClick={() => onStatusFilterChange('unread')}
-              className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between cursor-pointer ${
                 statusFilter === 'unread'
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
             >
               <span>未读邮件</span>
-              <span className="font-mono bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full text-[11px] font-medium">{countUnread}</span>
+              <span className="font-mono bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded text-[11px] font-medium">{countUnread}</span>
             </button>
 
             <button
               onClick={() => onStatusFilterChange('read')}
-              className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between cursor-pointer ${
                 statusFilter === 'read'
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
             >
               <span>已读留言</span>
-              <span className="font-mono bg-blue-500/10 text-blue-600 px-2 py-0.5 rounded-full text-[11px] font-medium">{countRead}</span>
+              <span className="font-mono bg-blue-500/10 text-blue-600 px-1.5 py-0.5 rounded text-[11px] font-medium">{countRead}</span>
             </button>
 
             <button
               onClick={() => onStatusFilterChange('processed')}
-              className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center justify-between cursor-pointer ${
+              className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center justify-between cursor-pointer ${
                 statusFilter === 'processed'
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
               }`}
             >
               <span>已处理归档</span>
-              <span className="font-mono bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded-full text-[11px] font-medium">{countProcessed}</span>
+              <span className="font-mono bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded text-[11px] font-medium">{countProcessed}</span>
             </button>
           </div>
         </div>

@@ -1,6 +1,5 @@
 /**
- * AppThemeSettings — 简化后的亮/暗/跟随系统主题切换组件
- * 移除了色彩方案选择面板（原 3 套赛博主题已废弃）
+ * AppThemeSettings — 极简科技黑亮/暗/跟随系统主题切换组件
  */
 import { useState, useRef, useEffect } from 'react'
 import { Sun, Moon, Monitor } from 'lucide-react'
@@ -30,9 +29,9 @@ export default function AppThemeSettings() {
   if (!mounted) return null
 
   const modes = [
-    { key: 'light', icon: Sun, label: '亮色' },
-    { key: 'dark', icon: Moon, label: '暗色' },
-    { key: 'system', icon: Monitor, label: '跟随' },
+    { key: 'light', icon: Sun, label: 'LIGHT' },
+    { key: 'dark', icon: Moon, label: 'DARK' },
+    { key: 'system', icon: Monitor, label: 'SYSTEM' },
   ] as const
 
   // 获取当前模式图标
@@ -44,15 +43,15 @@ export default function AppThemeSettings() {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-8 h-8 bg-transparent hover:bg-accent text-muted-foreground hover:text-foreground transition-all cursor-pointer flex items-center justify-center rounded-lg"
+        className="w-8 h-8 bg-transparent hover:bg-accent text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center justify-center rounded-md"
         title="主题设置"
       >
-        <CurrentIcon className="h-4 w-4" strokeWidth={1.75} />
+        <CurrentIcon className="h-4 w-4" strokeWidth={1.5} />
       </button>
 
       {/* 下拉面板 */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-36 bg-card border border-border rounded-xl elevation-3 z-50 animate-scale-in p-1.5">
+        <div className="absolute right-0 mt-2 w-32 bg-card border border-border rounded-lg elevation-2 z-50 animate-scale-in p-1 font-sans">
           {modes.map((mode) => {
             const Icon = mode.icon
             const isActive = theme === mode.key
@@ -64,13 +63,13 @@ export default function AppThemeSettings() {
                   setTheme(mode.key)
                   setIsOpen(false)
                 }}
-                className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-[13px] font-medium transition-all cursor-pointer ${
+                className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[11px] font-mono font-medium transition-colors cursor-pointer ${
                   isActive
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 }`}
               >
-                <Icon className="h-4 w-4" strokeWidth={1.75} />
+                <Icon className="h-3.5 w-3.5" strokeWidth={1.5} />
                 <span>{mode.label}</span>
               </button>
             )

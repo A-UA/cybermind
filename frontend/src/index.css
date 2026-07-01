@@ -1,12 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════
-   CyberMind CMS — Atelier Design System
-   编辑工坊美学：暖色调 · 柔和阴影 · 精致排版
+   CyberMind CMS — V2 Swiss Minimalist Tech-Noir Design System
+   极简科技黑：冷色调 · 锐利圆角 · 精密网格线
    ═══════════════════════════════════════════════════════════════ */
 
-/* 字体导入：DM Serif Display（标题衬线）+ Figtree（正文无衬线）+ JetBrains Mono（等宽数据） */
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Figtree:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-
 @import "tailwindcss";
+@import "@fontsource-variable/geist/index.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -16,10 +14,10 @@
 
 /* ─── Design Tokens ─── */
 @theme inline {
-    --font-heading: 'DM Serif Display', Georgia, 'Times New Roman', serif;
-    --font-sans: 'Figtree', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-    --font-display: 'DM Serif Display', Georgia, serif;
+    --font-display: 'Geist Variable', sans-serif;
 
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
@@ -55,82 +53,82 @@
     --color-foreground: var(--foreground);
     --color-background: var(--background);
 
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-    --radius-xl: 18px;
-    --radius-2xl: 24px;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
+    --radius-2xl: 16px;
 }
 
-/* ─── Atelier Light（默认亮色主题） ─── */
+/* ─── Tech Light（极简纸张白） ─── */
 :root {
-    --background: hsl(36, 33%, 97%);       /* 微暖象牙白 */
-    --foreground: hsl(20, 10%, 12%);       /* 暖炭黑 */
+    --background: hsl(0, 0%, 98%);         /* 纸张白 */
+    --foreground: hsl(0, 0%, 9%);          /* 深墨黑 */
     --card: hsl(0, 0%, 100%);             /* 纯白 */
-    --card-foreground: hsl(20, 10%, 12%);
+    --card-foreground: hsl(0, 0%, 9%);
     --popover: hsl(0, 0%, 100%);
-    --popover-foreground: hsl(20, 10%, 12%);
-    --primary: hsl(24, 85%, 48%);          /* 烧焦琥珀 */
+    --popover-foreground: hsl(0, 0%, 9%);
+    --primary: hsl(217, 91%, 56%);         /* 皇家极光蓝 */
     --primary-foreground: hsl(0, 0%, 100%);
-    --secondary: hsl(36, 25%, 93%);        /* 暖灰 */
-    --secondary-foreground: hsl(20, 10%, 20%);
-    --muted: hsl(36, 15%, 93%);            /* 静默灰 */
-    --muted-foreground: hsl(20, 5%, 46%);
-    --accent: hsl(36, 30%, 95%);           /* 浅暖色 */
-    --accent-foreground: hsl(20, 10%, 12%);
-    --destructive: hsl(0, 65%, 50%);       /* 克制红 */
-    --border: hsl(20, 10%, 90%);           /* 细腻暖灰线 */
-    --input: hsl(20, 10%, 90%);
-    --ring: hsl(24, 85%, 48%);
-    --chart-1: hsl(24, 85%, 48%);          /* 琥珀 */
-    --chart-2: hsl(160, 45%, 40%);         /* 翡翠 */
-    --chart-3: hsl(220, 50%, 55%);         /* 钴蓝 */
-    --chart-4: hsl(340, 55%, 55%);         /* 玫瑰 */
-    --chart-5: hsl(45, 70%, 55%);          /* 琥珀金 */
-    --radius: 10px;
+    --secondary: hsl(0, 0%, 94%);          /* 浅灰 */
+    --secondary-foreground: hsl(0, 0%, 9%);
+    --muted: hsl(0, 0%, 95%);
+    --muted-foreground: hsl(0, 0%, 45%);   /* 烟灰 */
+    --accent: hsl(0, 0%, 96%);             /* 浅冷色 */
+    --accent-foreground: hsl(0, 0%, 9%);
+    --destructive: hsl(0, 72%, 51%);       /* 警示红 */
+    --border: hsl(0, 0%, 89%);             /* 极细浅灰网格线 */
+    --input: hsl(0, 0%, 89%);
+    --ring: hsl(217, 91%, 56%);
+    --chart-1: hsl(217, 91%, 56%);         /* 极光蓝 */
+    --chart-2: hsl(142, 71%, 45%);         /* 极客绿 */
+    --chart-3: hsl(262, 83%, 58%);         /* 紫 */
+    --chart-4: hsl(24, 90%, 50%);          /* 橙 */
+    --chart-5: hsl(43, 96%, 50%);          /* 黄 */
+    --radius: 8px;
     --sidebar: hsl(0, 0%, 100%);
-    --sidebar-foreground: hsl(20, 10%, 12%);
-    --sidebar-primary: hsl(24, 85%, 48%);
+    --sidebar-foreground: hsl(0, 0%, 9%);
+    --sidebar-primary: hsl(217, 91%, 56%);
     --sidebar-primary-foreground: hsl(0, 0%, 100%);
-    --sidebar-accent: hsl(36, 30%, 95%);
-    --sidebar-accent-foreground: hsl(20, 10%, 12%);
-    --sidebar-border: hsl(20, 10%, 92%);
-    --sidebar-ring: hsl(24, 85%, 48%);
+    --sidebar-accent: hsl(0, 0%, 96%);
+    --sidebar-accent-foreground: hsl(0, 0%, 9%);
+    --sidebar-border: hsl(0, 0%, 92%);
+    --sidebar-ring: hsl(217, 91%, 56%);
 }
 
-/* ─── Atelier Dark（暗色主题） ─── */
+/* ─── Tech Dark（极致墨黑 - 默认推荐） ─── */
 .dark {
-    --background: hsl(20, 10%, 9%);        /* 温暖近黑 */
-    --foreground: hsl(36, 20%, 92%);       /* 暖象牙白 */
-    --card: hsl(20, 8%, 13%);             /* 深巧克力灰 */
-    --card-foreground: hsl(36, 20%, 92%);
-    --popover: hsl(20, 8%, 13%);
-    --popover-foreground: hsl(36, 20%, 92%);
-    --primary: hsl(36, 90%, 60%);          /* 蜜金色 */
-    --primary-foreground: hsl(20, 15%, 8%);
-    --secondary: hsl(20, 8%, 18%);         /* 深可可 */
-    --secondary-foreground: hsl(36, 20%, 92%);
-    --muted: hsl(20, 6%, 18%);
-    --muted-foreground: hsl(20, 5%, 55%);
-    --accent: hsl(20, 8%, 16%);
-    --accent-foreground: hsl(36, 20%, 92%);
-    --destructive: hsl(0, 60%, 55%);       /* 暖红 */
-    --border: hsl(20, 5%, 20%);            /* 深色分割线 */
-    --input: hsl(20, 5%, 20%);
-    --ring: hsl(36, 90%, 60%);
-    --chart-1: hsl(36, 90%, 60%);          /* 蜜金 */
-    --chart-2: hsl(160, 45%, 55%);         /* 亮翡翠 */
-    --chart-3: hsl(220, 55%, 65%);         /* 天蓝 */
-    --chart-4: hsl(340, 55%, 60%);         /* 淡玫瑰 */
-    --chart-5: hsl(45, 75%, 60%);          /* 金黄 */
-    --sidebar: hsl(20, 10%, 7%);
-    --sidebar-foreground: hsl(36, 15%, 85%);
-    --sidebar-primary: hsl(36, 90%, 60%);
-    --sidebar-primary-foreground: hsl(20, 15%, 8%);
-    --sidebar-accent: hsl(20, 8%, 14%);
-    --sidebar-accent-foreground: hsl(36, 20%, 92%);
-    --sidebar-border: hsl(20, 5%, 18%);
-    --sidebar-ring: hsl(36, 90%, 60%);
+    --background: hsl(0, 0%, 4%);          /* 碳黑 */
+    --foreground: hsl(0, 0%, 95%);         /* 冰川白 */
+    --card: hsl(0, 0%, 7%);               /* 精密石墨黑 */
+    --card-foreground: hsl(0, 0%, 95%);
+    --popover: hsl(0, 0%, 7%);
+    --popover-foreground: hsl(0, 0%, 95%);
+    --primary: hsl(217, 91%, 60%);         /* 皇家极光蓝 */
+    --primary-foreground: hsl(0, 0%, 9%);
+    --secondary: hsl(0, 0%, 12%);          /* 深灰 */
+    --secondary-foreground: hsl(0, 0%, 95%);
+    --muted: hsl(0, 0%, 12%);
+    --muted-foreground: hsl(0, 0%, 55%);
+    --accent: hsl(0, 0%, 11%);
+    --accent-foreground: hsl(0, 0%, 95%);
+    --destructive: hsl(0, 84%, 60%);       /* 警示红 */
+    --border: hsl(0, 0%, 14%);             /* 科技暗灰线 */
+    --input: hsl(0, 0%, 14%);
+    --ring: hsl(217, 91%, 60%);
+    --chart-1: hsl(217, 91%, 60%);
+    --chart-2: hsl(142, 72%, 55%);
+    --chart-3: hsl(263, 84%, 65%);
+    --chart-4: hsl(24, 95%, 60%);
+    --chart-5: hsl(43, 100%, 60%);
+    --sidebar: hsl(0, 0%, 5%);
+    --sidebar-foreground: hsl(0, 0%, 90%);
+    --sidebar-primary: hsl(217, 91%, 60%);
+    --sidebar-primary-foreground: hsl(0, 0%, 9%);
+    --sidebar-accent: hsl(0, 0%, 12%);
+    --sidebar-accent-foreground: hsl(0, 0%, 95%);
+    --sidebar-border: hsl(0, 0%, 10%);
+    --sidebar-ring: hsl(217, 91%, 60%);
 }
 
 /* ─── 基础层 ─── */
@@ -147,173 +145,125 @@
   }
 }
 
-/* ─── 工具类 ─── */
+/* ─── 科技风工具类 ─── */
 @layer utilities {
-  /* 多层柔和阴影系统（取代 pop-shadow 硬阴影） */
+  /* 高精度细微卡片阴影与内阴影 */
   .elevation-1 {
-    box-shadow:
-      0 1px 2px 0 hsl(20 10% 12% / 0.04),
-      0 1px 3px 0 hsl(20 10% 12% / 0.06);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   }
   .elevation-2 {
-    box-shadow:
-      0 2px 4px -1px hsl(20 10% 12% / 0.05),
-      0 4px 8px -1px hsl(20 10% 12% / 0.08);
+    box-shadow: 0 3px 6px -1px rgba(0, 0, 0, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
   }
   .elevation-3 {
-    box-shadow:
-      0 4px 8px -2px hsl(20 10% 12% / 0.06),
-      0 8px 16px -4px hsl(20 10% 12% / 0.1);
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 2px 6px 0 rgba(0, 0, 0, 0.05);
   }
   .elevation-4 {
-    box-shadow:
-      0 8px 16px -4px hsl(20 10% 12% / 0.08),
-      0 16px 32px -8px hsl(20 10% 12% / 0.12);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 4px 12px 0 rgba(0, 0, 0, 0.08);
   }
 
-  /* 暗色模式阴影适配 */
   .dark .elevation-1 {
-    box-shadow:
-      0 1px 2px 0 hsl(0 0% 0% / 0.2),
-      0 1px 3px 0 hsl(0 0% 0% / 0.3);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   }
   .dark .elevation-2 {
-    box-shadow:
-      0 2px 4px -1px hsl(0 0% 0% / 0.25),
-      0 4px 8px -1px hsl(0 0% 0% / 0.35);
+    box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.5), 0 1px 3px 0 rgba(0, 0, 0, 0.3);
   }
   .dark .elevation-3 {
-    box-shadow:
-      0 4px 8px -2px hsl(0 0% 0% / 0.3),
-      0 8px 16px -4px hsl(0 0% 0% / 0.4);
+    box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.6), 0 2px 8px 0 rgba(0, 0, 0, 0.4);
   }
   .dark .elevation-4 {
-    box-shadow:
-      0 8px 16px -4px hsl(0 0% 0% / 0.35),
-      0 16px 32px -8px hsl(0 0% 0% / 0.5);
+    box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.7), 0 4px 16px 0 rgba(0, 0, 0, 0.5);
   }
 
-  /* hover 提升效果（取代 pop-press 按压效果） */
+  /* 悬浮微移效果 */
   .hover-lift {
-    transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1), box-shadow 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .hover-lift:hover {
     transform: translateY(-1px);
   }
 
-  /* 微妙的入场淡入 */
+  /* 极细点状网格背景 (Dot Matrix Grid) */
+  .bg-dot-grid {
+    background-image: radial-gradient(var(--border) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+  
+  .dark .bg-dot-grid {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* 精密单像素发光边框 */
+  .glow-border {
+    position: relative;
+  }
+  .glow-border::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* 淡入动画 */
   .animate-fade-in {
-    animation: fadeIn 0.2s ease-out forwards;
+    animation: fadeIn 0.15s ease-out forwards;
   }
   .animate-scale-in {
-    animation: scaleIn 0.25s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   .animate-slide-up {
-    animation: slideUp 0.3s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
-  /* 交错入场延迟（用于列表项） */
-  .stagger-1 { animation-delay: 50ms; }
-  .stagger-2 { animation-delay: 100ms; }
-  .stagger-3 { animation-delay: 150ms; }
-  .stagger-4 { animation-delay: 200ms; }
-  .stagger-5 { animation-delay: 250ms; }
-
-  /* 移动端侧边栏过渡动画 */
+  /* 移动端侧边栏过渡 */
   .sidebar-transition {
-    transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* 移动端表格容器 */
+  /* 移动端横向滚动容器 */
   .table-container {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
-
   .table-container::-webkit-scrollbar {
-    height: 6px;
+    height: 5px;
   }
-
   .table-container::-webkit-scrollbar-track {
     background: transparent;
   }
-
   .table-container::-webkit-scrollbar-thumb {
     background-color: var(--border);
-    border-radius: 3px;
-  }
-
-  /* 移动端表单输入优化 */
-  .mobile-input {
-    font-size: 16px; /* 防止 iOS 缩放 */
-  }
-
-  /* 移动端安全区域适配 */
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .safe-area-top {
-    padding-top: env(safe-area-inset-top);
-  }
-
-  /* 左侧色条装饰 */
-  .accent-bar-left {
-    position: relative;
-  }
-  .accent-bar-left::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 12%;
-    bottom: 12%;
-    width: 3px;
-    border-radius: 0 3px 3px 0;
-    background: var(--primary);
-  }
-
-  /* 微妙的背景纹理（用于登录页等特殊页面） */
-  .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    border-radius: 2px;
   }
 }
 
-/* ─── 关键帧动画 ─── */
+/* ─── 关键帧 ─── */
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.97); }
+  from { opacity: 0; transform: scale(0.98); }
   to   { opacity: 1; transform: scale(1);    }
 }
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0);   }
-}
-@keyframes iconRotateIn {
-  from {
-    transform: scale(0.4) rotate(-90deg);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
 @keyframes shimmer {
   from { background-position: -200% 0; }
   to   { background-position: 200% 0; }
 }
 
-@layer utilities {
-  .animate-icon-in {
-    animation: iconRotateIn 0.3s cubic-bezier(0.33, 1, 0.68, 1) forwards;
-  }
-  .animate-shimmer {
-    background: linear-gradient(90deg, var(--muted) 25%, var(--accent) 50%, var(--muted) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s ease-in-out infinite;
-  }
+.animate-shimmer {
+  background: linear-gradient(90deg, var(--muted) 25%, var(--accent) 50%, var(--muted) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
 }

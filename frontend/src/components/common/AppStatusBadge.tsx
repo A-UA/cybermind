@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils'
 type AppStatusTone = 'default' | 'success' | 'warning' | 'danger' | 'muted' | 'info'
 
 const TONE_CLASS: Record<AppStatusTone, string> = {
-  default: 'bg-secondary text-foreground',
-  success: 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400',
-  warning: 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400',
-  danger: 'bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400',
-  muted: 'bg-muted text-muted-foreground',
-  info: 'bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400',
+  default: 'bg-secondary text-foreground border border-border/40',
+  success: 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/15',
+  warning: 'bg-amber-500/10 text-amber-500 border border-amber-500/15',
+  danger: 'bg-red-500/10 text-red-500 border border-red-500/15',
+  muted: 'bg-muted text-muted-foreground border border-border/40',
+  info: 'bg-primary/10 text-primary border border-primary/15',
 }
 
 const DOT_COLOR: Record<AppStatusTone, string> = {
@@ -18,7 +18,7 @@ const DOT_COLOR: Record<AppStatusTone, string> = {
   warning: 'bg-amber-500',
   danger: 'bg-red-500',
   muted: 'bg-muted-foreground/40',
-  info: 'bg-blue-500',
+  info: 'bg-primary',
 }
 
 interface AppStatusBadgeProps {
@@ -37,7 +37,7 @@ export default function AppStatusBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center justify-center gap-1.5 px-2.5 py-1 text-[11px] font-medium rounded-full select-none whitespace-nowrap',
+        'inline-flex items-center justify-center gap-1 px-1.5 py-0.5 text-[10px] font-mono font-medium rounded select-none whitespace-nowrap',
         TONE_CLASS[tone],
         className,
       )}
@@ -45,7 +45,7 @@ export default function AppStatusBadge({
       {dot && (
         <span className={cn('h-1.5 w-1.5 rounded-full', DOT_COLOR[tone])} />
       )}
-      {children}
+      <span className="leading-none">{children}</span>
     </span>
   )
 }

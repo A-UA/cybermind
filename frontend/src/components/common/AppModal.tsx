@@ -1,6 +1,6 @@
 /**
  * AppModal - 全站统一弹窗组件
- * Atelier 风格：柔和阴影 + 圆角 + 精致分割线
+ * V2 极简风格：锐利圆角 + 细分割线 + 极轻阴影
  */
 import type { ReactNode } from 'react'
 import { X } from 'lucide-react'
@@ -43,13 +43,13 @@ export default function AppModal({
     >
       <DialogPortal>
         <DialogPrimitive.Backdrop
-          className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0"
           onClick={onClose}
         />
 
         <DialogPrimitive.Popup
           className={cn(
-            'fixed top-1/2 left-1/2 z-50 w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 overflow-visible outline-none duration-200 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+            'fixed top-1/2 left-1/2 z-50 w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 overflow-visible outline-none duration-150 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-98 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-98',
             SIZE_MAP[size],
           )}
         >
@@ -57,22 +57,22 @@ export default function AppModal({
             className="relative w-full"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="relative flex w-full flex-col overflow-hidden rounded-2xl bg-card elevation-4 animate-scale-in">
+            <div className="relative flex w-full flex-col overflow-hidden rounded-lg bg-card border border-border elevation-3 animate-scale-in">
               {/* 标题栏 */}
-              <div className="relative flex flex-shrink-0 items-center justify-between border-b border-border px-6 py-4">
-                <DialogPrimitive.Title className="truncate pr-8 font-heading text-lg text-foreground">
+              <div className="relative flex flex-shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
+                <DialogPrimitive.Title className="truncate pr-8 font-sans font-semibold text-[14px] text-foreground">
                   {title}
                 </DialogPrimitive.Title>
                 <DialogPrimitive.Close
                   render={
                     <button
                       type="button"
-                      className="flex-shrink-0 cursor-pointer rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                      className="flex-shrink-0 cursor-pointer rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                       aria-label="关闭弹窗"
                     />
                   }
                 >
-                  <X className="h-4 w-4" strokeWidth={1.75} />
+                  <X className="h-4 w-4" strokeWidth={1.5} />
                   <span className="sr-only">关闭弹窗</span>
                 </DialogPrimitive.Close>
               </div>

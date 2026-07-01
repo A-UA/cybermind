@@ -20,9 +20,9 @@ const UsersPage = lazy(() => import('@/pages/users'))
 // 页面加载骨架屏
 function PageLoading() {
   return (
-    <div className="flex flex-col justify-center items-center h-64 space-y-3">
-      <RefreshCw className="h-6 w-6 text-primary animate-spin" strokeWidth={1.75} />
-      <span className="text-[13px] text-muted-foreground">正在加载模块...</span>
+    <div className="flex flex-col justify-center items-center h-64 gap-2">
+      <RefreshCw className="h-5 w-5 text-primary animate-spin" strokeWidth={1.5} />
+      <span className="text-[13px] text-muted-foreground font-sans">LOADING MODULE...</span>
     </div>
   )
 }
@@ -30,18 +30,18 @@ function PageLoading() {
 // 403 页面
 function ForbiddenPage() {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4">
-      <div className="p-10 bg-card max-w-md w-full text-center rounded-2xl elevation-4 animate-scale-in">
-        <h1 className="text-7xl font-heading text-destructive tracking-tight select-all">403</h1>
-        <p className="text-sm font-semibold text-foreground mt-6 pb-3 border-b border-border">
-          访问请求被拒绝
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4 bg-dot-grid">
+      <div className="p-8 bg-card border border-border max-w-sm w-full text-center rounded-lg elevation-2 animate-scale-in">
+        <h1 className="text-6xl font-sans font-bold text-destructive tracking-tight select-all">403</h1>
+        <p className="text-sm font-semibold text-foreground mt-4 pb-2.5 border-b border-border font-sans">
+          ACCESS FORBIDDEN
         </p>
-        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
-          您的账号未获得此页面的访问权限。请联系系统管理员获取授权。
+        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto font-sans">
+          您的账号未获得此页面的访问权限。请联系系统管理员。
         </p>
         <Link
           to="/"
-          className="mt-8 inline-block w-full py-2.5 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/90 elevation-1 transition-all"
+          className="mt-6 inline-block w-full py-2 px-4 rounded-md bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/95 transition-colors select-none text-center h-9 leading-5 active:scale-[0.98]"
         >
           返回首页
         </Link>
@@ -53,18 +53,18 @@ function ForbiddenPage() {
 // 404 页面
 function NotFoundPage() {
   return (
-    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4">
-      <div className="p-10 bg-card max-w-md w-full text-center rounded-2xl elevation-4 animate-scale-in">
-        <h1 className="text-7xl font-heading text-primary tracking-tight select-all">404</h1>
-        <p className="text-sm font-semibold text-foreground mt-6 pb-3 border-b border-border">
-          页面不存在
+    <div className="h-screen w-full flex flex-col justify-center items-center bg-background px-4 bg-dot-grid">
+      <div className="p-8 bg-card border border-border max-w-sm w-full text-center rounded-lg elevation-2 animate-scale-in">
+        <h1 className="text-6xl font-sans font-bold text-primary tracking-tight select-all">404</h1>
+        <p className="text-sm font-semibold text-foreground mt-4 pb-2.5 border-b border-border font-sans">
+          PAGE NOT FOUND
         </p>
-        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto">
-          请求的页面地址不存在。请检查 URL 拼写，或点击下方按钮返回首页。
+        <p className="text-[13px] text-muted-foreground mt-4 leading-relaxed max-w-xs mx-auto font-sans">
+          您访问的页面地址不存在，请检查输入地址。
         </p>
         <Link
           to="/"
-          className="mt-8 inline-block w-full py-2.5 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/90 elevation-1 transition-all"
+          className="mt-6 inline-block w-full py-2 px-4 rounded-md bg-primary text-primary-foreground font-medium text-[13px] hover:bg-primary/95 transition-colors select-none text-center h-9 leading-5 active:scale-[0.98]"
         >
           返回首页
         </Link>
@@ -96,7 +96,7 @@ export default function App() {
         <Route element={<AdminLayout />}>
           <Route path="/" element={<DashboardPage />} />
 
-          {/* 带权限控制的路由 */}
+          {/* 带权限控制 of routes */}
           <Route element={<AppProtectedRoute permission="banner:read" />}>
             <Route path="/banners" element={<BannersPage />} />
           </Route>

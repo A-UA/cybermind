@@ -67,7 +67,7 @@ const getColumns = (
           className="border-none hover:bg-accent"
           title={row.is_top ? '取消置顶' : '置顶'}
         >
-          <Star className={`h-4 w-4 ${row.is_top ? 'text-amber-500 fill-amber-400' : 'text-muted-foreground/60'}`} strokeWidth={1.75} />
+          <Star className={`h-4 w-4 ${row.is_top ? 'text-amber-500 fill-amber-400' : 'text-muted-foreground/60'}`} strokeWidth={1.5} />
         </AppButton>
       </AppGuard>
     )
@@ -77,10 +77,10 @@ const getColumns = (
     key: 'cover_image',
     width: '100px',
     render: (row) => row.cover_image ? (
-      <div className="w-16 h-10 border border-border bg-card rounded-xl overflow-hidden flex items-center justify-center p-0.5 relative group">
-        <img src={row.cover_image} alt={row.title} className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-200 group-hover:scale-105" />
-        <a href={row.cover_image} target="_blank" rel="noreferrer" className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg">
-          <Eye className="h-3.5 w-3.5 text-white" strokeWidth={1.75} />
+      <div className="w-16 h-10 border border-border bg-card rounded-lg overflow-hidden flex items-center justify-center p-0.5 relative group">
+        <img src={row.cover_image} alt={row.title} className="max-w-full max-h-full object-contain rounded-md transition-transform duration-200 group-hover:scale-105" />
+        <a href={row.cover_image} target="_blank" rel="noreferrer" className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-md">
+          <Eye className="h-3.5 w-3.5 text-white" strokeWidth={1.5} />
         </a>
       </div>
     ) : (

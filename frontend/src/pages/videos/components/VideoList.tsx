@@ -100,12 +100,12 @@ export default function VideoList({
 
       {/* 画廊展示层 */}
       {isLoading ? (
-        <div className="h-64 bg-card rounded-2xl elevation-1 flex flex-col justify-center items-center gap-3">
-          <RefreshCw className="h-6 w-6 text-primary animate-spin" strokeWidth={1.75} />
-          <span className="text-[13px] text-muted-foreground">正在载入视频资源...</span>
+        <div className="h-64 bg-card rounded-lg border border-border shadow-sm flex flex-col justify-center items-center gap-2">
+          <RefreshCw className="h-5 w-5 text-primary animate-spin" strokeWidth={1.5} />
+          <span className="text-[13px] text-muted-foreground font-mono">LOADING VIDEO ASSETS...</span>
         </div>
       ) : videos.length === 0 ? (
-        <div className="h-64 bg-card rounded-2xl elevation-1 flex flex-col justify-center items-center text-center">
+        <div className="h-64 bg-card rounded-lg border border-border shadow-sm flex flex-col justify-center items-center text-center">
           <span className="text-[13px] text-muted-foreground">暂无任何操作视频记录</span>
         </div>
       ) : (
@@ -113,10 +113,10 @@ export default function VideoList({
           {videos.map((v) => (
             <div
               key={v.id}
-              className="bg-card rounded-2xl elevation-1 hover:elevation-2 hover-lift transition-all duration-200 overflow-hidden flex flex-col justify-between"
+              className="bg-card rounded-lg border border-border shadow-sm hover:border-primary/40 transition-colors duration-200 overflow-hidden flex flex-col justify-between"
             >
               {/* 封面/预览卡 */}
-              <div className="relative aspect-video bg-accent flex items-center justify-center overflow-hidden group border-b border-border/40">
+              <div className="relative aspect-video bg-accent flex items-center justify-center overflow-hidden group border-b border-border">
                 {v.cover_image ? (
                   <img
                     src={v.cover_image}

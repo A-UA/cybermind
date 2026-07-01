@@ -101,8 +101,8 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
     >
       <div className="p-6 font-sans text-foreground">
         {errorMsg && (
-          <div className="p-3 mb-6 text-xs text-destructive border border-destructive/20 bg-destructive/5 rounded-xl flex items-center space-x-2 animate-shake font-semibold">
-            <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <div className="p-3 mb-5 text-[12px] text-destructive border border-destructive/20 bg-destructive/5 rounded-lg flex items-center space-x-2 animate-shake font-semibold font-mono">
+            <AlertCircle className="h-4 w-4 flex-shrink-0" strokeWidth={1.5} />
             <span>{errorMsg}</span>
           </div>
         )}

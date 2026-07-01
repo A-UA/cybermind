@@ -68,24 +68,24 @@ export default function SiteConfigPage() {
             variant="secondary"
             title="刷新数据"
           >
-            <RefreshCw className="h-4 w-4" strokeWidth={1.75} />
+            <RefreshCw className="h-4 w-4" strokeWidth={1.5} />
           </AppButton>
         }
       />
 
       {isLoading ? (
-        <div className="h-64 flex flex-col justify-center items-center gap-3 bg-card rounded-2xl elevation-1">
-          <RefreshCw className="h-6 w-6 text-primary animate-spin" strokeWidth={1.75} />
-          <span className="text-[13px] text-muted-foreground">正在载入配置参数...</span>
+        <div className="h-64 flex flex-col justify-center items-center gap-2 bg-card rounded-lg border border-border shadow-sm font-mono">
+          <RefreshCw className="h-5 w-5 text-primary animate-spin" strokeWidth={1.5} />
+          <span className="text-[13px] text-muted-foreground">LOADING SITE CONFIGS...</span>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
             {/* 左半部分：基本信息 */}
-            <div className="bg-card rounded-2xl p-6 elevation-1 space-y-6">
-              <h3 className="text-[14px] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2 select-none">
-                <Globe className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            <div className="bg-card rounded-lg p-5 border border-border shadow-sm space-y-6">
+              <h3 className="text-[13px] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2 select-none">
+                <Globe className="h-4 w-4 text-primary" strokeWidth={1.5} />
                 <span>基础运行属性</span>
               </h3>
 
@@ -111,9 +111,9 @@ export default function SiteConfigPage() {
             </div>
 
             {/* 右半部分：联系方式 */}
-            <div className="bg-card rounded-2xl p-6 elevation-1 space-y-6">
-              <h3 className="text-[14px] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2 select-none">
-                <Phone className="h-4 w-4 text-primary" strokeWidth={1.75} />
+            <div className="bg-card rounded-lg p-5 border border-border shadow-sm space-y-6">
+              <h3 className="text-[13px] font-semibold text-foreground border-b border-border pb-3 flex items-center gap-2 select-none">
+                <Phone className="h-4 w-4 text-primary" strokeWidth={1.5} />
                 <span>联系与宣发渠道</span>
               </h3>
 

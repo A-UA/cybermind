@@ -1,6 +1,6 @@
 /**
  * AppCheckbox — 全站统一复选框组件
- * Atelier 风格：细边框 + 柔和过渡
+ * V2 极简风格：细边框 + 科技感选中状态
  */
 import { type ReactNode } from 'react'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -40,7 +40,7 @@ export default function AppCheckbox({
         onCheckedChange={onCheckedChange}
         disabled={disabled}
         className={cn(
-          'border border-border rounded-md data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
+          'border border-border rounded data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors cursor-pointer',
           size === 'sm' && 'size-3.5',
           className,
         )}
@@ -53,7 +53,7 @@ export default function AppCheckbox({
     return (
       <label
         className={cn(
-          'flex items-start space-x-2.5 px-3 py-2.5 border border-border rounded-xl bg-background cursor-pointer select-none transition-all duration-200 hover:bg-accent/50',
+          'flex items-start space-x-2.5 px-3 py-2 border border-border rounded-lg bg-card cursor-pointer select-none transition-colors hover:bg-accent/40',
           disabled && 'opacity-50 cursor-not-allowed',
           className,
         )}
@@ -83,7 +83,7 @@ export default function AppCheckbox({
   return (
     <label
       className={cn(
-        'flex items-center space-x-2.5 cursor-pointer select-none transition-all duration-200',
+        'flex items-center space-x-2.5 cursor-pointer select-none transition-colors',
         disabled && 'opacity-50 cursor-not-allowed',
         className,
       )}
@@ -93,7 +93,7 @@ export default function AppCheckbox({
         onCheckedChange={onCheckedChange}
         disabled={disabled}
         className={cn(
-          'border border-border data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
+          'border border-border rounded data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground transition-colors',
           size === 'sm' && 'size-3.5',
         )}
       />

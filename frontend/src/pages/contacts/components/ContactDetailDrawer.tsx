@@ -91,23 +91,23 @@ export default function ContactDetailDrawer({
       }
     >
       {activeSubmission ? (
-        <div className="space-y-6 text-[13px]">
+        <div className="space-y-4 text-[13px] font-sans">
           {/* 留言主题 */}
-          <div className="bg-card border border-border p-5 rounded-2xl elevation-1 space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">主题</span>
-            <h4 className="font-semibold text-[14px] text-foreground select-all">{activeSubmission.subject}</h4>
+          <div className="bg-card border border-border p-4 rounded-lg shadow-sm space-y-1">
+            <span className="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-wider">主题</span>
+            <h4 className="font-semibold text-[13px] text-foreground select-all">{activeSubmission.subject}</h4>
           </div>
 
           {/* 留言正文 */}
-          <div className="bg-card border border-border p-5 rounded-2xl elevation-1 space-y-2">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">留言正文</span>
+          <div className="bg-card border border-border p-4 rounded-lg shadow-sm space-y-1.5">
+            <span className="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-wider">留言正文</span>
             <p className="text-foreground leading-relaxed whitespace-pre-wrap select-all">
               {activeSubmission.message}
             </p>
           </div>
 
           {/* 留言人详情元数据 */}
-          <div className="bg-card border border-border rounded-2xl p-5 space-y-4 elevation-1">
+          <div className="bg-card border border-border rounded-lg p-4 space-y-4 shadow-sm">
             <h4 className="text-[12px] font-semibold border-b border-border pb-2.5 text-foreground">
               留言人登记信息
             </h4>
@@ -131,7 +131,7 @@ export default function ContactDetailDrawer({
               </div>
             </div>
 
-            <div className="pt-3 border-t border-border text-[11px] text-muted-foreground flex items-center gap-1.5">
+            <div className="pt-3 border-t border-border text-[11px] text-muted-foreground flex items-center gap-1.5 font-mono">
               <Clock className="h-3.5 w-3.5" strokeWidth={1.5} />
               <span>提交于: <AppTime value={activeSubmission.created_at} format="YYYY-MM-DD HH:mm" /></span>
             </div>
@@ -139,13 +139,13 @@ export default function ContactDetailDrawer({
 
           {/* 批注回复历史 (若已处理) */}
           {activeSubmission.status === 'processed' && (
-            <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-500/20 p-5 rounded-2xl space-y-3">
-              <h4 className="text-[12px] font-semibold text-emerald-800 dark:text-emerald-400 uppercase tracking-wider select-none">
+            <div className="bg-emerald-500/5 dark:bg-emerald-950/10 border border-emerald-500/20 p-4 rounded-lg space-y-3">
+              <h4 className="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider select-none font-mono">
                 处理归档意见
               </h4>
               <div className="space-y-2 text-foreground">
-                <p className="whitespace-pre-wrap bg-card p-3.5 rounded-xl border border-emerald-500/10">{activeSubmission.remark}</p>
-                <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                <p className="whitespace-pre-wrap bg-card p-3 rounded-lg border border-border">{activeSubmission.remark}</p>
+                <div className="flex items-center justify-between text-[11px] text-muted-foreground font-mono">
                   <span>处理人: {activeSubmission.processed_by_username || `ID #${activeSubmission.processed_by}`}</span>
                   <span>时间: <AppTime value={activeSubmission.processed_at} format="YYYY-MM-DD HH:mm" /></span>
                 </div>
@@ -154,7 +154,7 @@ export default function ContactDetailDrawer({
           )}
 
           {/* 留言处理批注表单 */}
-          <form onSubmit={handleFormSubmit} className="bg-card border border-border p-5 rounded-2xl space-y-4 elevation-1">
+          <form onSubmit={handleFormSubmit} className="bg-card border border-border p-4 rounded-lg space-y-4 shadow-sm">
             <h4 className="text-[12px] font-semibold text-foreground border-b border-border pb-2.5 select-none">
               客服处理与批注
             </h4>

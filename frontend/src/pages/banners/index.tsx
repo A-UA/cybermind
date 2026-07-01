@@ -78,19 +78,19 @@ export default function BannersPage() {
       key: 'image_url',
       width: '100px',
       render: (row) => (
-        <div className="w-16 h-10 border border-border bg-card rounded-xl overflow-hidden flex items-center justify-center p-0.5 group relative">
+        <div className="w-16 h-10 border border-border bg-card rounded-lg overflow-hidden flex items-center justify-center p-0.5 group relative">
           <img
             src={row.image_url}
             alt={row.title}
-            className="max-w-full max-h-full object-contain rounded-lg transition-transform duration-200 group-hover:scale-105"
+            className="max-w-full max-h-full object-contain rounded-md transition-transform duration-200 group-hover:scale-105"
           />
           <a
             href={row.image_url}
             target="_blank"
             rel="noreferrer"
-            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg"
+            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-md"
           >
-            <Eye className="h-3.5 w-3.5 text-white" strokeWidth={1.75} />
+            <Eye className="h-3.5 w-3.5 text-white" strokeWidth={1.5} />
           </a>
         </div>
       )

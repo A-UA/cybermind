@@ -61,10 +61,10 @@ export default function HelpCategoryList({
   }
 
   return (
-    <div className="xl:col-span-1 bg-card rounded-2xl elevation-1 h-fit text-xs">
+    <div className="xl:col-span-1 bg-card rounded-lg border border-border shadow-sm h-fit text-xs">
       <div className="flex pt-5 px-5 items-center justify-between border-b border-border pb-3">
-        <h3 className="text-[13px] font-semibold text-foreground flex items-center gap-1.5 select-none">
-          <FolderPlus className="h-4 w-4 text-primary" strokeWidth={1.75} />
+        <h3 className="text-[13px] font-semibold text-foreground flex items-center gap-1.5 select-none font-sans">
+          <FolderPlus className="h-4 w-4 text-primary" strokeWidth={1.5} />
           <span>类别筛选</span>
         </h3>
         <AppButton
@@ -73,15 +73,15 @@ export default function HelpCategoryList({
           variant="secondary"
           title="新增类别"
         >
-          <Plus className="h-3.5 w-3.5" strokeWidth={2} />
+          <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
         </AppButton>
       </div>
 
       {/* 类别列表 */}
-      <div className="space-y-1 p-4 max-h-[400px] overflow-y-auto text-[13px]">
+      <div className="space-y-0.5 p-3.5 max-h-[400px] overflow-y-auto text-[13px] font-sans">
         <button
           onClick={() => onSelectCategory(null)}
-          className={`w-full text-left px-3 py-2 rounded-xl transition-all cursor-pointer ${
+          className={`w-full text-left px-3 py-2 rounded-lg transition-colors cursor-pointer ${
             selectedCategoryId === null
               ? 'bg-primary/10 text-primary font-semibold'
               : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -91,14 +91,14 @@ export default function HelpCategoryList({
         </button>
 
         {isLoading ? (
-          <div className="text-center py-4 text-[13px] text-muted-foreground">加载类别中...</div>
+          <div className="text-center py-4 text-[13px] text-muted-foreground font-mono">LOADING CATEGORIES...</div>
         ) : categories.length === 0 ? (
           <div className="text-center py-4 text-[13px] text-muted-foreground/60">暂无任何类别</div>
         ) : (
           categories.map((cat) => (
             <div
               key={cat.id}
-              className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all group ${
+              className={`flex items-center justify-between px-3 py-1.5 rounded-lg transition-colors group ${
                 selectedCategoryId === cat.id
                   ? 'bg-primary/10 text-primary font-semibold'
                   : 'text-muted-foreground hover:text-foreground hover:bg-accent'
@@ -116,14 +116,14 @@ export default function HelpCategoryList({
                   className="p-0.5 bg-card border border-border rounded text-foreground hover:bg-accent cursor-pointer transition-colors"
                   title="重命名"
                 >
-                  <Edit className="h-3 w-3" strokeWidth={1.75} />
+                  <Edit className="h-3 w-3" strokeWidth={1.5} />
                 </button>
                 <button
                   onClick={() => onDeleteCategory(cat.id)}
                   className="p-0.5 bg-card border border-border rounded text-foreground hover:bg-destructive hover:text-white cursor-pointer transition-colors"
                   title="删除"
                 >
-                  <Trash2 className="h-3 w-3" strokeWidth={1.75} />
+                  <Trash2 className="h-3 w-3" strokeWidth={1.5} />
                 </button>
               </div>
             </div>
@@ -133,8 +133,8 @@ export default function HelpCategoryList({
 
       {/* 分类编辑小表单 */}
       {isOpen && (
-        <form onSubmit={handleFormSubmit} className="m-4 mt-0 p-4 bg-background border border-border rounded-xl space-y-4">
-          <h4 className="text-[11px] font-semibold uppercase text-foreground">
+        <form onSubmit={handleFormSubmit} className="m-3.5 mt-0 p-3.5 bg-background border border-border rounded-lg space-y-4">
+          <h4 className="text-[10px] font-semibold font-mono uppercase text-foreground">
             {editingCategory ? '重命名分类' : '创建新分类'}
           </h4>
           <div className="space-y-3">

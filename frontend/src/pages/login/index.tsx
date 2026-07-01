@@ -37,26 +37,57 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center bg-background bg-noise font-sans overflow-hidden px-4">
-      {/* 登录卡片 */}
-      <div className="relative w-full max-w-sm animate-scale-in">
-        <div className="bg-card rounded-2xl elevation-4 p-8 sm:p-10">
-          {/* Logo & 标题 */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-heading text-foreground tracking-tight">
-              Cybermind
-            </h1>
-            <div className="h-[2px] w-12 bg-primary mx-auto my-3 rounded-full" />
-            <p className="text-[12px] text-muted-foreground">
-              内容管理控制台
-            </p>
+    <div className="min-h-screen w-full flex bg-background font-sans overflow-hidden">
+      {/* 左侧：科技美学点阵背景 (仅桌面端显示) */}
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 bg-card border-r border-border bg-dot-grid relative">
+        <div className="flex items-center space-x-2 select-none">
+          <span className="text-xl font-bold tracking-tight text-foreground">Cybermind</span>
+          <span className="text-[10px] font-mono font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+            CMS
+          </span>
+        </div>
+
+        <div className="space-y-4 max-w-md">
+          <h2 className="text-4xl font-bold tracking-tight text-foreground font-sans">
+            Minimalist Control
+            <br />
+            <span className="text-primary">Precision Delivery.</span>
+          </h2>
+          <p className="text-[13px] text-muted-foreground leading-relaxed">
+            专为企业内容管理打造的高性能后台控制台。基于极简网格系统与流式交互，提供秒级内容分发、细粒度 RBAC 权限管理以及多端联动配置。
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between text-[11px] text-muted-foreground/60 font-mono">
+          <span>VERSION 2.0.0</span>
+          <span>SYSTEM ACTIVE // SECURE ACCESS</span>
+        </div>
+      </div>
+
+      {/* 右侧：登录表单区 */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 relative bg-background bg-dot-grid lg:bg-none">
+        <div className="w-full max-w-sm space-y-8 animate-scale-in">
+          {/* 移动端 Logo 替代方案 */}
+          <div className="lg:hidden flex flex-col items-center text-center space-y-2">
+            <div className="flex items-center space-x-2 select-none">
+              <span className="text-2xl font-bold tracking-tight text-foreground">Cybermind</span>
+              <span className="text-[10px] font-mono font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                CMS
+              </span>
+            </div>
+            <p className="text-[12px] text-muted-foreground">企业内容管理控制台</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-2">
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground hidden lg:block">登录控制台</h1>
+            <p className="text-[13px] text-muted-foreground hidden lg:block">请输入管理员凭证访问系统</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* 账号 */}
             <div className="space-y-1.5">
-              <label className="text-[13px] font-medium text-foreground block">
-                登录账号
+              <label className="text-[12px] font-medium text-muted-foreground font-mono block uppercase">
+                USERNAME
               </label>
               <input
                 type="text"
@@ -65,15 +96,17 @@ export default function LoginPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 autoComplete="username"
-                className="w-full px-4 py-2.5 bg-background border border-border rounded-xl text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
+                className="w-full px-3 py-2 bg-card border border-border rounded-lg text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/80 focus:ring-1 focus:ring-primary/80 h-9"
               />
             </div>
 
             {/* 密码 */}
             <div className="space-y-1.5">
-              <label className="text-[13px] font-medium text-foreground block">
-                登录密码
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="text-[12px] font-medium text-muted-foreground font-mono block uppercase">
+                  PASSWORD
+                </label>
+              </div>
               <div className="relative flex items-center">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -82,14 +115,14 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
-                  className="w-full pl-4 pr-10 py-2.5 bg-background border border-border rounded-xl text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10"
+                  className="w-full pl-3 pr-9 py-2 bg-card border border-border rounded-lg text-foreground text-[13px] placeholder-muted-foreground/60 outline-none transition-all focus:border-primary/80 focus:ring-1 focus:ring-primary/80 h-9"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" strokeWidth={1.75} /> : <Eye className="h-4 w-4" strokeWidth={1.75} />}
+                  {showPassword ? <EyeOff className="h-4 w-4" strokeWidth={1.5} /> : <Eye className="h-4 w-4" strokeWidth={1.5} />}
                 </button>
               </div>
             </div>
@@ -98,25 +131,25 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 mt-2 bg-primary text-primary-foreground font-semibold text-[13px] rounded-xl elevation-1 hover:elevation-2 hover-lift flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:pointer-events-none transition-all"
+              className="w-full py-2 bg-primary text-primary-foreground font-medium text-[13px] rounded-lg border border-primary/20 flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:pointer-events-none transition-colors h-9 mt-4 active:scale-[0.98]"
             >
               {loading ? (
                 <>
-                  <RefreshCw className="h-4 w-4 animate-spin" strokeWidth={1.75} />
-                  <span>登录中...</span>
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin" strokeWidth={1.5} />
+                  <span>正在登录...</span>
                 </>
               ) : (
                 <>
                   <span>登录</span>
-                  <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </>
               )}
             </button>
           </form>
 
           {/* 底部版权 */}
-          <div className="mt-8 text-center text-[11px] text-muted-foreground">
-            Cybermind Studio © {new Date().getFullYear()}
+          <div className="text-center lg:text-left text-[11px] text-muted-foreground/50 font-mono pt-4 border-t border-border/40">
+            CYBERMIND STUDIO © {new Date().getFullYear()} // ALL RIGHTS RESERVED
           </div>
         </div>
       </div>

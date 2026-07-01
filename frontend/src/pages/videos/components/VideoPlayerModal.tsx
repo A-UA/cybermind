@@ -18,12 +18,12 @@ export default function VideoPlayerModal({
       size="xl"
     >
       {video && (
-        <div className="p-6 bg-background flex flex-col items-center gap-4">
+        <div className="p-5 bg-background flex flex-col items-center gap-4">
           <video
             src={video.video_url}
             controls
             autoPlay
-            className="max-h-[50vh] w-full border border-border rounded-xl elevation-1 bg-black"
+            className="max-h-[50vh] w-full border border-border rounded-lg shadow-sm bg-black"
           />
           {video.description && (
             <p className="text-[13px] text-muted-foreground text-left w-full">

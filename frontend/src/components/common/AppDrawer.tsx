@@ -51,29 +51,29 @@ export default function AppDrawer({
         side={side}
         showCloseButton={showCloseButton}
         className={cn(
-          'flex flex-col h-full bg-card p-0 gap-0 outline-none elevation-4 border-l border-border',
+          'flex flex-col h-full bg-card p-0 gap-0 outline-none border-l border-border elevation-3',
           SIZE_MAP[size],
           contentClassName,
         )}
       >
         {/* 顶部头部 */}
-        <SheetHeader className={cn('flex flex-col gap-1 border-b border-border p-5 flex-shrink-0', className)}>
-          <SheetTitle className="text-base font-heading text-foreground">
+        <SheetHeader className={cn('flex flex-col gap-1 border-b border-border p-4.5 flex-shrink-0', className)}>
+          <SheetTitle className="text-[14px] font-semibold text-foreground">
             {title}
           </SheetTitle>
           {description && (
-            <SheetDescription className="text-[12px] text-muted-foreground mt-0.5">
+            <SheetDescription className="text-[11px] text-muted-foreground mt-0.5">
               {description}
             </SheetDescription>
           )}
         </SheetHeader>
 
         {/* 中间内容滚动区 */}
-        <div className="flex-1 overflow-y-auto p-6 text-[13px]">{children}</div>
+        <div className="flex-1 overflow-y-auto p-5 text-[13px]">{children}</div>
 
         {/* 底部操作区 */}
         {footer && (
-          <SheetFooter className="mt-auto border-t border-border p-4 flex-shrink-0">
+          <SheetFooter className="mt-auto border-t border-border p-3.5 flex-shrink-0">
             {footer}
           </SheetFooter>
         )}

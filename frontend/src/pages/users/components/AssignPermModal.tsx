@@ -87,7 +87,7 @@ export default function AssignPermModal({
             const moduleLabel = MODULE_NAME_MAP[moduleName] || moduleName.toUpperCase()
 
             return (
-              <div key={moduleName} className="bg-card border border-border p-4 rounded-xl space-y-3 elevation-1">
+              <div key={moduleName} className="bg-card border border-border p-4 rounded-lg space-y-3 shadow-sm">
                 <h4 className="font-semibold text-foreground border-b border-border/40 pb-2 select-none">
                   {moduleLabel}
                 </h4>

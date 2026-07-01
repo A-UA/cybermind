@@ -23,7 +23,7 @@ export default function AppTabs<T extends string>({
   return (
     <div
       className={cn(
-        'inline-flex items-center bg-muted/50 rounded-xl p-1 gap-0.5',
+        'inline-flex items-center bg-muted/60 border border-border/40 rounded-lg p-1 gap-1',
         className,
       )}
     >
@@ -33,9 +33,9 @@ export default function AppTabs<T extends string>({
           type="button"
           onClick={() => onValueChange(option.value)}
           className={cn(
-            'px-4 py-2 text-[13px] font-medium rounded-lg transition-all cursor-pointer flex items-center gap-1.5',
+            'px-3.5 py-1.5 text-[12px] font-medium rounded-md transition-colors cursor-pointer flex items-center gap-1.5 active:scale-[0.98] select-none',
             value === option.value
-              ? 'bg-card text-foreground elevation-1 font-semibold'
+              ? 'bg-card text-foreground border border-border/50 shadow-sm font-semibold'
               : 'text-muted-foreground hover:text-foreground',
           )}
         >

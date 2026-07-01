@@ -1,6 +1,6 @@
 /**
  * AppStatsCard — 统计指标卡片
- * Atelier 风格：白色卡片 + 左侧色条 + 柔和阴影
+ * V2 极简科技黑风格：精密单像素边框 + 细色块指示器
  */
 
 interface AppStatsCardProps {
@@ -19,27 +19,27 @@ export default function AppStatsCard({
   accentColor,
 }: AppStatsCardProps) {
   return (
-    <div className="relative bg-card rounded-2xl elevation-1 hover:elevation-2 transition-shadow p-5 overflow-hidden group">
-      {/* 左侧色条装饰 */}
+    <div className="relative bg-card border border-border rounded-lg shadow-sm p-4 overflow-hidden group select-none">
+      {/* 左侧精密单像素指示条 */}
       <div
-        className="absolute left-0 top-3 bottom-3 w-[3px] rounded-r-full"
+        className="absolute left-0 top-0 bottom-0 w-[2px]"
         style={{ backgroundColor: accentColor || 'var(--primary)' }}
       />
 
-      <div className="flex items-start justify-between pl-3">
-        <div className="space-y-2">
-          <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+      <div className="flex items-start justify-between pl-2">
+        <div className="space-y-1.5">
+          <p className="text-[10px] font-mono font-medium text-muted-foreground uppercase tracking-wider">
             {title}
           </p>
-          <p className="text-3xl font-heading text-foreground tracking-tight">
+          <p className="text-2xl font-bold tracking-tight text-foreground">
             {value}
           </p>
           {label && (
-            <p className="text-[12px] text-muted-foreground">{label}</p>
+            <p className="text-[11px] text-muted-foreground">{label}</p>
           )}
         </div>
         {icon && (
-          <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
+          <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center flex-shrink-0 text-muted-foreground group-hover:text-primary transition-colors">
             {icon}
           </div>
         )}

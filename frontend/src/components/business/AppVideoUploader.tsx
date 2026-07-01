@@ -78,7 +78,7 @@ export function AppVideoUploader({
   }
 
   return (
-    <div className="space-y-3 font-sans text-[13px]">
+    <div className="space-y-2 font-sans text-[13px]">
       <div className="flex space-x-2">
         <input
           type="text"
@@ -86,7 +86,7 @@ export function AppVideoUploader({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           disabled={disabled || uploading}
-          className="flex-1 px-4 py-2.5 bg-background border border-border rounded-xl text-foreground outline-none text-[13px] placeholder-muted-foreground/60 transition-all focus:border-primary/50 focus:ring-2 focus:ring-primary/10 disabled:opacity-60"
+          className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-foreground outline-none text-[13px] placeholder-muted-foreground/60 transition-all focus:border-primary/80 focus:ring-1 focus:ring-primary/80 disabled:opacity-60 h-9"
         />
         <input
           type="file"
@@ -100,12 +100,12 @@ export function AppVideoUploader({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={disabled || uploading}
-          className="px-4 py-2.5 border border-border bg-card hover:bg-accent text-foreground font-medium flex items-center gap-1.5 transition-all rounded-xl cursor-pointer disabled:opacity-50 text-[13px] whitespace-nowrap"
+          className="px-3.5 py-2 border border-border bg-card hover:bg-accent text-foreground font-medium flex items-center gap-1.5 transition-colors rounded-lg cursor-pointer disabled:opacity-50 text-[13px] whitespace-nowrap h-9 active:scale-[0.98]"
         >
           {uploading ? (
-            <RefreshCw className="h-3.5 w-3.5 animate-spin" strokeWidth={1.75} />
+            <RefreshCw className="h-3.5 w-3.5 animate-spin" strokeWidth={1.5} />
           ) : (
-            <Upload className="h-3.5 w-3.5 text-primary" strokeWidth={1.75} />
+            <Upload className="h-3.5 w-3.5 text-primary" strokeWidth={1.5} />
           )}
           <span>{uploading ? '上传中...' : '选择视频'}</span>
         </button>
@@ -113,12 +113,12 @@ export function AppVideoUploader({
 
       {/* 进度条面板 */}
       {uploading && (
-        <div className="w-full bg-card border border-border p-4 rounded-xl elevation-1">
-          <div className="flex justify-between text-[12px] text-muted-foreground mb-2">
-            <span>正在传输视频文件</span>
-            <span className="font-mono">{progress}%</span>
+        <div className="w-full bg-card border border-border p-3.5 rounded-lg elevation-1">
+          <div className="flex justify-between text-[11px] text-muted-foreground mb-1.5 font-mono">
+            <span>UPLOADING VIDEO...</span>
+            <span>{progress}%</span>
           </div>
-          <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+          <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
             <div
               className="bg-primary h-full rounded-full transition-all duration-150"
               style={{ width: `${progress}%` }}
@@ -129,20 +129,20 @@ export function AppVideoUploader({
 
       {/* 视频预览面板 */}
       {value && !uploading && (
-        <div className="relative p-1.5 border border-border bg-accent/20 w-48 rounded-xl overflow-hidden group flex flex-col space-y-1.5">
-          <video src={value} controls className="w-full max-h-32 rounded-lg object-cover bg-black" />
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground px-1.5">
-            <span className="truncate flex-1 max-w-[120px] font-mono" title={value.split('/').pop()}>
+        <div className="relative p-1 border border-border bg-muted/40 w-48 rounded-lg overflow-hidden group flex flex-col space-y-1.5">
+          <video src={value} controls className="w-full max-h-32 rounded-md object-cover bg-black" />
+          <div className="flex items-center justify-between text-[11px] text-muted-foreground px-1 font-mono">
+            <span className="truncate flex-1 max-w-[120px]" title={value.split('/').pop()}>
               {value.split('/').pop()}
             </span>
             <button
               type="button"
               onClick={() => onChange('')}
               disabled={disabled}
-              className="p-1 bg-destructive text-white rounded-lg cursor-pointer hover:bg-destructive/80 transition-colors"
+              className="p-1 bg-destructive text-white rounded-md cursor-pointer hover:bg-destructive/80 transition-colors"
               title="移除视频"
             >
-              <X className="h-2.5 w-2.5" strokeWidth={2} />
+              <X className="h-2.5 w-2.5" strokeWidth={1.5} />
             </button>
           </div>
         </div>

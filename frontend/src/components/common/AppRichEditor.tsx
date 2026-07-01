@@ -117,7 +117,7 @@ export default function AppRichEditor({
   }
 
   return (
-    <div className="border border-border rounded-2xl bg-card overflow-hidden focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary/50 transition-all">
+    <div className="border border-border rounded-lg bg-card overflow-hidden focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary/50 transition-all">
       <input
         ref={imageInputRef}
         type="file"
