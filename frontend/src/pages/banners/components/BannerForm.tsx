@@ -9,6 +9,7 @@ import AppModal from '@/components/common/AppModal'
 import AppButton from '@/components/common/AppButton'
 import AppCheckbox from '@/components/common/AppCheckbox'
 import AppInput from '@/components/common/AppInput'
+import AppTextarea from '@/components/common/AppTextarea'
 
 interface BannerFormProps {
   isOpen: boolean
@@ -22,6 +23,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
 
   // 表单状态
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [imageUrl, setImageUrl] = useState('')
   const [linkUrl, setLinkUrl] = useState('')
   const [sortOrder, setSortOrder] = useState<number>(0)
@@ -35,12 +37,14 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
       setErrorMsg('')
       if (banner) {
         setTitle(banner.title)
+        setDescription(banner.description || '')
         setImageUrl(banner.image_url)
         setLinkUrl(banner.link_url || '')
         setSortOrder(banner.sort_order)
         setIsActive(banner.is_active)
       } else {
         setTitle('')
+        setDescription('')
         setImageUrl('')
         setLinkUrl('')
         setSortOrder(0)
@@ -54,6 +58,7 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
     mutationFn: async () => {
       const dataPayload = {
         title,
+        description: description || null,
         image_url: imageUrl,
         link_url: linkUrl || null,
         sort_order: sortOrder,
@@ -111,6 +116,17 @@ export default function BannerForm({ isOpen, onClose, banner, onSuccess }: Banne
               placeholder="请输入标题"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+            />
+          </AppFormItem>
+
+          {/* 描述 */}
+          <AppFormItem label="Banner 描述">
+            <AppTextarea
+              placeholder="请输入描述内容（选填）"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              resize="vertical"
             />
           </AppFormItem>
 

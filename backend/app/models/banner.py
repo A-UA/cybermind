@@ -1,7 +1,5 @@
 """Banner 业务数据模型"""
 
-from typing import Optional
-
 from sqlmodel import Field, SQLModel
 
 from app.models.base import TimestampMixin
@@ -12,10 +10,13 @@ class Banner(TimestampMixin, table=True):
 
     __tablename__ = "banners"
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     title: str = Field(max_length=200, description="Banner标题")
+    description: str | None = Field(
+        default=None, max_length=500, description="Banner描述"
+    )
     image_url: str = Field(max_length=500, description="图片URL")
-    link_url: Optional[str] = Field(
+    link_url: str | None = Field(
         default=None, max_length=500, description="点击跳转链接"
     )
     sort_order: int = Field(default=0, description="排序序号，值越小越靠前")

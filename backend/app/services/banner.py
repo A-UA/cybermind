@@ -1,7 +1,5 @@
 """Banner 业务逻辑层"""
 
-from typing import Optional
-
 from sqlmodel import Session, col, func, select
 
 from app.core.exceptions import NotFoundException
@@ -13,7 +11,7 @@ def get_banner_list(
     session: Session,
     page: int = 1,
     page_size: int = 20,
-    is_active: Optional[bool] = None,
+    is_active: bool | None = None,
 ) -> tuple[list[Banner], int]:
     """获取 Banner 列表（分页/过滤）"""
     statement = select(Banner)
@@ -49,6 +47,7 @@ def create_banner(session: Session, banner_in: BannerCreate, creator_id: int) ->
     """创建 Banner"""
     banner = Banner(
         title=banner_in.title,
+        description=banner_in.description,
         image_url=banner_in.image_url,
         link_url=banner_in.link_url,
         sort_order=banner_in.sort_order,

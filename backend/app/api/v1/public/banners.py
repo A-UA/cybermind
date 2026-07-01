@@ -18,6 +18,7 @@ async def list_public_banners(session: Session = Depends(get_session)):
         BannerResponse(
             id=b.id,
             title=b.title,
+            description=b.description,
             image_url=b.image_url,
             link_url=b.link_url,
             sort_order=b.sort_order,

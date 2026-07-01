@@ -1,7 +1,6 @@
 """Banner 管理路由"""
 from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session
-from typing import Optional
 
 from app.core.database import get_session
 from app.core.deps import require_permission
@@ -18,7 +17,7 @@ router = APIRouter(prefix="/banners", tags=["Banner管理"])
 async def list_banners(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
-    is_active: Optional[bool] = Query(None),
+    is_active: bool | None = Query(None),
     session: Session = Depends(get_session),
 ):
     """获取 Banner 列表（支持分页及启用状态过滤）"""
@@ -29,6 +28,7 @@ async def list_banners(
         BannerResponse(
             id=b.id,
             title=b.title,
+            description=b.description,
             image_url=b.image_url,
             link_url=b.link_url,
             sort_order=b.sort_order,
@@ -54,6 +54,7 @@ async def create_banner(
     return ApiResponse(data=BannerResponse(
         id=banner.id,
         title=banner.title,
+        description=banner.description,
         image_url=banner.image_url,
         link_url=banner.link_url,
         sort_order=banner.sort_order,
@@ -72,6 +73,7 @@ async def get_banner(banner_id: int, session: Session = Depends(get_session)):
     return ApiResponse(data=BannerResponse(
         id=banner.id,
         title=banner.title,
+        description=banner.description,
         image_url=banner.image_url,
         link_url=banner.link_url,
         sort_order=banner.sort_order,
@@ -94,6 +96,7 @@ async def update_banner(
     return ApiResponse(data=BannerResponse(
         id=banner.id,
         title=banner.title,
+        description=banner.description,
         image_url=banner.image_url,
         link_url=banner.link_url,
         sort_order=banner.sort_order,

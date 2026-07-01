@@ -1,6 +1,7 @@
 export interface IBanner {
   id: number
   title: string
+  description: string | null
   image_url: string
   link_url: string | null
   sort_order: number
@@ -12,6 +13,7 @@ export interface IBanner {
 
 export interface IBannerCreate {
   title: string
+  description?: string | null
   image_url: string
   link_url?: string | null
   sort_order: number
@@ -20,6 +22,7 @@ export interface IBannerCreate {
 
 export interface IBannerUpdate {
   title?: string
+  description?: string | null
   image_url?: string
   link_url?: string | null
   sort_order?: number
