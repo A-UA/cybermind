@@ -6,10 +6,15 @@
  */
 import { create } from 'zustand'
 
+export type ColorTheme = 'blue' | 'violet' | 'green' | 'orange' | 'red'
+
 interface ThemeState {
   /** 侧边栏是否折叠（UI 偏好） */
   sidebarCollapsed: boolean
   setSidebarCollapsed: (collapsed: boolean) => void
+  /** 主题颜色偏好 */
+  colorTheme: ColorTheme
+  setColorTheme: (theme: ColorTheme) => void
 }
 
 export const useThemeStore = create<ThemeState>((set) => {
@@ -21,6 +26,16 @@ export const useThemeStore = create<ThemeState>((set) => {
     return false
   }
 
+  const getInitialColorTheme = (): ColorTheme => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('cybermind-color-theme') as ColorTheme
+      if (['blue', 'violet', 'green', 'orange', 'red'].includes(saved)) {
+        return saved
+      }
+    }
+    return 'blue'
+  }
+
   return {
     sidebarCollapsed: getInitialCollapsed(),
     setSidebarCollapsed: (collapsed) => {
@@ -28,6 +43,13 @@ export const useThemeStore = create<ThemeState>((set) => {
         localStorage.setItem('cybermind-sidebar-collapsed', String(collapsed))
       }
       set({ sidebarCollapsed: collapsed })
+    },
+    colorTheme: getInitialColorTheme(),
+    setColorTheme: (theme) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('cybermind-color-theme', theme)
+      }
+      set({ colorTheme: theme })
     },
   }
 })

@@ -5,6 +5,7 @@ import { AppProtectedRoute } from '@/components/business/AppProtectedRoute'
 import AppConfirm from '@/components/common/AppConfirm'
 import AppErrorBoundary from '@/components/common/AppErrorBoundary'
 import { RefreshCw } from 'lucide-react'
+import { useThemeStore } from '@/stores/theme'
 
 // 路由懒加载
 const LoginPage = lazy(() => import('@/pages/login'))
@@ -84,6 +85,15 @@ function AuthLogoutListener() {
 }
 
 export default function App() {
+  const colorTheme = useThemeStore((state) => state.colorTheme)
+
+  useEffect(() => {
+    const root = document.documentElement
+    const classesToRemove = Array.from(root.classList).filter((c) => c.startsWith('theme-'))
+    classesToRemove.forEach((c) => root.classList.remove(c))
+    root.classList.add(`theme-${colorTheme}`)
+  }, [colorTheme])
+
   return (
     <AppErrorBoundary>
     <Suspense fallback={<PageLoading />}>

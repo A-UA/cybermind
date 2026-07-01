@@ -131,6 +131,92 @@
     --sidebar-ring: hsl(217, 91%, 60%);
 }
 
+/* ─── 主题色覆盖定义 ─── */
+/* 蓝色（默认） */
+.theme-blue {
+    --primary: hsl(217, 91%, 56%);
+    --ring: hsl(217, 91%, 56%);
+    --sidebar-primary: hsl(217, 91%, 56%);
+    --sidebar-ring: hsl(217, 91%, 56%);
+    --chart-1: hsl(217, 91%, 56%);
+}
+.dark .theme-blue,
+.dark.theme-blue {
+    --primary: hsl(217, 91%, 60%);
+    --ring: hsl(217, 91%, 60%);
+    --sidebar-primary: hsl(217, 91%, 60%);
+    --sidebar-ring: hsl(217, 91%, 60%);
+    --chart-1: hsl(217, 91%, 60%);
+}
+
+/* 罗兰紫 */
+.theme-violet {
+    --primary: hsl(262, 83%, 58%);
+    --ring: hsl(262, 83%, 58%);
+    --sidebar-primary: hsl(262, 83%, 58%);
+    --sidebar-ring: hsl(262, 83%, 58%);
+    --chart-1: hsl(262, 83%, 58%);
+}
+.dark .theme-violet,
+.dark.theme-violet {
+    --primary: hsl(263, 84%, 65%);
+    --ring: hsl(263, 84%, 65%);
+    --sidebar-primary: hsl(263, 84%, 65%);
+    --sidebar-ring: hsl(263, 84%, 65%);
+    --chart-1: hsl(263, 84%, 65%);
+}
+
+/* 极客绿 */
+.theme-green {
+    --primary: hsl(142, 71%, 45%);
+    --ring: hsl(142, 71%, 45%);
+    --sidebar-primary: hsl(142, 71%, 45%);
+    --sidebar-ring: hsl(142, 71%, 45%);
+    --chart-1: hsl(142, 71%, 45%);
+}
+.dark .theme-green,
+.dark.theme-green {
+    --primary: hsl(142, 72%, 55%);
+    --ring: hsl(142, 72%, 55%);
+    --sidebar-primary: hsl(142, 72%, 55%);
+    --sidebar-ring: hsl(142, 72%, 55%);
+    --chart-1: hsl(142, 72%, 55%);
+}
+
+/* 赛博橙 */
+.theme-orange {
+    --primary: hsl(24, 90%, 50%);
+    --ring: hsl(24, 90%, 50%);
+    --sidebar-primary: hsl(24, 90%, 50%);
+    --sidebar-ring: hsl(24, 90%, 50%);
+    --chart-1: hsl(24, 90%, 50%);
+}
+.dark .theme-orange,
+.dark.theme-orange {
+    --primary: hsl(24, 95%, 60%);
+    --ring: hsl(24, 95%, 60%);
+    --sidebar-primary: hsl(24, 95%, 60%);
+    --sidebar-ring: hsl(24, 95%, 60%);
+    --chart-1: hsl(24, 95%, 60%);
+}
+
+/* 科技红 */
+.theme-red {
+    --primary: hsl(346, 84%, 55%);
+    --ring: hsl(346, 84%, 55%);
+    --sidebar-primary: hsl(346, 84%, 55%);
+    --sidebar-ring: hsl(346, 84%, 55%);
+    --chart-1: hsl(346, 84%, 55%);
+}
+.dark .theme-red,
+.dark.theme-red {
+    --primary: hsl(346, 87%, 62%);
+    --ring: hsl(346, 87%, 62%);
+    --sidebar-primary: hsl(346, 87%, 62%);
+    --sidebar-ring: hsl(346, 87%, 62%);
+    --chart-1: hsl(346, 87%, 62%);
+}
+
 /* ─── 基础层 ─── */
 @layer base {
   * {
